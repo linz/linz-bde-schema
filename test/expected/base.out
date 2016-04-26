@@ -11,4 +11,3 @@
 -- Provide unit testing for LINZ BDE SCHEMA using pgTAP
 --------------------------------------------------------------------------------
 \set ECHO none
-0..0

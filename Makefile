@@ -21,9 +21,9 @@ install: dummy
 uninstall:
 	rm -rf ${datadir}
 
-test:
+test: dummy
 	${PG_REGRESS} \
-	--inputdir=./ \
+   --inputdir=./ \
    --inputdir=test \
    --load-language=plpgsql \
    --dbname=regression base

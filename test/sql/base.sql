@@ -23,9 +23,10 @@ BEGIN;
 
 CREATE EXTENSION pgtap;
 
-SELECT plan(0);
+--SELECT plan(1);
+SELECT * FROM no_plan();
 
-SELECT * FROM finish();
+--SELECT * FROM finish();
 
 ROLLBACK;
 
