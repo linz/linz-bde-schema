@@ -34,8 +34,6 @@ Dependencies
 ------------
 
 Requires PostgreSQL 9.3+/PostGIS 2.2+ and the PL/PgSQL language extension installed.
-Also requires the BDE schemas to be installed which are part of the
-https://github.com/linz/linz-bde-schema project
 
 License
 ---------------------
