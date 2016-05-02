@@ -2,6 +2,8 @@
 
 VERSION=dev
 
+SED = sed
+
 datadir=${DESTDIR}/usr/share/linz-bde-schema
 
 #
@@ -12,18 +14,37 @@ PG_CONFIG    = pg_config
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 PG_REGRESS := $(dir $(PGXS))../../src/test/regress/pg_regress
 
-dummy:
+SQLSCRIPTS = \
+  sql/00-bde_version.sql \
+  sql/01-bde_roles.sql \
+  sql/02-bde_schema.sql \
+  sql/03-bde_functions.sql \
+  sql/04-bde_schema_index.sql \
+  sql/99-patches.sql \
+  sql/versioning/01-version_tables.sql
+  $(END)
+  
+EXTRA_CLEAN = sql/00-bde_version.sql
+
+.dummy:
 
 # Need install to depend on something for debuild
 
-install: dummy
+all: $(SQLSCRIPTS)
+
+sql/00-bde_version.sql: sql/00-bde_version.sql.in
+	$(SED) -e 's/@@VERSION@@/$(VERSION)/' $< > $@
+
+install: $(SQLSCRIPTS)
 	mkdir -p ${datadir}/sql
-	cp  sql/*.sql ${datadir}/sql
+	cp sql/*.sql ${datadir}/sql
+	mkdir -p ${datadir}/sql/versioning
+	cp sql/versioning/*.sql ${datadir}/sql/versioning
 
 uninstall:
 	rm -rf ${datadir}
 
-test: dummy
+test: $(SQLSCRIPTS)
 	${PG_REGRESS} \
    --inputdir=./ \
    --inputdir=test \
@@ -34,5 +55,5 @@ clean:
 	rm -f regression.diffs
 	rm -f regression.out
 	rm -rf results
+	rm -f $(EXTRA_CLEAN)
 	
-
