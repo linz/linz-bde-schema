@@ -1,17 +1,19 @@
 LINZ BDE SCHEMAS
 ================
 
-Provides that core BDE schemas and functions that are used for storing and accessing raw BDE
+Provides the core BDE schemas and functions that are used for storing and accessing raw BDE
 unloads from the Landonline database system.
 
 Installation
 ------------
 
+First install the project into the OS data share directory:
+
 ```shell
 sudo make install
 ```
 
-First you need to install the PostGIS and dbpatch extensions:
+Then you need to install the PostGIS and dbpatch extensions:
 
 ```shell
 createdb $DB_NAME
@@ -20,7 +22,7 @@ psql $DB_NAME -c "CREATE SCHEMA _patches"
 psql $DB_NAME -c "CREATE EXTENSION dbpatch SCHEMA _patches"
 ```
 
-You can then execute the installed SQL file with something like:
+You can then execute the installed SQL files with something like:
 
 ```shell
 for file in /usr/share/linz-bde-schema/sql/*.sql
@@ -28,7 +30,7 @@ for file in /usr/share/linz-bde-schema/sql/*.sql
 done
 ```
 
-or the following if you don't want to install the indexes:
+or the following commands if you don't want to install the indexes:
 
 ```shell
 psql $DB_NAME -f /usr/share/linz-bde-schema/sql/01-bde_roles.sql
@@ -51,15 +53,18 @@ Testing
 
 Testing is done using pg_regress and PgTap. To run the tests run the following command:
 
-	make test
+```shell
+make test
+```shell
 
 Building Debian packaging
 --------------------------
 
 Build the debian packages using the following command:
 
-    dpkg-buildpackage -us -uc
-
+```shell
+dpkg-buildpackage -us -uc
+```shell
 
 Dependencies
 ------------
