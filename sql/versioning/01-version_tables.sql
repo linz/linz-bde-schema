@@ -13,6 +13,8 @@
 -- Creates system tables required for table versioning support
 --------------------------------------------------------------------------------
 
+SET client_min_messages TO WARNING;
+
 DO $$
 DECLARE
    v_schema    NAME;
