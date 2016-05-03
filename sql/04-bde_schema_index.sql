@@ -19,7 +19,19 @@ SET search_path = bde, public;
 DO $SCHEMA$
 BEGIN
 
-IF EXISTS (SELECT * FROM pg_namespace where LOWER(nspname) = 'bde') THEN
+IF NOT EXISTS (SELECT * FROM pg_namespace where LOWER(nspname) = 'bde') THEN
+    RAISE EXCEPTION 'BDE schema is not installed';
+END IF;
+
+-- Check if indexes have been installed already
+IF EXISTS (
+    SELECT *
+    FROM   pg_class c
+    JOIN   pg_namespace n ON n.oid = c.relnamespace
+    WHERE  c.relname = 'fk_act_tin'
+    AND    n.nspname = 'bde'
+    AND    c.relkind = 'i'
+) THEN
     RETURN;
 END IF;
 
