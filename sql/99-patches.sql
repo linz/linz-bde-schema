@@ -30,7 +30,7 @@ IF NOT EXISTS (
 ) THEN
 	RAISE EXCEPTION 'dbpatch extension is not installed correctly';
 END IF;
-	
+
 -- Patches start from here
 
 

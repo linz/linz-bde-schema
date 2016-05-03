@@ -23,9 +23,9 @@ DECLARE
    v_rev_table TEXT;
 BEGIN
 
-	IF NOT EXISTS (SELECT * FROM pg_extension  WHERE extname = 'table_version') THEN
-		RETURN;
-	END IF;
+    IF NOT EXISTS (SELECT * FROM pg_extension  WHERE extname = 'table_version') THEN
+        RETURN;
+    END IF;
 
     PERFORM table_version.ver_create_revision('Initial revisioning for BDE tables');
     
