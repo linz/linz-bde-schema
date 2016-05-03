@@ -1,5 +1,5 @@
 LINZ BDE SCHEMAS
-=================================
+================
 
 Provides that core BDE schemas and functions that are used for storing and accessing raw BDE
 unloads from the Landonline database system.
@@ -7,13 +7,44 @@ unloads from the Landonline database system.
 Installation
 ------------
 
-    sudo make install
-    
+```shell
+sudo make install
+```
+
+First you need to install the PostGIS and dbpatch extensions:
+
+```shell
+createdb $DB_NAME
+psql $DB_NAME -c "CREATE EXTENSION postgis"
+psql $DB_NAME -c "CREATE SCHEMA _patches"
+psql $DB_NAME -c "CREATE EXTENSION dbpatch SCHEMA _patches"
+```
+
 You can then execute the installed SQL file with something like:
-    
-    for file in /usr/share/linz-bde-schema/*.sql
-        do psql $DATABASE_NAME -f $file
-    done
+
+```shell
+for file in /usr/share/linz-bde-schema/sql/*.sql
+    do psql $DB_NAME -f $file -v ON_ERROR_STOP=1
+done
+```
+
+or the following if you don't want to install the indexes:
+
+```shell
+psql $DB_NAME -f /usr/share/linz-bde-schema/sql/01-bde_roles.sql
+psql $DB_NAME -f /usr/share/linz-bde-schema/sql/02-bde_schema.sql
+psql $DB_NAME -f /usr/share/linz-bde-schema/sql/03-bde_functions.sql
+psql $DB_NAME -f /usr/share/linz-bde-schema/sql/05-bde_version.sql
+psql $DB_NAME -f /usr/share/linz-bde-schema/sql/99-patches.sql
+```
+
+If you would like to revision the table then install the table_version extension
+and then run the versioning SQL script:
+
+```shell
+psql $DB_NAME -c "CREATE EXTENSION table_version"
+psql $DB_NAME -f /usr/share/linz-bde-schema/sql/versioning/01-version_tables.sql
+```
 
 Testing
 -------
@@ -33,7 +64,8 @@ Build the debian packages using the following command:
 Dependencies
 ------------
 
-Requires PostgreSQL 9.3+/PostGIS 2.2+ and the PL/PgSQL language extension installed.
+Requires PostgreSQL 9.3+/PostGIS 2.2+, PL/PgSQL, [dbpatch](https://github.com/linz/postgresql-dbpatch) and (optionally)
+[table_version](https://github.com/linz/postgresql-tableversion) extensions installed.
 
 License
 ---------------------
