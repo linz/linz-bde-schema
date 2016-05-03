@@ -14,6 +14,6 @@ Depends: ${misc:Depends},
  postgresql-9.3-postgis-2.2,
  postgresql-9.3-dbpatch
 Recommends: postgresql-9.3-tableversion
-Description: Provides that core BDE schemas and functions that are used
+Description: Provides the core BDE schemas and functions that are used
  for storing and accessing raw BDE unloads from the Landonline database
  system.
