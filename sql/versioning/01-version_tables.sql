@@ -21,15 +21,15 @@ DECLARE
    v_rev_table TEXT;
 BEGIN
 
-	IF NOT EXISTS (SELECT * FROM pg_available_extensions WHERE name = ''table_version'') THEN
+	IF NOT EXISTS (SELECT * FROM pg_extension  WHERE extname = 'table_version') THEN
 		RETURN;
-	END IF; 
+	END IF;
 
     PERFORM table_version.ver_create_revision('Initial revisioning for BDE tables');
     
     FOR v_schema, v_table IN 
         SELECT
-            NSP.nspname,s
+            NSP.nspname,
             CLS.relname
         FROM
             pg_class CLS,
