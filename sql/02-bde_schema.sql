@@ -22,6 +22,11 @@ IF EXISTS (SELECT * FROM pg_namespace where LOWER(nspname) = 'bde') THEN
     RETURN;
 END IF;
 
+
+IF NOT EXISTS (SELECT * FROM pg_extension  WHERE extname = 'postgis') THEN
+	RAISE EXCEPTION 'postgis extension is not installed';
+END IF;
+
 CREATE SCHEMA bde AUTHORIZATION bde_dba;
 
 GRANT ALL ON SCHEMA bde TO bde_dba;
@@ -2724,7 +2729,7 @@ GRANT SELECT ON TABLE crs_statist_area TO bde_user;
 CREATE TABLE crs_statute  (
     id INTEGER NOT NULL,
     section VARCHAR(100) NOT NULL,
-    name_and_date VARCHAR(100) NOT NULL,
+    name_and_date VARCHAR(200) NOT NULL,
     still_in_force CHAR(1) NOT NULL,
     in_force_date DATE,
     repeal_date DATE,
@@ -2760,7 +2765,8 @@ CREATE TABLE crs_statute_action (
     other_legality VARCHAR(250),
     recorded_date DATE,
     id INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    gazette_notice_id INTEGER
 );
 
 ALTER TABLE ONLY crs_statute_action
