@@ -1,6 +1,6 @@
 ﻿--------------------------------------------------------------------------------
 --
--- linz-bde-schema - LINZ BDE simplified schema
+-- linz-bde-schema
 --
 -- Copyright 2016 Crown copyright (c)
 -- Land Information New Zealand and the New Zealand Government.
