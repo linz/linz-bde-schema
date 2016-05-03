@@ -15,16 +15,16 @@ PGXS := $(shell $(PG_CONFIG) --pgxs)
 PG_REGRESS := $(dir $(PGXS))../../src/test/regress/pg_regress
 
 SQLSCRIPTS = \
-  sql/00-bde_version.sql \
   sql/01-bde_roles.sql \
   sql/02-bde_schema.sql \
   sql/03-bde_functions.sql \
   sql/04-bde_schema_index.sql \
+  sql/05-bde_version.sql \
   sql/99-patches.sql \
   sql/versioning/01-version_tables.sql
   $(END)
   
-EXTRA_CLEAN = sql/00-bde_version.sql
+EXTRA_CLEAN = sql/05-bde_version.sql
 
 .dummy:
 
@@ -32,7 +32,7 @@ EXTRA_CLEAN = sql/00-bde_version.sql
 
 all: $(SQLSCRIPTS)
 
-sql/00-bde_version.sql: sql/00-bde_version.sql.in
+sql/05-bde_version.sql: sql/05-bde_version.sql.in
 	$(SED) -e 's/@@VERSION@@/$(VERSION)/' $< > $@
 
 install: $(SQLSCRIPTS)
