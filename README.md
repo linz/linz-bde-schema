@@ -55,7 +55,7 @@ Testing is done using pg_regress and PgTap. To run the tests run the following c
 
 ```shell
 make test
-```shell
+```
 
 Building Debian packaging
 --------------------------
@@ -64,7 +64,7 @@ Build the debian packages using the following command:
 
 ```shell
 dpkg-buildpackage -us -uc
-```shell
+```
 
 Dependencies
 ------------
