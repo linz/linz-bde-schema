@@ -28,7 +28,7 @@ IF NOT EXISTS (
     AND    NSP.oid = EXT.extnamespace 
     AND    NSP.nspname = '_patches'
 ) THEN
-	RAISE EXCEPTION 'dbpatch extension is not installed correctly';
+    RAISE EXCEPTION 'dbpatch extension is not installed correctly';
 END IF;
 
 -- Patches start from here
