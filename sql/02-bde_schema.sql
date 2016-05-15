@@ -1562,10 +1562,10 @@ CREATE TABLE crs_mesh_blk_line (
 PERFORM AddGeometryColumn('crs_mesh_blk_line', 'shape', 4167, 'LINESTRING', 2);
 
 ALTER TABLE ONLY crs_mesh_blk_line
-    ADD UNIQUE (id);
+    ADD UNIQUE (audit_id);
     
 ALTER TABLE ONLY crs_mesh_blk_line
-    ADD CONSTRAINT pkey_crs_mesh_blk_line PRIMARY KEY (audit_id);
+    ADD CONSTRAINT pkey_crs_mesh_blk_line PRIMARY KEY (id);
 
 ALTER TABLE crs_mesh_blk_line ALTER COLUMN alt_id SET STATISTICS 500;
 ALTER TABLE crs_mesh_blk_line ALTER COLUMN audit_id SET STATISTICS 500;
