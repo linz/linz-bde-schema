@@ -37,7 +37,7 @@ END IF;
 -- 1.0.2 Remove annotations column from crs_work
 -------------------------------------------------------------------------------
 
-SELECT _patches.apply_patch(
+PERFORM _patches.apply_patch(
     'BDE - 1.0.2: Remove annotations column from bde.crs_work',
     '
 DO $$
