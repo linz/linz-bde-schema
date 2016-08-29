@@ -33,6 +33,26 @@ END IF;
 
 -- Patches start from here
 
+-------------------------------------------------------------------------------
+-- 1.0.2 Remove annotations column from crs_work
+-------------------------------------------------------------------------------
+
+SELECT _patches.apply_patch(
+    'BDE - 1.0.2: Remove annotations column from bde.crs_work',
+    '
+DO $$
+BEGIN
+
+IF table_version.ver_is_table_versioned(''bde'', ''crs_work'') THEN
+    PERFORM table_version.ver_versioned_table_drop_column(''bde'', ''crs_work'', ''annotations'');
+ELSE
+    ALTER TABLE bde.crs_work DROP COLUMN annotations;
+END IF;
+
+END;
+$$
+'
+);
 
 END;
 $PATCHES$;
