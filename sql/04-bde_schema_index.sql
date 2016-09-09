@@ -132,6 +132,11 @@ IF NOT EXISTS (SELECT relname FROM tmp_bde_index WHERE relname='fk_sco_scg') THE
     CREATE INDEX fk_sco_scg ON bde.crs_sys_code USING btree (scg_code);
 END IF;
 
+IF NOT EXISTS (SELECT relname FROM tmp_bde_index WHERE relname='fk_sco_scg_code') THEN
+    RAISE NOTICE 'Building fk_sco_scg_code';
+    CREATE UNIQUE INDEX fk_sco_scg_code ON bde.crs_sys_code USING btree (scg_code, code);
+END IF;
+
 IF NOT EXISTS (SELECT relname FROM tmp_bde_index WHERE relname='shx_vct_shape') THEN
     RAISE NOTICE 'Building shx_vct_shape';
     CREATE INDEX shx_vct_shape ON bde.crs_vector USING gist (shape);
