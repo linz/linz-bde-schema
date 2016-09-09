@@ -67,6 +67,11 @@ IF NOT EXISTS (SELECT relname FROM tmp_bde_index WHERE relname='shx_map_shape') 
     CREATE INDEX shx_map_shape ON bde.crs_map_grid USING gist (shape);
 END IF;
 
+IF NOT EXISTS (SELECT relname FROM tmp_bde_index WHERE relname='fk_mkn_mrk') THEN
+    RAISE NOTICE 'Building fk_mkn_mrk';
+    CREATE INDEX fk_mkn_mrk ON bde.crs_mark_name USING btree (mrk_id);
+END IF;
+
 IF NOT EXISTS (SELECT relname FROM tmp_bde_index WHERE relname='shx_mbk_shape') THEN
     RAISE NOTICE 'Building shx_mbk_shape';
     CREATE INDEX shx_mbk_shape ON bde.crs_mesh_blk USING gist (shape);
