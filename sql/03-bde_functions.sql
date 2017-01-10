@@ -31,8 +31,24 @@ END;
 $$;
 
 --
--- Name: bde_get_app_specific
+-- Function: bde_get_app_specific
 --
+
+/**
+* Retrieve the title or survey appellation for a specific parcel and format it. 
+* Note this function has the same logic as Landonline. 
+*
+* @param par_id       Parcel id of the appellation
+* @param p_context    Either 'SURV' (survey) or 'TITL' (title). This defines the appellation
+*                     string context that is returned. In many cases this will return
+*                     the same value but differs in many cases due to historic differences
+*                     in survey and title registration processes. This difference can
+*                     be small such as "LOT 8" vs "Allot 8", but in other cases the
+*                     appellation string can be completely different.
+* @param p_long       Either 'Y' or 'N'. This defines if the appellation should be in long
+*                     or short appellation format. e.g 'Lot 1 Deposited Plan 1234' vs 'Lot 1 DP 1234'.
+* @return             The formatted appellation string
+*/
 
 CREATE OR REPLACE FUNCTION bde_get_app_specific(p_par_id INTEGER, p_context VARCHAR, p_long CHAR) RETURNS text
     AS $$
