@@ -729,28 +729,28 @@ GRANT EXECUTE ON FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR,
 --
 
 CREATE OR REPLACE FUNCTION appellation_within_bbox(
-    p_xmin	DOUBLE PRECISION, 
-    p_ymin 	DOUBLE PRECISION, 
-    p_xmax 	DOUBLE PRECISION, 
-    p_ymax 	DOUBLE PRECISION,
-    p_toc	VARCHAR DEFAULT 'PRIM')
+    p_xmin		DOUBLE PRECISION, 
+    p_ymin 		DOUBLE PRECISION, 
+    p_xmax 		DOUBLE PRECISION, 
+    p_ymax 		DOUBLE PRECISION,
+    p_toc		VARCHAR DEFAULT 'PRIM')
 RETURNS TABLE(label text, par_id integer, shape geometry) 
 AS
 $body$
 
 DECLARE
-    v_xmin 	DOUBLE PRECISION;
-    v_ymin 	DOUBLE PRECISION;
-    v_xmax 	DOUBLE PRECISION;
-    v_ymax 	DOUBLE PRECISION;
+    v_xmin 		DOUBLE PRECISION;
+    v_ymin 		DOUBLE PRECISION;
+    v_xmax 		DOUBLE PRECISION;
+    v_ymax 		DOUBLE PRECISION;
     v_srid     	INTEGER := 4167;
     v_toc_code 	VARCHAR(4);
     
 BEGIN
-    v_xmin 	:= p_xmin;
-    v_ymin 	:= p_ymin;
-    v_xmax 	:= p_xmax;
-    v_ymax 	:= p_ymax;
+    v_xmin 		:= p_xmin;
+    v_ymin 		:= p_ymin;
+    v_xmax 		:= p_xmax;
+    v_ymax 		:= p_ymax;
     v_toc_code 	:= p_toc;
     
     RETURN QUERY
