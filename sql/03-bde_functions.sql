@@ -724,6 +724,57 @@ REVOKE ALL ON FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TE
 GRANT EXECUTE ON FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) TO bde_admin;
 GRANT EXECUTE ON FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) TO bde_user;
 
+--
+-- Name: par_label_for_bbox(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, VARCHAR);
+--
+
+CREATE OR REPLACE FUNCTION par_label_for_bbox(
+    p_xmin	DOUBLE PRECISION, 
+    p_ymin 	DOUBLE PRECISION, 
+    p_xmax 	DOUBLE PRECISION, 
+    p_ymax 	DOUBLE PRECISION,
+    p_toc	VARCHAR DEFAULT 'PRIM')
+RETURNS TABLE(label text, par_id integer, shape geometry) 
+AS
+$body$
+
+DECLARE
+    v_xmin 	DOUBLE PRECISION;
+    v_ymin 	DOUBLE PRECISION;
+    v_xmax 	DOUBLE PRECISION;
+    v_ymax 	DOUBLE PRECISION;
+    v_srid     	INTEGER := 4167;
+    v_toc_code 	VARCHAR(4);
+    
+BEGIN
+    v_xmin 	:= p_xmin;
+    v_ymin 	:= p_ymin;
+    v_xmax 	:= p_xmax;
+    v_ymax 	:= p_ymax;
+    v_toc_code 	:= p_toc;
+    
+    RETURN QUERY
+	SELECT 
+	     bde_get_combined_appellation(id ,'N'), 
+	     id, 
+	     ST_PointOnSurface(p.shape)
+	  FROM 
+	      crs_parcel p
+	  WHERE 
+	      status = 'CURR'
+	  AND
+	      toc_code = v_toc_code
+	  AND 
+	      ST_Intersects(p.shape,ST_MakeEnvelope(v_xmin,v_ymin, v_xmax, v_ymax, v_srid));
+    END;
+$body$ LANGUAGE plpgsql VOLATILE
+COST 100
+ROWS 1000;
+
+ALTER FUNCTION par_label_for_bbox(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, VARCHAR) OWNER TO  bde_dba;
+REVOKE ALL ON FUNCTION par_label_for_bbox(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, VARCHAR) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION par_label_for_bbox(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, VARCHAR) TO bde_admin;
+GRANT EXECUTE ON FUNCTION par_label_for_bbox(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION, VARCHAR) TO bde_user;
 
 CREATE OR REPLACE FUNCTION bde_get_combined_appellation(p_par_id INTEGER, p_long CHAR)
     RETURNS TEXT AS $$
