@@ -53,13 +53,12 @@ $$
 );
 
 
-
 -------------------------------------------------------------------------------
 -- 1.0.3 View to support AIMS (QGIS Plugin) parcel labeling 
 -------------------------------------------------------------------------------
 
 PERFORM _patches.apply_patch(
-    'BDE - 1.0.3: View to support AIMS (QGIS Plugin) parcel labeling',
+  'BDE - 1.0.3: View to support AIMS (QGIS Plugin) parcel labeling',
   '
   CREATE VIEW parcel_appellation_view AS 
     SELECT  bde_get_combined_appellation(crs_parcel.id, ''N'') AS appellation,
