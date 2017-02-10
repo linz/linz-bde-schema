@@ -63,9 +63,9 @@ PERFORM _patches.apply_patch(
   CREATE VIEW parcel_appellation_view AS 
     SELECT  bde_get_combined_appellation(crs_parcel.id, ''N'') AS appellation,
             crs_parcel.id AS par_id
-    FROM	crs_parcel
-    WHERE   crs_parcel.status = ''CURR'' 
-    AND   	crs_parcel.toc_code = ''PRIM'';
+	FROM	crs_parcel
+	WHERE	crs_parcel.status = ''CURR'' 
+	AND		crs_parcel.toc_code = ''PRIM'';
 
   ALTER TABLE parcel_appellation_view OWNER TO bde_dba;
   REVOKE ALL ON TABLE parcel_appellation_view FROM PUBLIC;
