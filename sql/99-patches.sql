@@ -39,21 +39,21 @@ END IF;
 
 PERFORM _patches.apply_patch(
     'BDE - 1.0.2: Remove annotations column from bde.crs_work',
-    '
+    $P$
 DO $$
 BEGIN
-IF EXISTS ( SELECT * FROM pg_extension  WHERE extname = ''table_version'' )
+IF EXISTS ( SELECT * FROM pg_extension  WHERE extname = 'table_version' )
 THEN
-  IF table_version.ver_is_table_versioned(''bde'', ''crs_work'')
+  IF table_version.ver_is_table_versioned('bde', 'crs_work')
   THEN
-      PERFORM table_version.ver_versioned_table_drop_column(''bde'', ''crs_work'', ''annotations'');
+      PERFORM table_version.ver_versioned_table_drop_column('bde', 'crs_work', 'annotations');
   ELSE
       ALTER TABLE bde.crs_work DROP COLUMN annotations;
   END IF;
 END IF;
 END;
 $$
-'
+$P$
 );
 
 END;
