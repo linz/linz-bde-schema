@@ -10,8 +10,8 @@
 -- LICENSE file for more information.
 --
 --------------------------------------------------------------------------------
--- Creates a PostgreSQL 8.4+ and PostGIS 1.0+ schema and set of table
--- definitions for BDE data
+-- Create tables for holding BDE data in a `bde` schema, granting
+-- appropriate authorizations to bde_* roles.
 --------------------------------------------------------------------------------
 SET client_min_messages TO WARNING;
 
@@ -19,6 +19,7 @@ DO $SCHEMA$
 BEGIN
 
 IF EXISTS (SELECT * FROM pg_namespace where LOWER(nspname) = 'bde') THEN
+	  RAISE NOTICE 'bde schema already exists';
     RETURN;
 END IF;
 
