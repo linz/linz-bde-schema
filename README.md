@@ -40,8 +40,8 @@ psql $DB_NAME -f /usr/share/linz-bde-schema/sql/05-bde_version.sql
 psql $DB_NAME -f /usr/share/linz-bde-schema/sql/99-patches.sql
 ```
 
-If you would like to revision the table then install the table_version extension
-and then run the versioning SQL script:
+If you would like to revision the table then install the `table_version`
+extension and then run the versioning SQL script:
 
 ```shell
 psql $DB_NAME -c "CREATE EXTENSION table_version"
@@ -51,7 +51,8 @@ psql $DB_NAME -f /usr/share/linz-bde-schema/sql/versioning/01-version_tables.sql
 Testing
 -------
 
-Testing is done using pg_regress and PgTap. To run the tests run the following command:
+Testing is done using `pg_regress` and `PgTap`.
+To run the tests run the following command:
 
 ```shell
 make test
@@ -69,8 +70,10 @@ dpkg-buildpackage -us -uc
 Dependencies
 ------------
 
-Requires PostgreSQL 9.3+/PostGIS 2.2+, PL/PgSQL, [dbpatch](https://github.com/linz/postgresql-dbpatch) and (optionally)
-[table_version](https://github.com/linz/postgresql-tableversion) extensions installed.
+Requires PostgreSQL 9.3+/PostGIS 2.2+, PL/PgSQL,
+[dbpatch](https://github.com/linz/postgresql-dbpatch) and (optionally)
+[table_version](https://github.com/linz/postgresql-tableversion) extensions
+installed.
 
 License
 ---------------------
