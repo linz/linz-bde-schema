@@ -1,8 +1,8 @@
 LINZ BDE SCHEMAS
 ================
 
-Provides the core BDE schemas and functions that are used for storing and accessing raw BDE
-unloads from the Landonline database system.
+Provides the core BDE schemas and functions that are used for storing
+and accessing raw BDE exports from the Landonline database system.
 
 Installation
 ------------
