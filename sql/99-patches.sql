@@ -42,10 +42,7 @@ PERFORM _patches.apply_patch(
     '
 DO $$
 BEGIN
-IF EXISTS ( SELECT p.oid from pg_proc p, pg_namespace n
-            WHERE p.proname = ''ver_is_table_versioned''
-              AND p.pronamespace = n.oid
-              AND n.nspname = ''table_version'' )
+IF EXISTS ( SELECT * FROM pg_extension  WHERE extname = ''table_version'' )
 THEN
   IF table_version.ver_is_table_versioned(''bde'', ''crs_work'')
   THEN
@@ -53,6 +50,7 @@ THEN
   ELSE
       ALTER TABLE bde.crs_work DROP COLUMN annotations;
   END IF;
+END IF;
 END;
 $$
 '
