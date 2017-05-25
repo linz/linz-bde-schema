@@ -4,6 +4,9 @@ LINZ BDE SCHEMAS
 Provides the core BDE schemas and functions that are used for storing
 and accessing raw BDE exports from the Landonline database system.
 
+Refer to [LINZ::Bde](https://github.com/linz/linz_bde_perl)
+documentation for further information about raw BDE exports format.
+
 Installation
 ------------
 
