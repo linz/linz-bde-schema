@@ -6,6 +6,7 @@ addons:
   apt:
     packages:
     - postgresql-server-dev-9.1
+    - pgtap
 script:
   - make
-  - make check || cat regression.diffs
+  - make check || { cat regression.diffs; false; }
