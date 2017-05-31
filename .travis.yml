@@ -8,4 +8,4 @@ addons:
     - postgresql-server-dev-9.1
 script:
   - make
-  - make check
+  - make check || cat regression.diffs
