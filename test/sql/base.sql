@@ -1,3 +1,4 @@
+\set ECHO none
 --------------------------------------------------------------------------------
 --
 -- Copyright 2016 Crown copyright (c)
@@ -10,22 +11,34 @@
 --------------------------------------------------------------------------------
 -- Provide unit testing for LINZ BDE SCHEMA using pgTAP
 --------------------------------------------------------------------------------
-\set ECHO none
 \set QUIET true
-\set VERBOSITY verbose
+\set VERBOSITY terse
 \pset format unaligned
 \pset tuples_only true
 
 SET client_min_messages TO WARNING;
 
-BEGIN;
+CREATE EXTENSION postgis;
 
-CREATE EXTENSION pgtap;
+CREATE SCHEMA _patches;
+CREATE EXTENSION dbpatch SCHEMA _patches;
+
+\i sql/01-bde_roles.sql
+\i sql/02-bde_schema.sql
+\i sql/03-bde_functions.sql
+\i sql/04-bde_schema_index.sql
+\i sql/05-bde_version.sql
+\i sql/99-patches.sql
+
+--BEGIN;
+
+
+--CREATE EXTENSION pgtap;
 
 --SELECT plan(1);
-SELECT * FROM no_plan();
+--SELECT * FROM no_plan();
 
 --SELECT * FROM finish();
 
-ROLLBACK;
+--ROLLBACK;
 

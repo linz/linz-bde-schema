@@ -1,13 +1,2 @@
---------------------------------------------------------------------------------
---
--- Copyright 2016 Crown copyright (c)
--- Land Information New Zealand and the New Zealand Government.
--- All rights reserved
---
--- This software is released under the terms of the new BSD license. See the 
--- LICENSE file for more information.
---
---------------------------------------------------------------------------------
--- Provide unit testing for LINZ BDE SCHEMA using pgTAP
---------------------------------------------------------------------------------
 \set ECHO none
+psql:sql/99-patches.sql:60: INFO:  Applying patch BDE - 1.0.2: Remove annotations column from bde.crs_work

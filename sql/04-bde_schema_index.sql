@@ -12,7 +12,7 @@
 --------------------------------------------------------------------------------
 -- BDE indexes used within the CRS production database
 --------------------------------------------------------------------------------
-SET client_min_messages TO NOTICE;
+--SET client_min_messages TO NOTICE;
 SET search_path = bde, public;
 
 
