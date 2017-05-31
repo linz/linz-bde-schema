@@ -1,5 +1,7 @@
 sudo: false
 language: C++
+services:
+  - postgresql
 addons:
   apt:
     packages:
