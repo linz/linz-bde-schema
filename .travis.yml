@@ -1,0 +1,5 @@
+sudo: false
+language: C++
+script:
+  - make
+  - make check
