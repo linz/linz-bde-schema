@@ -5,8 +5,9 @@ services:
 addons:
   apt:
     packages:
-    - postgresql-server-dev-9.1
-    - pgtap
+    - postgresql-9.6
+    - postgresql-9.6-pgtap
+    - postgresql-server-dev-9.6
 script:
   - make
   - make check || { cat regression.diffs; false; }
