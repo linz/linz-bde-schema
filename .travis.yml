@@ -1,5 +1,9 @@
 sudo: false
 language: C++
+addons:
+  apt:
+    packages:
+    - postgresql-server-dev-9.1
 script:
   - make
   - make check
