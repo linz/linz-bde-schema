@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/linz/linz-bde-schema.svg)](http://travis-ci.org/linz/linz-bde-schema)
+
 LINZ BDE SCHEMAS
 ================
 
