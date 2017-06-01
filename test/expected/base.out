@@ -5,153 +5,258 @@ ok 2 - Role bde_dba should exist
 ok 3 - Role bde_admin should exist
 ok 4 - Role bde_user should exist
 ok 5 - Table bde.cbe_title_parcel_association should exist
-ok 6 - Table bde.crs_action should exist
-ok 7 - Table bde.crs_action_type should exist
-ok 8 - Table bde.crs_adj_obs_change should exist
-ok 9 - Table bde.crs_adj_user_coef should exist
-ok 10 - Table bde.crs_adjust_coef should exist
-ok 11 - Table bde.crs_adjust_method should exist
-ok 12 - Table bde.crs_adjustment_run should exist
-ok 13 - Table bde.crs_adoption should exist
-ok 14 - Table bde.crs_affected_parcl should exist
-ok 15 - Table bde.crs_alias should exist
-ok 16 - Table bde.crs_appellation should exist
-ok 17 - Table bde.crs_comprised_in should exist
-ok 18 - Table bde.crs_coordinate should exist
-ok 19 - Table bde.crs_coordinate_sys should exist
-ok 20 - Table bde.crs_coordinate_tpe should exist
-ok 21 - Table bde.crs_cor_precision should exist
-ok 22 - Table bde.crs_cord_order should exist
-ok 23 - Table bde.crs_datum should exist
-ok 24 - Table bde.crs_elect_place should exist
-ok 25 - Table bde.crs_ellipsoid should exist
-ok 26 - Table bde.crs_enc_share should exist
-ok 27 - Table bde.crs_encumbrance should exist
-ok 28 - Table bde.crs_encumbrancee should exist
-ok 29 - Table bde.crs_estate_share should exist
-ok 30 - Table bde.crs_feature_name should exist
-ok 31 - Table bde.crs_geodetic_network should exist
-ok 32 - Table bde.crs_geodetic_node_network should exist
-ok 33 - Table bde.crs_image should exist
-ok 34 - Table bde.crs_image_history should exist
-ok 35 - Table bde.crs_land_district should exist
-ok 36 - Table bde.crs_legal_desc should exist
-ok 37 - Table bde.crs_legal_desc_prl should exist
-ok 38 - Table bde.crs_line should exist
-ok 39 - Table bde.crs_locality should exist
-ok 40 - Table bde.crs_maintenance should exist
-ok 41 - Table bde.crs_map_grid should exist
-ok 42 - Table bde.crs_mark should exist
-ok 43 - Table bde.crs_mark_name should exist
-ok 44 - Table bde.crs_mark_sup_doc should exist
-ok 45 - Table bde.crs_mesh_blk should exist
-ok 46 - Table bde.crs_mesh_blk_area should exist
-ok 47 - Table bde.crs_mesh_blk_bdry should exist
-ok 48 - Table bde.crs_mesh_blk_line should exist
-ok 49 - Table bde.crs_mesh_blk_place should exist
-ok 50 - Table bde.crs_mrk_phys_state should exist
-ok 51 - Table bde.crs_network_plan should exist
-ok 52 - Table bde.crs_node should exist
-ok 53 - Table bde.crs_node_prp_order should exist
-ok 54 - Table bde.crs_node_works should exist
-ok 55 - Table bde.crs_nominal_index should exist
-ok 56 - Table bde.crs_obs_accuracy should exist
-ok 57 - Table bde.crs_obs_elem_type should exist
-ok 58 - Table bde.crs_obs_set should exist
-ok 59 - Table bde.crs_obs_type should exist
-ok 60 - Table bde.crs_observation should exist
-ok 61 - Table bde.crs_off_cord_sys should exist
-ok 62 - Table bde.crs_office should exist
-ok 63 - Table bde.crs_ordinate_adj should exist
-ok 64 - Table bde.crs_ordinate_type should exist
-ok 65 - Table bde.crs_parcel should exist
-ok 66 - Table bde.crs_parcel_bndry should exist
-ok 67 - Table bde.crs_parcel_dimen should exist
-ok 68 - Table bde.crs_parcel_label should exist
-ok 69 - Table bde.crs_parcel_ring should exist
-ok 70 - Table bde.crs_programme should exist
-ok 71 - Table bde.crs_proprietor should exist
-ok 72 - Table bde.crs_reduct_meth should exist
-ok 73 - Table bde.crs_reduct_run should exist
-ok 74 - Table bde.crs_ref_survey should exist
-ok 75 - Table bde.crs_road_ctr_line should exist
-ok 76 - Table bde.crs_road_name should exist
-ok 77 - Table bde.crs_road_name_asc should exist
-ok 78 - Table bde.crs_setup should exist
-ok 79 - Table bde.crs_site should exist
-ok 80 - Table bde.crs_site_locality should exist
-ok 81 - Table bde.crs_stat_act_parcl should exist
-ok 82 - Table bde.crs_stat_version should exist
-ok 83 - Table bde.crs_statist_area should exist
-ok 84 - Table bde.crs_statute should exist
-ok 85 - Table bde.crs_statute_action should exist
-ok 86 - Table bde.crs_street_address should exist
-ok 87 - Table bde.crs_sur_admin_area should exist
-ok 88 - Table bde.crs_sur_plan_ref should exist
-ok 89 - Table bde.crs_survey should exist
-ok 90 - Table bde.crs_survey_image should exist
-ok 91 - Table bde.crs_sys_code should exist
-ok 92 - Table bde.crs_sys_code_group should exist
-ok 93 - Table bde.crs_title should exist
-ok 94 - Table bde.crs_title_action should exist
-ok 95 - Table bde.crs_title_doc_ref should exist
-ok 96 - Table bde.crs_title_estate should exist
-ok 97 - Table bde.crs_title_mem_text should exist
-ok 98 - Table bde.crs_title_memorial should exist
-ok 99 - Table bde.crs_topology_class should exist
-ok 100 - Table bde.crs_transact_type should exist
-ok 101 - Table bde.crs_ttl_enc should exist
-ok 102 - Table bde.crs_ttl_hierarchy should exist
-ok 103 - Table bde.crs_ttl_inst should exist
-ok 104 - Table bde.crs_ttl_inst_title should exist
-ok 105 - Table bde.crs_unit_of_meas should exist
-ok 106 - Table bde.crs_user should exist
-ok 107 - Table bde.crs_vector should exist
-ok 108 - Table bde.crs_vertx_sequence should exist
-ok 109 - Table bde.crs_work should exist
-ok 110 - Function bde.bde_get_app_specific() should exist
-ok 111 - Function bde.bde_get_charcode() should exist
-ok 112 - Function bde.bde_get_dataset() should exist
-ok 113 - Function bde.bde_get_datasource() should exist
-ok 114 - Function bde.bde_get_desccode() should exist
-ok 115 - Function bde.bde_get_district() should exist
-ok 116 - Function bde.bde_get_mrknodename() should exist
-ok 117 - Function bde.bde_get_markname() should exist
-ok 118 - Function bde.bde_get_nodename() should exist
-ok 119 - Function bde.bde_get_nodename() should exist
-ok 120 - Function bde.bde_get_nodeorder() should exist
-ok 121 - Function bde.bde_get_office() should exist
-ok 122 - Function bde.bde_get_roadname() should exist
-ok 123 - Function bde.bde_get_trtcode() should exist
-ok 124 - Function bde.bde_get_username() should exist
-ok 125 - Function bde.bde_get_useroff() should exist
-ok 126 - Function bde.bde_write_appellation() should exist
-ok 127 - Function bde.bde_get_combined_appellation() should exist
-ok 128 - Function bde.bde_get_par_stat_act() should exist
-ok 129 - Function bde.bde_getnearnodes() should exist
-ok 130 - Function bde.bde_drop_idle_connections() should exist
-ok 131 - Function bde.bde_version() should exist
-ok 132 - Index fk_app_par should exist
-ok 133 - Index shx_epl_shape should exist
-ok 134 - Index shx_fen_shape should exist
-ok 135 - Index shx_ldt_shape should exist
-ok 136 - Index shx_lin_shape should exist
-ok 137 - Index shx_loc_shape should exist
-ok 138 - Index shx_map_shape should exist
-ok 139 - Index fk_mkn_mrk should exist
-ok 140 - Index shx_mbk_shape should exist
-ok 141 - Index shx_mbl_shape should exist
-ok 142 - Index shx_nod_shape should exist
-ok 143 - Index shx_ocs_shape should exist
-ok 144 - Index shx_par_shape should exist
-ok 145 - Index shx_plb_shape should exist
-ok 146 - Index shx_rcl_shape should exist
-ok 147 - Index fk_sap_sta should exist
-ok 148 - Index fk_sap_par should exist
-ok 149 - Index shx_stt_shape should exist
-ok 150 - Index shx_sad_shape should exist
-ok 151 - Index shx_spf_shape should exist
-ok 152 - Index fk_sco_scg should exist
-ok 153 - Index fk_sco_scg_code should exist
-ok 154 - Index shx_vct_shape should exist
-1..154
+ok 6 - Table bde.cbe_title_parcel_association should have the correct columns
+ok 7 - Table bde.crs_action should exist
+ok 8 - Table bde.crs_action should have the correct columns
+ok 9 - Table bde.crs_action_type should exist
+ok 10 - Table bde.crs_action_type should have the correct columns
+ok 11 - Table bde.crs_adj_obs_change should exist
+ok 12 - Table bde.crs_adj_obs_change should have the correct columns
+ok 13 - Table bde.crs_adj_user_coef should exist
+ok 14 - Table bde.crs_adj_user_coef should have the correct columns
+ok 15 - Table bde.crs_adjust_coef should exist
+ok 16 - Table bde.crs_adjust_coef should have the correct columns
+ok 17 - Table bde.crs_adjustment_run should exist
+ok 18 - Table bde.crs_adjust_method should have the correct columns
+ok 19 - Table bde.crs_adjust_method should exist
+ok 20 - Table bde.crs_adjustment_run should have the correct columns
+ok 21 - Table bde.crs_adoption should exist
+ok 22 - Table bde.crs_adoption should have the correct columns
+ok 23 - Table bde.crs_affected_parcl should exist
+ok 24 - Table bde.crs_affected_parcl should have the correct columns
+ok 25 - Table bde.crs_alias should exist
+ok 26 - Table bde.crs_alias should have the correct columns
+ok 27 - Table bde.crs_appellation should exist
+ok 28 - Table bde.crs_appellation should have the correct columns
+ok 29 - Table bde.crs_comprised_in should exist
+ok 30 - Table bde.crs_comprised_in should have the correct columns
+ok 31 - Table bde.crs_coordinate should exist
+ok 32 - Table bde.crs_coordinate should have the correct columns
+ok 33 - Table bde.crs_coordinate_sys should exist
+ok 34 - Table bde.crs_coordinate_sys should have the correct columns
+ok 35 - Table bde.crs_coordinate_tpe should exist
+ok 36 - Table bde.crs_coordinate_tpe should have the correct columns
+ok 37 - Table bde.crs_cord_order should exist
+ok 38 - Table bde.crs_cor_precision should have the correct columns
+ok 39 - Table bde.crs_cor_precision should exist
+ok 40 - Table bde.crs_cord_order should have the correct columns
+ok 41 - Table bde.crs_datum should exist
+ok 42 - Table bde.crs_datum should have the correct columns
+ok 43 - Table bde.crs_elect_place should exist
+ok 44 - Table bde.crs_elect_place should have the correct columns
+ok 45 - Table bde.crs_ellipsoid should exist
+ok 46 - Table bde.crs_ellipsoid should have the correct columns
+ok 47 - Table bde.crs_enc_share should exist
+ok 48 - Table bde.crs_enc_share should have the correct columns
+ok 49 - Table bde.crs_encumbrancee should exist
+ok 50 - Table bde.crs_encumbrance should have the correct columns
+ok 51 - Table bde.crs_encumbrance should exist
+ok 52 - Table bde.crs_encumbrancee should have the correct columns
+ok 53 - Table bde.crs_estate_share should exist
+ok 54 - Table bde.crs_estate_share should have the correct columns
+ok 55 - Table bde.crs_feature_name should exist
+ok 56 - Table bde.crs_feature_name should have the correct columns
+ok 57 - Table bde.crs_geodetic_network should exist
+ok 58 - Table bde.crs_geodetic_network should have the correct columns
+ok 59 - Table bde.crs_geodetic_node_network should exist
+ok 60 - Table bde.crs_geodetic_node_network should have the correct columns
+ok 61 - Table bde.crs_image_history should exist
+ok 62 - Table bde.crs_image should have the correct columns
+ok 63 - Table bde.crs_image should exist
+ok 64 - Table bde.crs_image_history should have the correct columns
+ok 65 - Table bde.crs_land_district should exist
+ok 66 - Table bde.crs_land_district should have the correct columns
+ok 67 - Table bde.crs_legal_desc should exist
+ok 68 - Table bde.crs_legal_desc should have the correct columns
+ok 69 - Table bde.crs_legal_desc_prl should exist
+ok 70 - Table bde.crs_legal_desc_prl should have the correct columns
+ok 71 - Table bde.crs_line should exist
+ok 72 - Table bde.crs_line should have the correct columns
+ok 73 - Table bde.crs_locality should exist
+ok 74 - Table bde.crs_locality should have the correct columns
+ok 75 - Table bde.crs_maintenance should exist
+ok 76 - Table bde.crs_maintenance should have the correct columns
+ok 77 - Table bde.crs_map_grid should exist
+ok 78 - Table bde.crs_map_grid should have the correct columns
+ok 79 - Table bde.crs_mark should exist
+ok 80 - Table bde.crs_mark should have the correct columns
+ok 81 - Table bde.crs_mark_name should exist
+ok 82 - Table bde.crs_mark_name should have the correct columns
+ok 83 - Table bde.crs_mark_sup_doc should exist
+ok 84 - Table bde.crs_mark_sup_doc should have the correct columns
+ok 85 - Table bde.crs_mesh_blk_area should exist
+ok 86 - Table bde.crs_mesh_blk should have the correct columns
+ok 87 - Table bde.crs_mesh_blk_bdry should exist
+ok 88 - Table bde.crs_mesh_blk_area should have the correct columns
+ok 89 - Table bde.crs_mesh_blk_line should exist
+ok 90 - Table bde.crs_mesh_blk_bdry should have the correct columns
+ok 91 - Table bde.crs_mesh_blk should exist
+ok 92 - Table bde.crs_mesh_blk_line should have the correct columns
+ok 93 - Table bde.crs_mesh_blk_place should exist
+ok 94 - Table bde.crs_mesh_blk_place should have the correct columns
+ok 95 - Table bde.crs_mrk_phys_state should exist
+ok 96 - Table bde.crs_mrk_phys_state should have the correct columns
+ok 97 - Table bde.crs_network_plan should exist
+ok 98 - Table bde.crs_network_plan should have the correct columns
+ok 99 - Table bde.crs_node should exist
+ok 100 - Table bde.crs_node should have the correct columns
+ok 101 - Table bde.crs_node_prp_order should exist
+ok 102 - Table bde.crs_node_prp_order should have the correct columns
+ok 103 - Table bde.crs_node_works should exist
+ok 104 - Table bde.crs_node_works should have the correct columns
+ok 105 - Table bde.crs_nominal_index should exist
+ok 106 - Table bde.crs_nominal_index should have the correct columns
+ok 107 - Table bde.crs_obs_accuracy should exist
+ok 108 - Table bde.crs_obs_accuracy should have the correct columns
+ok 109 - Table bde.crs_obs_elem_type should exist
+ok 110 - Table bde.crs_obs_elem_type should have the correct columns
+ok 111 - Table bde.crs_observation should exist
+ok 112 - Table bde.crs_obs_set should have the correct columns
+ok 113 - Table bde.crs_obs_set should exist
+ok 114 - Table bde.crs_obs_type should have the correct columns
+ok 115 - Table bde.crs_obs_type should exist
+ok 116 - Table bde.crs_observation should have the correct columns
+ok 117 - Table bde.crs_off_cord_sys should exist
+ok 118 - Table bde.crs_off_cord_sys should have the correct columns
+ok 119 - Table bde.crs_office should exist
+ok 120 - Table bde.crs_office should have the correct columns
+ok 121 - Table bde.crs_ordinate_adj should exist
+ok 122 - Table bde.crs_ordinate_adj should have the correct columns
+ok 123 - Table bde.crs_ordinate_type should exist
+ok 124 - Table bde.crs_ordinate_type should have the correct columns
+ok 125 - Table bde.crs_parcel_bndry should exist
+ok 126 - Table bde.crs_parcel should have the correct columns
+ok 127 - Table bde.crs_parcel_dimen should exist
+ok 128 - Table bde.crs_parcel_bndry should have the correct columns
+ok 129 - Table bde.crs_parcel_label should exist
+ok 130 - Table bde.crs_parcel_dimen should have the correct columns
+ok 131 - Table bde.crs_parcel should exist
+ok 132 - Table bde.crs_parcel_label should have the correct columns
+ok 133 - Table bde.crs_parcel_ring should exist
+ok 134 - Table bde.crs_parcel_ring should have the correct columns
+ok 135 - Table bde.crs_programme should exist
+ok 136 - Table bde.crs_programme should have the correct columns
+ok 137 - Table bde.crs_proprietor should exist
+ok 138 - Table bde.crs_proprietor should have the correct columns
+ok 139 - Table bde.crs_reduct_meth should exist
+ok 140 - Table bde.crs_reduct_meth should have the correct columns
+ok 141 - Table bde.crs_reduct_run should exist
+ok 142 - Table bde.crs_reduct_run should have the correct columns
+ok 143 - Table bde.crs_ref_survey should exist
+ok 144 - Table bde.crs_ref_survey should have the correct columns
+ok 145 - Table bde.crs_road_ctr_line should exist
+ok 146 - Table bde.crs_road_ctr_line should have the correct columns
+ok 147 - Table bde.crs_road_name_asc should exist
+ok 148 - Table bde.crs_road_name should have the correct columns
+ok 149 - Table bde.crs_road_name should exist
+ok 150 - Table bde.crs_road_name_asc should have the correct columns
+ok 151 - Table bde.crs_setup should exist
+ok 152 - Table bde.crs_setup should have the correct columns
+ok 153 - Table bde.crs_site_locality should exist
+ok 154 - Table bde.crs_site should have the correct columns
+ok 155 - Table bde.crs_site should exist
+ok 156 - Table bde.crs_site_locality should have the correct columns
+ok 157 - Table bde.crs_stat_act_parcl should exist
+ok 158 - Table bde.crs_stat_act_parcl should have the correct columns
+ok 159 - Table bde.crs_statist_area should exist
+ok 160 - Table bde.crs_stat_version should have the correct columns
+ok 161 - Table bde.crs_statute_action should exist
+ok 162 - Table bde.crs_statist_area should have the correct columns
+ok 163 - Table bde.crs_statute should exist
+ok 164 - Table bde.crs_statute should have the correct columns
+ok 165 - Table bde.crs_stat_version should exist
+ok 166 - Table bde.crs_statute_action should have the correct columns
+ok 167 - Table bde.crs_street_address should exist
+ok 168 - Table bde.crs_street_address should have the correct columns
+ok 169 - Table bde.crs_sur_admin_area should exist
+ok 170 - Table bde.crs_sur_admin_area should have the correct columns
+ok 171 - Table bde.crs_sur_plan_ref should exist
+ok 172 - Table bde.crs_sur_plan_ref should have the correct columns
+ok 173 - Table bde.crs_survey_image should exist
+ok 174 - Table bde.crs_survey should have the correct columns
+ok 175 - Table bde.crs_survey should exist
+ok 176 - Table bde.crs_survey_image should have the correct columns
+ok 177 - Table bde.crs_sys_code_group should exist
+ok 178 - Table bde.crs_sys_code should have the correct columns
+ok 179 - Table bde.crs_sys_code should exist
+ok 180 - Table bde.crs_sys_code_group should have the correct columns
+ok 181 - Table bde.crs_title_action should exist
+ok 182 - Table bde.crs_title should have the correct columns
+ok 183 - Table bde.crs_title_doc_ref should exist
+ok 184 - Table bde.crs_title_action should have the correct columns
+ok 185 - Table bde.crs_title_estate should exist
+ok 186 - Table bde.crs_title_doc_ref should have the correct columns
+ok 187 - Table bde.crs_title_memorial should exist
+ok 188 - Table bde.crs_title_estate should have the correct columns
+ok 189 - Table bde.crs_title_mem_text should exist
+ok 190 - Table bde.crs_title_mem_text should have the correct columns
+ok 191 - Table bde.crs_title should exist
+ok 192 - Table bde.crs_title_memorial should have the correct columns
+ok 193 - Table bde.crs_topology_class should exist
+ok 194 - Table bde.crs_topology_class should have the correct columns
+ok 195 - Table bde.crs_transact_type should exist
+ok 196 - Table bde.crs_transact_type should have the correct columns
+ok 197 - Table bde.crs_ttl_enc should exist
+ok 198 - Table bde.crs_ttl_enc should have the correct columns
+ok 199 - Table bde.crs_ttl_hierarchy should exist
+ok 200 - Table bde.crs_ttl_hierarchy should have the correct columns
+ok 201 - Table bde.crs_ttl_inst should exist
+ok 202 - Table bde.crs_ttl_inst should have the correct columns
+ok 203 - Table bde.crs_ttl_inst_title should exist
+ok 204 - Table bde.crs_ttl_inst_title should have the correct columns
+ok 205 - Table bde.crs_unit_of_meas should exist
+ok 206 - Table bde.crs_unit_of_meas should have the correct columns
+ok 207 - Table bde.crs_user should exist
+ok 208 - Table bde.crs_user should have the correct columns
+ok 209 - Table bde.crs_vector should exist
+ok 210 - Table bde.crs_vector should have the correct columns
+ok 211 - Table bde.crs_vertx_sequence should exist
+ok 212 - Table bde.crs_vertx_sequence should have the correct columns
+ok 213 - Table bde.crs_work should exist
+ok 214 - Table bde.crs_work should have the correct columns
+ok 215 - Function bde.bde_get_app_specific() should exist
+ok 216 - Function bde.bde_get_charcode() should exist
+ok 217 - Function bde.bde_get_dataset() should exist
+ok 218 - Function bde.bde_get_datasource() should exist
+ok 219 - Function bde.bde_get_desccode() should exist
+ok 220 - Function bde.bde_get_district() should exist
+ok 221 - Function bde.bde_get_mrknodename() should exist
+ok 222 - Function bde.bde_get_markname() should exist
+ok 223 - Function bde.bde_get_nodename() should exist
+ok 224 - Function bde.bde_get_nodename() should exist
+ok 225 - Function bde.bde_get_nodeorder() should exist
+ok 226 - Function bde.bde_get_office() should exist
+ok 227 - Function bde.bde_get_roadname() should exist
+ok 228 - Function bde.bde_get_trtcode() should exist
+ok 229 - Function bde.bde_get_username() should exist
+ok 230 - Function bde.bde_get_useroff() should exist
+ok 231 - Function bde.bde_write_appellation() should exist
+ok 232 - Function bde.bde_get_combined_appellation() should exist
+ok 233 - Function bde.bde_get_par_stat_act() should exist
+ok 234 - Function bde.bde_getnearnodes() should exist
+ok 235 - Function bde.bde_drop_idle_connections() should exist
+ok 236 - Function bde.bde_version() should exist
+ok 237 - Index fk_app_par should exist
+ok 238 - Index shx_epl_shape should exist
+ok 239 - Index shx_fen_shape should exist
+ok 240 - Index shx_ldt_shape should exist
+ok 241 - Index shx_lin_shape should exist
+ok 242 - Index shx_loc_shape should exist
+ok 243 - Index shx_map_shape should exist
+ok 244 - Index fk_mkn_mrk should exist
+ok 245 - Index shx_mbk_shape should exist
+ok 246 - Index shx_mbl_shape should exist
+ok 247 - Index shx_nod_shape should exist
+ok 248 - Index shx_ocs_shape should exist
+ok 249 - Index shx_par_shape should exist
+ok 250 - Index shx_plb_shape should exist
+ok 251 - Index shx_rcl_shape should exist
+ok 252 - Index fk_sap_sta should exist
+ok 253 - Index fk_sap_par should exist
+ok 254 - Index shx_stt_shape should exist
+ok 255 - Index shx_sad_shape should exist
+ok 256 - Index shx_spf_shape should exist
+ok 257 - Index fk_sco_scg should exist
+ok 258 - Index fk_sco_scg_code should exist
+ok 259 - Index shx_vct_shape should exist
+1..259
