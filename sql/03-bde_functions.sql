@@ -1,4 +1,4 @@
-﻿--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 --
 -- linz-bde-schema
 --
@@ -6,7 +6,7 @@
 -- Land Information New Zealand and the New Zealand Government.
 -- All rights reserved
 --
--- This software is released under the terms of the new BSD license. See the 
+-- This software is released under the terms of the new BSD license. See the
 -- LICENSE file for more information.
 --
 --------------------------------------------------------------------------------
@@ -20,9 +20,9 @@ DECLARE
    v_pcid    TEXT;
    v_schema  TEXT = 'bde';
 BEGIN
-    FOR v_pcid IN 
+    FOR v_pcid IN
         SELECT v_schema || '.' || proname || '(' || pg_get_function_identity_arguments(oid) || ')'
-        FROM pg_proc 
+        FROM pg_proc
         WHERE pronamespace=(SELECT oid FROM pg_namespace WHERE nspname = v_schema)
     LOOP
         EXECUTE 'DROP FUNCTION ' || v_pcid;
@@ -35,8 +35,8 @@ $$;
 --
 
 /**
-* Retrieve the title or survey appellation for a specific parcel and format it. 
-* Note this function has the same logic as Landonline. 
+* Retrieve the title or survey appellation for a specific parcel and format it.
+* Note this function has the same logic as Landonline.
 *
 * @param par_id       Parcel id of the appellation
 * @param p_context    Either 'SURV' (survey) or 'TITL' (title). This defines the appellation
@@ -242,11 +242,11 @@ BEGIN
         wrk_id = p_wrk_id;
 
     v_survey := v_dataset_series || ' ' || v_dataset_id;
-    
+
     IF v_dataset_suffix IS NOT NULL THEN
         v_survey := v_survey || '/' || v_dataset_suffix;
     END IF;
-    
+
     RETURN v_survey;
 END;
     $$ LANGUAGE plpgsql STRICT;
@@ -331,7 +331,7 @@ BEGIN
             MRK.nod_id
         INTO
             v_tmp_mrk_id,
-            v_tmp_nod_id 
+            v_tmp_nod_id
         FROM
             crs_mark MRK
         WHERE
@@ -553,7 +553,7 @@ BEGIN
     ELSE
         v_fullroadname := '';
     END IF;
-    
+
     RETURN v_fullroadname;
 END;
     $$ LANGUAGE plpgsql STRICT;
@@ -709,12 +709,12 @@ BEGIN
             v_output := v_output || ' ' || p_sub_type;
         END IF;
     END IF;
-    
+
     v_output := TRIM(both FROM v_output);
     IF length(v_output) > 2048 THEN
         v_output := 'Appellation Too Long';
     END IF;
-    
+
     RETURN v_output;
 END;
     $$ LANGUAGE plpgsql;
@@ -735,7 +735,7 @@ DECLARE
     v_appellation   TEXT;
 BEGIN
     v_appellation := NULL;
-    
+
     SELECT
         max(survey) as survey,
         max(title) as title,
@@ -817,7 +817,7 @@ BEGIN
              v_par_act_desc := v_par_act_desc || '[' || v_sap_name || ']';
         END IF;
     END IF;
-    
+
     SELECT
         STA.type,
         STA.ste_id,
@@ -842,21 +842,21 @@ BEGIN
     WHERE
         SCO.scg_code = 'SAPA' AND
         STA.id = p_sta_id;
-    
+
     IF v_stat_act_type = 'GNOT' THEN
         IF v_gaz_notice_id IS NULL THEN
             IF v_gaz_page IS NULL THEN
                 v_prefix :=  ' ';
-            ELSE 
+            ELSE
                 v_prefix := ' p ';
-            END IF; 
-            
+            END IF;
+
             v_stat_act_desc := bde_get_charcode('STAG', v_gazette) || ' ' || CAST(v_gaz_year AS TEXT) || v_prefix || CAST(v_gaz_page AS TEXT);
-        
-        ELSE        
+
+        ELSE
             v_prefix := ' ln ';
             v_stat_act_desc := bde_get_charcode('STAG', v_gazette) || ' ' || CAST(v_gaz_year AS TEXT) || v_prefix || CAST(v_gaz_notice_id AS TEXT);
-        
+
         END IF;
         IF v_other_legality IS NOT NULL THEN
             v_stat_act_desc := v_stat_act_desc || ', ' || v_other_legality;
@@ -878,7 +878,7 @@ BEGIN
     ELSIF v_stat_act_type IS NOT NULL THEN
         v_stat_act_desc := v_other_legality;
     END IF;
-    
+
     IF v_stat_act_type IS NOT NULL AND v_stat_act_desc IS NULL THEN
         v_stat_act_desc := v_other_legality;
     END IF;
@@ -908,9 +908,9 @@ CREATE OR REPLACE FUNCTION bde_getnearnodes (
     p_longitude DOUBLE PRECISION,
     p_tolerance DOUBLE PRECISION
     )
-RETURNS TABLE(nod_id INTEGER, distance DOUBLE PRECISION) 
-AS 
-$body$ 
+RETURNS TABLE(nod_id INTEGER, distance DOUBLE PRECISION)
+AS
+$body$
 DECLARE
     v_point    GEOMETRY;
     v_lat      DOUBLE PRECISION;
@@ -936,15 +936,15 @@ BEGIN
     -- RAISE INFO 'lat0 % lat1 % lon0 % lon1 % off %',lat0,lat1,lon0,lon1,degoff;
 
     RETURN QUERY
-        SELECT 
+        SELECT
             coo.nod_id,
             ST_Distance_Spheroid(nod.shape, v_point, v_spheroid)
-        FROM 
+        FROM
             crs_coordinate coo
             JOIN crs_node nod ON coo.nod_id = nod.id AND coo.cos_id = nod.cos_id_official
         WHERE
             coo.status = 'AUTH' AND
-            nod.shape && 
+            nod.shape &&
             ST_SetSRID(
                 ST_MakeBox2D(ST_Point(v_lon0,v_lat0),ST_Point(v_lon1,v_lat1)),
                 v_srid
@@ -961,29 +961,29 @@ GRANT EXECUTE ON FUNCTION bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, D
 GRANT EXECUTE ON FUNCTION bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION) TO bde_user;
 
 --  Drop connnections to the database more than a specific age
--- 
+--
 -- This is to prevent Quantum edit sessions left open overnight from
 -- blocking the parcel layer maintenance.
 
 CREATE OR REPLACE FUNCTION bde_drop_idle_connections( p_upload_id INT )
 RETURNS INT
 AS $$
-DECLARE 
+DECLARE
     v_pid integer;
     v_usename name;
     v_ndrop integer;
 BEGIN
     v_ndrop := 0;
     FOR v_pid, v_usename IN
-       SELECT 
+       SELECT
             procpid,
             usename
-        FROM 
+        FROM
             pg_stat_activity a
         WHERE
-            a.datname = current_database() AND 
-            a.current_query = '<IDLE> in transaction' AND 
-            (clock_timestamp()-query_start) > '2 HOURS' 
+            a.datname = current_database() AND
+            a.current_query = '<IDLE> in transaction' AND
+            (clock_timestamp()-query_start) > '2 HOURS'
     LOOP
         BEGIN
             RAISE WARNING 'Dropping idle connection held by %', v_usename;
@@ -1023,11 +1023,11 @@ BEGIN
         ELSE
             v_comment := E'\n\n' || v_comment;
         END IF;
-       
+
         v_comment := '$Id$'
                     || E'\n' || 'Installed: ' ||
                     to_char(current_timestamp,'YYYY-MM-DD HH:MI') || v_comment;
-       
+
         EXECUTE 'COMMENT ON FUNCTION ' || v_schema || '.' || v_pcid || ' IS '
             || quote_literal( v_comment );
     END LOOP;

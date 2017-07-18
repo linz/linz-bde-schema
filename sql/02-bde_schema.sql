@@ -1,4 +1,4 @@
-﻿--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 --
 -- linz-bde-schema
 --
@@ -6,7 +6,7 @@
 -- Land Information New Zealand and the New Zealand Government.
 -- All rights reserved
 --
--- This software is released under the terms of the new BSD license. See the 
+-- This software is released under the terms of the new BSD license. See the
 -- LICENSE file for more information.
 --
 --------------------------------------------------------------------------------
@@ -87,7 +87,7 @@ CREATE TABLE crs_action_type (
 
 ALTER TABLE ONLY crs_action_type
     ADD CONSTRAINT pkey_crs_action_type PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE ONLY crs_action_type
     ADD UNIQUE (type);
 
@@ -130,7 +130,7 @@ CREATE TABLE crs_adj_obs_change (
 
 ALTER TABLE ONLY crs_adj_obs_change
     ADD UNIQUE (adj_id, obn_id);
-    
+
 ALTER TABLE ONLY crs_adj_obs_change
     ADD CONSTRAINT pkey_crs_adj_obs_change PRIMARY KEY (audit_id);
 
@@ -157,7 +157,7 @@ CREATE TABLE crs_adj_user_coef (
 
 ALTER TABLE ONLY crs_adj_user_coef
     ADD CONSTRAINT pkey_crs_adj_user_coef PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE ONLY crs_adj_user_coef
     ADD UNIQUE (adc_id, adj_id);
 
@@ -183,7 +183,7 @@ CREATE TABLE crs_adjust_coef (
 
 ALTER TABLE ONLY crs_adjust_coef
     ADD CONSTRAINT pkey_crs_adjust_coef PRIMARY KEY (id);
-    
+
 ALTER TABLE ONLY crs_adjust_coef
     ADD UNIQUE (audit_id);
 
@@ -212,7 +212,7 @@ ALTER TABLE ONLY crs_adjust_method
 
 ALTER TABLE ONLY crs_adjust_method
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_adjust_method OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_adjust_method FROM PUBLIC;
@@ -242,7 +242,7 @@ CREATE TABLE crs_adjustment_run (
 
 ALTER TABLE ONLY crs_adjustment_run
     ADD CONSTRAINT pkey_crs_adjustment_run PRIMARY KEY (id);
-    
+
 ALTER TABLE ONLY crs_adjustment_run
     ADD UNIQUE (audit_id);
 
@@ -276,7 +276,7 @@ CREATE TABLE crs_adoption (
 
 ALTER TABLE ONLY crs_adoption
     ADD CONSTRAINT pkey_crs_adoption PRIMARY KEY (obn_id_new);
-    
+
 ALTER TABLE ONLY crs_adoption
     ADD UNIQUE (audit_id);
 
@@ -304,7 +304,7 @@ CREATE TABLE crs_affected_parcl (
 
 ALTER TABLE ONLY crs_affected_parcl
     ADD UNIQUE (sur_wrk_id, par_id);
-    
+
 ALTER TABLE ONLY crs_affected_parcl
     ADD CONSTRAINT pkey_crs_affected_parcl PRIMARY KEY (audit_id);
 
@@ -372,7 +372,7 @@ ALTER TABLE ONLY crs_appellation
 
 ALTER TABLE ONLY crs_appellation
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_appellation ALTER COLUMN act_id_crt SET STATISTICS 500;
 ALTER TABLE crs_appellation ALTER COLUMN act_id_ext SET STATISTICS 500;
 ALTER TABLE crs_appellation ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
@@ -478,7 +478,7 @@ CREATE TABLE crs_coordinate (
 
 ALTER TABLE ONLY crs_coordinate
     ADD CONSTRAINT pkey_crs_coordinate PRIMARY KEY (id);
-    
+
 ALTER TABLE ONLY crs_coordinate
     ADD UNIQUE (audit_id);
 
@@ -521,7 +521,7 @@ ALTER TABLE ONLY crs_coordinate_sys
 
 ALTER TABLE ONLY crs_coordinate_sys
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_coordinate_sys OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_coordinate_sys FROM PUBLIC;
@@ -556,7 +556,7 @@ ALTER TABLE ONLY crs_coordinate_tpe
 
 ALTER TABLE ONLY crs_coordinate_tpe
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_coordinate_tpe OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_coordinate_tpe FROM PUBLIC;
@@ -576,7 +576,7 @@ CREATE TABLE crs_cor_precision (
 
 ALTER TABLE ONLY crs_cor_precision
     ADD UNIQUE (cor_id, ort_type);
-    
+
 ALTER TABLE ONLY crs_cor_precision
     ADD CONSTRAINT pkey_crs_cor_precision PRIMARY KEY (audit_id);
 
@@ -605,7 +605,7 @@ ALTER TABLE ONLY crs_cord_order
 
 ALTER TABLE ONLY crs_cord_order
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_cord_order OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_cord_order FROM PUBLIC;
@@ -634,7 +634,7 @@ ALTER TABLE ONLY crs_datum
 
 ALTER TABLE ONLY crs_datum
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_datum OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_datum FROM PUBLIC;
@@ -737,7 +737,7 @@ ALTER TABLE ONLY crs_elect_place
 
 ALTER TABLE ONLY crs_elect_place
     ADD UNIQUE (audit_id);
-   
+
 ALTER TABLE crs_elect_place OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_elect_place FROM PUBLIC;
@@ -761,7 +761,7 @@ ALTER TABLE ONLY crs_ellipsoid
 
 ALTER TABLE ONLY crs_ellipsoid
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_ellipsoid OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_ellipsoid FROM PUBLIC;
@@ -906,7 +906,7 @@ ALTER TABLE ONLY crs_feature_name
 
 ALTER TABLE ONLY crs_feature_name
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_feature_name OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_feature_name FROM PUBLIC;
@@ -947,7 +947,7 @@ ALTER TABLE ONLY crs_geodetic_node_network
 
 ALTER TABLE ONLY crs_geodetic_node_network
     ADD CONSTRAINT pkey_crs_geodetic_node_network PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_geodetic_node_network OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_geodetic_node_network FROM PUBLIC;
@@ -1128,7 +1128,7 @@ ALTER TABLE ONLY crs_land_district
 
 ALTER TABLE ONLY crs_land_district
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_land_district OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_land_district FROM PUBLIC;
@@ -1154,7 +1154,7 @@ ALTER TABLE ONLY crs_legal_desc
 
 ALTER TABLE ONLY crs_legal_desc
     ADD UNIQUE (audit_id);
-   
+
 ALTER TABLE crs_legal_desc ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE crs_legal_desc ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE crs_legal_desc ALTER COLUMN ttl_title_no SET STATISTICS 500;
@@ -1184,7 +1184,7 @@ ALTER TABLE ONLY crs_legal_desc_prl
 
 ALTER TABLE ONLY crs_legal_desc_prl
     ADD CONSTRAINT pkey_crs_legal_desc_prl PRIMARY KEY (audit_id);
-   
+
 ALTER TABLE crs_legal_desc_prl ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE crs_legal_desc_prl ALTER COLUMN lgd_id SET STATISTICS 500;
 ALTER TABLE crs_legal_desc_prl ALTER COLUMN par_id SET STATISTICS 500;
@@ -1256,7 +1256,7 @@ ALTER TABLE ONLY crs_locality
 
 ALTER TABLE ONLY crs_locality
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_locality OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_locality FROM PUBLIC;
@@ -1281,7 +1281,7 @@ ALTER TABLE ONLY crs_maintenance
 
 ALTER TABLE ONLY crs_maintenance
     ADD CONSTRAINT pkey_crs_maintenance PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_maintenance OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_maintenance FROM PUBLIC;
@@ -1306,7 +1306,7 @@ ALTER TABLE ONLY crs_map_grid
 
 ALTER TABLE ONLY crs_map_grid
     ADD UNIQUE (major_grid, minor_grid);
-    
+
 ALTER TABLE crs_map_grid OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_map_grid FROM PUBLIC;
@@ -1344,7 +1344,7 @@ ALTER TABLE ONLY crs_mark
 
 ALTER TABLE ONLY crs_mark
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_mark ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE crs_mark ALTER COLUMN id SET STATISTICS 1000;
 ALTER TABLE crs_mark ALTER COLUMN mrk_id_dist SET STATISTICS 1000;
@@ -1374,7 +1374,7 @@ ALTER TABLE ONLY crs_mark_name
 
 ALTER TABLE ONLY crs_mark_name
     ADD CONSTRAINT pkey_crs_mark_name PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_mark_name ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE crs_mark_name ALTER COLUMN mrk_id SET STATISTICS 500;
 ALTER TABLE crs_mark_name ALTER COLUMN name SET STATISTICS 500;
@@ -1400,7 +1400,7 @@ ALTER TABLE ONLY crs_mark_sup_doc
 
 ALTER TABLE ONLY crs_mark_sup_doc
     ADD CONSTRAINT pkey_crs_mark_sup_doc PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_mark_sup_doc ALTER COLUMN mrk_id SET STATISTICS 250;
 ALTER TABLE crs_mark_sup_doc ALTER COLUMN sud_id SET STATISTICS 250;
 
@@ -1444,12 +1444,12 @@ CREATE TABLE crs_mrk_phys_state (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_mrk_phys_state 
+ALTER TABLE ONLY crs_mrk_phys_state
     ADD UNIQUE (wrk_id, "type", mrk_id);
 
-ALTER TABLE ONLY crs_mrk_phys_state 
+ALTER TABLE ONLY crs_mrk_phys_state
     ADD CONSTRAINT pkey_crs_mrk_phys_state PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_mrk_phys_state ALTER COLUMN mrk_id SET STATISTICS 500;
 ALTER TABLE crs_mrk_phys_state ALTER COLUMN wrk_id SET STATISTICS 500;
 
@@ -1480,7 +1480,7 @@ ALTER TABLE ONLY crs_mesh_blk
 
 ALTER TABLE ONLY crs_mesh_blk
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_mesh_blk ALTER COLUMN alt_id SET STATISTICS 250;
 ALTER TABLE crs_mesh_blk ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE crs_mesh_blk ALTER COLUMN id SET STATISTICS 250;
@@ -1507,7 +1507,7 @@ ALTER TABLE ONLY crs_mesh_blk_area
 
 ALTER TABLE ONLY crs_mesh_blk_area
     ADD CONSTRAINT pkey_crs_mesh_blk_area PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_mesh_blk_area ALTER COLUMN alt_id SET STATISTICS 250;
 ALTER TABLE crs_mesh_blk_area ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE crs_mesh_blk_area ALTER COLUMN mbk_id SET STATISTICS 250;
@@ -1535,7 +1535,7 @@ ALTER TABLE ONLY crs_mesh_blk_bdry
 
 ALTER TABLE ONLY crs_mesh_blk_bdry
     ADD CONSTRAINT pkey_crs_mesh_blk_bdry PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_mesh_blk_bdry ALTER COLUMN alt_id SET STATISTICS 500;
 ALTER TABLE crs_mesh_blk_bdry ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE crs_mesh_blk_bdry ALTER COLUMN mbk_id SET STATISTICS 500;
@@ -1564,7 +1564,7 @@ PERFORM AddGeometryColumn('crs_mesh_blk_line', 'shape', 4167, 'LINESTRING', 2);
 
 ALTER TABLE ONLY crs_mesh_blk_line
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE ONLY crs_mesh_blk_line
     ADD CONSTRAINT pkey_crs_mesh_blk_line PRIMARY KEY (id);
 
@@ -1591,7 +1591,7 @@ CREATE TABLE crs_mesh_blk_place (
 
 ALTER TABLE ONLY crs_mesh_blk_place
     ADD UNIQUE (epl_id, mbk_id);
-    
+
 ALTER TABLE ONLY crs_mesh_blk_place
     ADD CONSTRAINT pkey_crs_mesh_blk_place PRIMARY KEY (audit_id);
 
@@ -1624,7 +1624,7 @@ ALTER TABLE ONLY crs_network_plan
 
 ALTER TABLE ONLY crs_network_plan
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_network_plan OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_network_plan FROM PUBLIC;
@@ -1685,7 +1685,7 @@ ALTER TABLE ONLY crs_node_prp_order
 
 ALTER TABLE ONLY crs_node_prp_order
     ADD CONSTRAINT pkey_crs_node_prp_order PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_node_prp_order OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_node_prp_order FROM PUBLIC;
@@ -1710,7 +1710,7 @@ ALTER TABLE ONLY crs_node_works
 
 ALTER TABLE ONLY crs_node_works
     ADD CONSTRAINT pkey_crs_node_works PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_node_works ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE crs_node_works ALTER COLUMN nod_id SET STATISTICS 1000;
 ALTER TABLE crs_node_works ALTER COLUMN wrk_id SET STATISTICS 1000;
@@ -1782,7 +1782,7 @@ ALTER TABLE ONLY crs_obs_accuracy
 
 ALTER TABLE ONLY crs_obs_accuracy
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_obs_accuracy ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE crs_obs_accuracy ALTER COLUMN id SET STATISTICS 1000;
 ALTER TABLE crs_obs_accuracy ALTER COLUMN obn_id1 SET STATISTICS 1000;
@@ -1811,7 +1811,7 @@ ALTER TABLE ONLY crs_obs_elem_type
 
 ALTER TABLE ONLY crs_obs_elem_type
     ADD CONSTRAINT pkey_crs_obs_elem_type PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_obs_elem_type OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_obs_elem_type FROM PUBLIC;
@@ -1864,7 +1864,7 @@ ALTER TABLE ONLY crs_obs_type
 
 ALTER TABLE ONLY crs_obs_type
     ADD CONSTRAINT pkey_crs_obs_type PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_obs_type OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_obs_type FROM PUBLIC;
@@ -1906,7 +1906,7 @@ ALTER TABLE ONLY crs_observation
 
 ALTER TABLE ONLY crs_observation
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_observation ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE crs_observation ALTER COLUMN cos_id SET STATISTICS 1000;
 ALTER TABLE crs_observation ALTER COLUMN id SET STATISTICS 1000;
@@ -1944,7 +1944,7 @@ ALTER TABLE ONLY crs_off_cord_sys
 
 ALTER TABLE ONLY crs_off_cord_sys
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_off_cord_sys OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_off_cord_sys FROM PUBLIC;
@@ -1979,7 +1979,7 @@ CREATE TABLE crs_office (
 
 ALTER TABLE ONLY crs_office
     ADD UNIQUE (code);
-    
+
 ALTER TABLE ONLY crs_office
     ADD CONSTRAINT pkey_crs_office PRIMARY KEY (audit_id);
 
@@ -2017,7 +2017,7 @@ ALTER TABLE ONLY crs_ordinate_adj
 
 ALTER TABLE ONLY crs_ordinate_adj
     ADD CONSTRAINT pkey_crs_ordinate_adj PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_ordinate_adj ALTER COLUMN adj_id SET STATISTICS 1000;
 ALTER TABLE crs_ordinate_adj ALTER COLUMN coo_id_output SET STATISTICS 1000;
 ALTER TABLE crs_ordinate_adj ALTER COLUMN coo_id_source SET STATISTICS 1000;
@@ -2115,7 +2115,7 @@ ALTER TABLE ONLY crs_parcel_bndry
 
 ALTER TABLE ONLY crs_parcel_bndry
     ADD CONSTRAINT pkey_crs_parcel_bndry PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_parcel_bndry ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE crs_parcel_bndry ALTER COLUMN lin_id SET STATISTICS 1000;
 ALTER TABLE crs_parcel_bndry ALTER COLUMN pri_id SET STATISTICS 1000;
@@ -2141,7 +2141,7 @@ ALTER TABLE ONLY crs_parcel_dimen
 
 ALTER TABLE ONLY crs_parcel_dimen
     ADD CONSTRAINT pkey_crs_parcel_dimen PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_parcel_dimen ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE crs_parcel_dimen ALTER COLUMN obn_id SET STATISTICS 1000;
 ALTER TABLE crs_parcel_dimen ALTER COLUMN par_id SET STATISTICS 1000;
@@ -2170,7 +2170,7 @@ ALTER TABLE ONLY crs_parcel_label
 
 ALTER TABLE ONLY crs_parcel_label
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_parcel_label ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE crs_parcel_label ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE crs_parcel_label ALTER COLUMN par_id SET STATISTICS 500;
@@ -2341,7 +2341,7 @@ ALTER TABLE ONLY crs_reduct_run
 
 ALTER TABLE ONLY crs_reduct_run
     ADD UNIQUE (audit_id);
-    
+
 ALTER TABLE crs_reduct_run OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_reduct_run FROM PUBLIC;
@@ -2364,7 +2364,7 @@ ALTER TABLE ONLY crs_ref_survey
 
 ALTER TABLE ONLY crs_ref_survey
     ADD CONSTRAINT pkey_crs_ref_survey PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_ref_survey ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE crs_ref_survey ALTER COLUMN sur_wrk_id_exist SET STATISTICS 250;
 ALTER TABLE crs_ref_survey ALTER COLUMN sur_wrk_id_new SET STATISTICS 250;
@@ -2536,7 +2536,7 @@ ALTER TABLE ONLY crs_road_name_asc
 
 ALTER TABLE ONLY crs_road_name_asc
     ADD CONSTRAINT pkey_crs_road_name_asc PRIMARY KEY (audit_id);
- 
+
 ALTER TABLE crs_road_name_asc ALTER COLUMN alt_id SET STATISTICS 250;
 ALTER TABLE crs_road_name_asc ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE crs_road_name_asc ALTER COLUMN rcl_id SET STATISTICS 250;
@@ -2624,7 +2624,7 @@ ALTER TABLE ONLY crs_site_locality
 
 ALTER TABLE ONLY crs_site_locality
     ADD CONSTRAINT pkey_crs_site_locality PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_site_locality ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE crs_site_locality ALTER COLUMN loc_id SET STATISTICS 250;
 ALTER TABLE crs_site_locality ALTER COLUMN sit_id SET STATISTICS 250;
@@ -2713,7 +2713,7 @@ PERFORM AddGeometryColumn('crs_statist_area', 'shape', 4167, 'MULTIPOLYGON', 2);
 
 ALTER TABLE ONLY crs_statist_area
     ADD CONSTRAINT pkey_crs_statist_area PRIMARY KEY (id);
-    
+
 ALTER TABLE ONLY crs_statist_area
     ADD UNIQUE (audit_id);
 
@@ -2845,7 +2845,7 @@ ALTER TABLE ONLY crs_sur_admin_area
 
 ALTER TABLE ONLY crs_sur_admin_area
     ADD CONSTRAINT pkey_crs_sur_admin_area PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_sur_admin_area ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE crs_sur_admin_area ALTER COLUMN eed_req_id SET STATISTICS 250;
 ALTER TABLE crs_sur_admin_area ALTER COLUMN stt_id SET STATISTICS 250;
@@ -2956,7 +2956,7 @@ ALTER TABLE ONLY crs_survey_image
 
 ALTER TABLE ONLY crs_survey_image
     ADD CONSTRAINT pkey_crs_survey_image PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_survey_image OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_survey_image FROM PUBLIC;
@@ -2985,7 +2985,7 @@ ALTER TABLE ONLY crs_sys_code
 
 ALTER TABLE ONLY crs_sys_code
     ADD CONSTRAINT pkey_crs_sys_code PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_sys_code OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_sys_code FROM PUBLIC;
@@ -3013,7 +3013,7 @@ ALTER TABLE ONLY crs_sys_code_group
 
 ALTER TABLE ONLY crs_sys_code_group
     ADD CONSTRAINT pkey_crs_sys_code_group PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_sys_code_group OWNER TO bde_dba;
 
 REVOKE ALL ON TABLE crs_sys_code_group FROM PUBLIC;
@@ -3143,7 +3143,7 @@ ALTER TABLE ONLY crs_title_action
 
 ALTER TABLE ONLY crs_title_action
     ADD CONSTRAINT pkey_crs_title_action PRIMARY KEY (audit_id);
-    
+
 ALTER TABLE crs_title_action ALTER COLUMN ttl_title_no SET STATISTICS 1000;
 ALTER TABLE crs_title_action ALTER COLUMN act_tin_id SET STATISTICS 1000;
 ALTER TABLE crs_title_action ALTER COLUMN act_id SET STATISTICS 1000;
@@ -3263,8 +3263,8 @@ CREATE TABLE crs_title_memorial (
     status VARCHAR(4) NOT NULL,
     user_changed CHAR(1) NOT NULL,
     text_type VARCHAR(4) NOT NULL,
-    register_only_mem CHAR(1),                         
-    prev_further_reg CHAR(1),                         
+    register_only_mem CHAR(1),
+    prev_further_reg CHAR(1),
     curr_hist_flag VARCHAR(4) NOT NULL,
     "default" CHAR(1) NOT NULL,
     number_of_cols INTEGER,
@@ -3637,7 +3637,7 @@ PERFORM AddGeometryColumn('crs_vector', 'shape', 4167, 'GEOMETRY', 2);
 
 ALTER TABLE ONLY crs_vector
     ADD CONSTRAINT pkey_crs_vector PRIMARY KEY (id);
-    
+
 ALTER TABLE ONLY crs_vector
     ADD UNIQUE (audit_id);
 
