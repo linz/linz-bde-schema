@@ -1,6 +1,7 @@
 # Minimal script to install the SQL creation scripts ready for postinst script.
 
 VERSION=dev
+REVISION = $(shell test -d .git && git describe --always || echo $(VERSION))
 
 SED = sed
 
@@ -23,8 +24,8 @@ SQLSCRIPTS = \
   sql/99-patches.sql \
   sql/versioning/01-version_tables.sql
   $(END)
-  
-EXTRA_CLEAN = sql/05-bde_version.sql
+
+EXTRA_CLEAN = sql/05-bde_version.sql sql/04-bde_functions.sql
 
 .dummy:
 
@@ -34,6 +35,9 @@ all: $(SQLSCRIPTS)
 
 sql/05-bde_version.sql: sql/05-bde_version.sql.in
 	$(SED) -e 's/@@VERSION@@/$(VERSION)/' $< > $@
+
+sql/03-bde_functions.sql: sql/03-bde_functions.sql.in Makefile
+	$(SED) -e 's/\$$Id\$$/$(REVISION)/' $< > $@
 
 install: $(SQLSCRIPTS)
 	mkdir -p ${datadir}/sql
@@ -56,4 +60,4 @@ clean:
 	rm -f regression.out
 	rm -rf results
 	rm -f $(EXTRA_CLEAN)
-	
+
