@@ -188,7 +188,7 @@ BEGIN
 
     RETURN v_app_text;
 END;
-    $$ LANGUAGE plpgsql STRICT;
+    $$ LANGUAGE plpgsql STABLE STRICT;
 
 ALTER FUNCTION bde_get_app_specific(INTEGER, VARCHAR, CHAR) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_get_app_specific(INTEGER, VARCHAR, CHAR) FROM PUBLIC;
@@ -764,7 +764,7 @@ BEGIN
 
     RETURN v_appellation;
 END;
-    $$ LANGUAGE plpgsql VOLATILE STRICT;
+    $$ LANGUAGE plpgsql STABLE STRICT;
 
 ALTER FUNCTION bde_get_combined_appellation(INTEGER, CHAR) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_get_combined_appellation(INTEGER, CHAR) FROM PUBLIC;
