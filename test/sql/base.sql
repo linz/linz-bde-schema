@@ -1679,7 +1679,7 @@ SELECT has_index('bde'::name, 'crs_sys_code'::name, 'fk_sco_scg_code'::name, ARR
 SELECT has_index('bde'::name, 'crs_vector'::name, 'shx_vct_shape'::name, ARRAY['shape']);
 -- }
 
--- Test bde_write_appellation
+-- Test bde_write_appellation {
 SELECT is(bde.bde_write_appellation
     (null,null,null,null,null,null,null,null,null,null,null,null,null,null),
     '', 'bde_write_appellation 1');
@@ -1784,6 +1784,7 @@ SELECT is(bde.bde_write_appellation
     ('PART','PART','1/1','','','','','','PRFX','','','','',''),
     'Part Part',
     'bde_write_appellation 28');
+-- }
 
 SELECT * FROM finish();
 
