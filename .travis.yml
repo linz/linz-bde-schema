@@ -10,6 +10,7 @@ addons:
     - postgresql-9.4-pgtap
     - postgresql-server-dev-9.4
 before_install:
+  - apt-cache search postgis #postgresql-9.4-postgis-2.3
   - wget https://github.com/linz/postgresql-dbpatch/archive/1.0.1.tar.gz
   - tar xzf 1.0.1.tar.gz
   - cd postgresql-dbpatch-1.0.1
