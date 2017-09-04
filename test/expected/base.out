@@ -259,4 +259,32 @@ ok 256 - Index shx_spf_shape should exist
 ok 257 - Index fk_sco_scg should exist
 ok 258 - Index fk_sco_scg_code should exist
 ok 259 - Index shx_vct_shape should exist
-1..259
+ok 260 - bde_write_appellation 1
+ok 261 - bde_write_appellation 2
+ok 262 - bde_write_appellation 3
+ok 263 - bde_write_appellation 4
+ok 264 - bde_write_appellation 5
+ok 265 - bde_write_appellation 6
+ok 266 - bde_write_appellation 7
+ok 267 - bde_write_appellation 8
+ok 268 - bde_write_appellation 9
+ok 269 - bde_write_appellation 10
+ok 270 - bde_write_appellation 11
+ok 271 - bde_write_appellation 12
+ok 272 - bde_write_appellation 13
+ok 273 - bde_write_appellation 14
+ok 274 - bde_write_appellation 15
+ok 275 - bde_write_appellation 16
+ok 276 - bde_write_appellation 17
+ok 277 - bde_write_appellation 18
+ok 278 - bde_write_appellation 19
+ok 279 - bde_write_appellation 20
+ok 280 - bde_write_appellation 21
+ok 281 - bde_write_appellation 22
+ok 282 - bde_write_appellation 23
+ok 283 - bde_write_appellation 24
+ok 284 - bde_write_appellation 25
+ok 285 - bde_write_appellation 26
+ok 286 - bde_write_appellation 27
+ok 287 - bde_write_appellation 28
+1..287
