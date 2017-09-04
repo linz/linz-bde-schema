@@ -5,7 +5,7 @@
 -- Land Information New Zealand and the New Zealand Government.
 -- All rights reserved
 --
--- This software is released under the terms of the new BSD license. See the 
+-- This software is released under the terms of the new BSD license. See the
 -- LICENSE file for more information.
 --
 --------------------------------------------------------------------------------
@@ -47,7 +47,7 @@ SELECT has_role('bde_user');
 -- Test tables existance and their composition {
 
 SELECT has_table('bde'::name, 'cbe_title_parcel_association'::name);
-SELECT columns_are('bde'::name, 'cbe_title_parcel_association'::name, 
+SELECT columns_are('bde'::name, 'cbe_title_parcel_association'::name,
   ARRAY[
   'last_updated',
   'id',
@@ -59,7 +59,7 @@ SELECT columns_are('bde'::name, 'cbe_title_parcel_association'::name,
   ]);
 
 SELECT has_table('bde'::name, 'crs_action'::name);
-SELECT columns_are('bde'::name, 'crs_action'::name, 
+SELECT columns_are('bde'::name, 'crs_action'::name,
 ARRAY[
   'act_tin_id_orig',
   'flags',
@@ -76,7 +76,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_action_type'::name);
-SELECT columns_are('bde'::name, 'crs_action_type'::name, 
+SELECT columns_are('bde'::name, 'crs_action_type'::name,
 ARRAY[
   'type',
   'description',
@@ -87,7 +87,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_adj_obs_change'::name);
-SELECT columns_are('bde'::name, 'crs_adj_obs_change'::name, 
+SELECT columns_are('bde'::name, 'crs_adj_obs_change'::name,
 ARRAY[
   'redundancy_fctr_3',
   'audit_id',
@@ -116,7 +116,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_adj_user_coef'::name);
-SELECT columns_are('bde'::name, 'crs_adj_user_coef'::name, 
+SELECT columns_are('bde'::name, 'crs_adj_user_coef'::name,
 ARRAY[
   'adc_id',
   'adj_id',
@@ -125,7 +125,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_adjust_coef'::name);
-SELECT columns_are('bde'::name, 'crs_adjust_coef'::name, 
+SELECT columns_are('bde'::name, 'crs_adjust_coef'::name,
 ARRAY[
   'id',
   'adm_id',
@@ -137,7 +137,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_adjustment_run'::name);
-SELECT columns_are('bde'::name, 'crs_adjust_method'::name, 
+SELECT columns_are('bde'::name, 'crs_adjust_method'::name,
 ARRAY[
   'type',
   'id',
@@ -149,7 +149,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_adjust_method'::name);
-SELECT columns_are('bde'::name, 'crs_adjustment_run'::name, 
+SELECT columns_are('bde'::name, 'crs_adjustment_run'::name,
 ARRAY[
   'id',
   'cos_id',
@@ -168,7 +168,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_adoption'::name);
-SELECT columns_are('bde'::name, 'crs_adoption'::name, 
+SELECT columns_are('bde'::name, 'crs_adoption'::name,
 ARRAY[
   'audit_id',
   'factor_3',
@@ -180,7 +180,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_affected_parcl'::name);
-SELECT columns_are('bde'::name, 'crs_affected_parcl'::name, 
+SELECT columns_are('bde'::name, 'crs_affected_parcl'::name,
 ARRAY[
   'action',
   'sur_wrk_id',
@@ -189,7 +189,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_alias'::name);
-SELECT columns_are('bde'::name, 'crs_alias'::name, 
+SELECT columns_are('bde'::name, 'crs_alias'::name,
 ARRAY[
   'prp_id',
   'id',
@@ -198,7 +198,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_appellation'::name);
-SELECT columns_are('bde'::name, 'crs_appellation'::name, 
+SELECT columns_are('bde'::name, 'crs_appellation'::name,
 ARRAY[
   'second_prcl_value',
   'parcel_type',
@@ -225,7 +225,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_comprised_in'::name);
-SELECT columns_are('bde'::name, 'crs_comprised_in'::name, 
+SELECT columns_are('bde'::name, 'crs_comprised_in'::name,
 ARRAY[
   'wrk_id',
   'limited',
@@ -235,7 +235,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_coordinate'::name);
-SELECT columns_are('bde'::name, 'crs_coordinate'::name, 
+SELECT columns_are('bde'::name, 'crs_coordinate'::name,
 ARRAY[
   'sdc_status',
   'source',
@@ -255,7 +255,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_coordinate_sys'::name);
-SELECT columns_are('bde'::name, 'crs_coordinate_sys'::name, 
+SELECT columns_are('bde'::name, 'crs_coordinate_sys'::name,
 ARRAY[
   'cot_id',
   'id',
@@ -268,7 +268,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_coordinate_tpe'::name);
-SELECT columns_are('bde'::name, 'crs_coordinate_tpe'::name, 
+SELECT columns_are('bde'::name, 'crs_coordinate_tpe'::name,
 ARRAY[
   'category',
   'audit_id',
@@ -289,7 +289,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_cord_order'::name);
-SELECT columns_are('bde'::name, 'crs_cor_precision'::name, 
+SELECT columns_are('bde'::name, 'crs_cor_precision'::name,
 ARRAY[
   'cor_id',
   'ort_type',
@@ -298,7 +298,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_cor_precision'::name);
-SELECT columns_are('bde'::name, 'crs_cord_order'::name, 
+SELECT columns_are('bde'::name, 'crs_cord_order'::name,
 ARRAY[
   'dtm_id',
   'order_group',
@@ -310,7 +310,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_datum'::name);
-SELECT columns_are('bde'::name, 'crs_datum'::name, 
+SELECT columns_are('bde'::name, 'crs_datum'::name,
 ARRAY[
   'type',
   'id',
@@ -325,7 +325,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_elect_place'::name);
-SELECT columns_are('bde'::name, 'crs_elect_place'::name, 
+SELECT columns_are('bde'::name, 'crs_elect_place'::name,
 ARRAY[
   'shape',
   'se_row_id',
@@ -338,7 +338,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ellipsoid'::name);
-SELECT columns_are('bde'::name, 'crs_ellipsoid'::name, 
+SELECT columns_are('bde'::name, 'crs_ellipsoid'::name,
 ARRAY[
   'semi_major_axis',
   'flattening',
@@ -348,7 +348,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_enc_share'::name);
-SELECT columns_are('bde'::name, 'crs_enc_share'::name, 
+SELECT columns_are('bde'::name, 'crs_enc_share'::name,
 ARRAY[
   'system_crt',
   'system_ext',
@@ -362,7 +362,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_encumbrancee'::name);
-SELECT columns_are('bde'::name, 'crs_encumbrance'::name, 
+SELECT columns_are('bde'::name, 'crs_encumbrance'::name,
 ARRAY[
   'term',
   'id',
@@ -375,7 +375,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_encumbrance'::name);
-SELECT columns_are('bde'::name, 'crs_encumbrancee'::name, 
+SELECT columns_are('bde'::name, 'crs_encumbrancee'::name,
 ARRAY[
   'id',
   'ens_id',
@@ -386,7 +386,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_estate_share'::name);
-SELECT columns_are('bde'::name, 'crs_estate_share'::name, 
+SELECT columns_are('bde'::name, 'crs_estate_share'::name,
 ARRAY[
   'act_id_ext',
   'act_tin_id_ext',
@@ -406,7 +406,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_feature_name'::name);
-SELECT columns_are('bde'::name, 'crs_feature_name'::name, 
+SELECT columns_are('bde'::name, 'crs_feature_name'::name,
 ARRAY[
   'shape',
   'id',
@@ -419,7 +419,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_geodetic_network'::name);
-SELECT columns_are('bde'::name, 'crs_geodetic_network'::name, 
+SELECT columns_are('bde'::name, 'crs_geodetic_network'::name,
 ARRAY[
   'description',
   'code',
@@ -427,7 +427,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_geodetic_node_network'::name);
-SELECT columns_are('bde'::name, 'crs_geodetic_node_network'::name, 
+SELECT columns_are('bde'::name, 'crs_geodetic_node_network'::name,
 ARRAY[
   'audit_id',
   'gdn_id',
@@ -435,7 +435,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_image_history'::name);
-SELECT columns_are('bde'::name, 'crs_image'::name, 
+SELECT columns_are('bde'::name, 'crs_image'::name,
 ARRAY[
   'usr_id_created',
   'barcode_datetime',
@@ -448,7 +448,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_image'::name);
-SELECT columns_are('bde'::name, 'crs_image_history'::name, 
+SELECT columns_are('bde'::name, 'crs_image_history'::name,
 ARRAY[
   'usr_id',
   'centera_id',
@@ -461,7 +461,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_land_district'::name);
-SELECT columns_are('bde'::name, 'crs_land_district'::name, 
+SELECT columns_are('bde'::name, 'crs_land_district'::name,
 ARRAY[
   'default',
   'loc_id',
@@ -473,7 +473,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_legal_desc'::name);
-SELECT columns_are('bde'::name, 'crs_legal_desc'::name, 
+SELECT columns_are('bde'::name, 'crs_legal_desc'::name,
 ARRAY[
   'legal_desc_text',
   'ttl_title_no',
@@ -485,7 +485,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_legal_desc_prl'::name);
-SELECT columns_are('bde'::name, 'crs_legal_desc_prl'::name, 
+SELECT columns_are('bde'::name, 'crs_legal_desc_prl'::name,
 ARRAY[
   'audit_id',
   'sur_wrk_id_crt',
@@ -497,7 +497,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_line'::name);
-SELECT columns_are('bde'::name, 'crs_line'::name, 
+SELECT columns_are('bde'::name, 'crs_line'::name,
 ARRAY[
   'arc_length',
   'pnx_id_created',
@@ -516,7 +516,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_locality'::name);
-SELECT columns_are('bde'::name, 'crs_locality'::name, 
+SELECT columns_are('bde'::name, 'crs_locality'::name,
 ARRAY[
   'shape',
   'id',
@@ -528,7 +528,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_maintenance'::name);
-SELECT columns_are('bde'::name, 'crs_maintenance'::name, 
+SELECT columns_are('bde'::name, 'crs_maintenance'::name,
 ARRAY[
   'type',
   'status',
@@ -539,7 +539,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_map_grid'::name);
-SELECT columns_are('bde'::name, 'crs_map_grid'::name, 
+SELECT columns_are('bde'::name, 'crs_map_grid'::name,
 ARRAY[
   'major_grid',
   'minor_grid',
@@ -549,7 +549,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mark'::name);
-SELECT columns_are('bde'::name, 'crs_mark'::name, 
+SELECT columns_are('bde'::name, 'crs_mark'::name,
 ARRAY[
   'id',
   'protection_type',
@@ -573,7 +573,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mark_name'::name);
-SELECT columns_are('bde'::name, 'crs_mark_name'::name, 
+SELECT columns_are('bde'::name, 'crs_mark_name'::name,
 ARRAY[
   'mrk_id',
   'type',
@@ -582,7 +582,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mark_sup_doc'::name);
-SELECT columns_are('bde'::name, 'crs_mark_sup_doc'::name, 
+SELECT columns_are('bde'::name, 'crs_mark_sup_doc'::name,
 ARRAY[
   'sud_id',
   'mrk_id',
@@ -590,7 +590,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mesh_blk_area'::name);
-SELECT columns_are('bde'::name, 'crs_mesh_blk'::name, 
+SELECT columns_are('bde'::name, 'crs_mesh_blk'::name,
 ARRAY[
   'shape',
   'id',
@@ -603,7 +603,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mesh_blk_bdry'::name);
-SELECT columns_are('bde'::name, 'crs_mesh_blk_area'::name, 
+SELECT columns_are('bde'::name, 'crs_mesh_blk_area'::name,
 ARRAY[
   'mbk_id',
   'audit_id',
@@ -612,7 +612,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mesh_blk_line'::name);
-SELECT columns_are('bde'::name, 'crs_mesh_blk_bdry'::name, 
+SELECT columns_are('bde'::name, 'crs_mesh_blk_bdry'::name,
 ARRAY[
   'audit_id',
   'mbk_id',
@@ -621,7 +621,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mesh_blk'::name);
-SELECT columns_are('bde'::name, 'crs_mesh_blk_line'::name, 
+SELECT columns_are('bde'::name, 'crs_mesh_blk_line'::name,
 ARRAY[
   'shape',
   'line_type',
@@ -633,7 +633,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mesh_blk_place'::name);
-SELECT columns_are('bde'::name, 'crs_mesh_blk_place'::name, 
+SELECT columns_are('bde'::name, 'crs_mesh_blk_place'::name,
 ARRAY[
   'mbk_id',
   'alt_id',
@@ -642,7 +642,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mrk_phys_state'::name);
-SELECT columns_are('bde'::name, 'crs_mrk_phys_state'::name, 
+SELECT columns_are('bde'::name, 'crs_mrk_phys_state'::name,
 ARRAY[
   'mrk_id',
   'pend_replaced',
@@ -674,7 +674,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_network_plan'::name);
-SELECT columns_are('bde'::name, 'crs_network_plan'::name, 
+SELECT columns_are('bde'::name, 'crs_network_plan'::name,
 ARRAY[
   'dtm_id',
   'id',
@@ -685,7 +685,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_node'::name);
-SELECT columns_are('bde'::name, 'crs_node'::name, 
+SELECT columns_are('bde'::name, 'crs_node'::name,
 ARRAY[
   'order_group_off',
   'sit_id',
@@ -701,7 +701,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_node_prp_order'::name);
-SELECT columns_are('bde'::name, 'crs_node_prp_order'::name, 
+SELECT columns_are('bde'::name, 'crs_node_prp_order'::name,
 ARRAY[
   'cor_id',
   'nod_id',
@@ -710,7 +710,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_node_works'::name);
-SELECT columns_are('bde'::name, 'crs_node_works'::name, 
+SELECT columns_are('bde'::name, 'crs_node_works'::name,
 ARRAY[
   'adopted',
   'nod_id',
@@ -721,7 +721,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_nominal_index'::name);
-SELECT columns_are('bde'::name, 'crs_nominal_index'::name, 
+SELECT columns_are('bde'::name, 'crs_nominal_index'::name,
 ARRAY[
   'dlg_id_ext',
   'dlg_id_hst',
@@ -739,7 +739,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_obs_accuracy'::name);
-SELECT columns_are('bde'::name, 'crs_obs_accuracy'::name, 
+SELECT columns_are('bde'::name, 'crs_obs_accuracy'::name,
 ARRAY[
   'value_31',
   'obn_id1',
@@ -757,7 +757,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_obs_elem_type'::name);
-SELECT columns_are('bde'::name, 'crs_obs_elem_type'::name, 
+SELECT columns_are('bde'::name, 'crs_obs_elem_type'::name,
 ARRAY[
   'type',
   'audit_id',
@@ -767,7 +767,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_observation'::name);
-SELECT columns_are('bde'::name, 'crs_obs_set'::name, 
+SELECT columns_are('bde'::name, 'crs_obs_set'::name,
 ARRAY[
   'audit_id',
   'type',
@@ -776,7 +776,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_obs_set'::name);
-SELECT columns_are('bde'::name, 'crs_obs_type'::name, 
+SELECT columns_are('bde'::name, 'crs_obs_type'::name,
 ARRAY[
   'time_reqd',
   'type',
@@ -792,7 +792,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_obs_type'::name);
-SELECT columns_are('bde'::name, 'crs_observation'::name, 
+SELECT columns_are('bde'::name, 'crs_observation'::name,
 ARRAY[
   'arc_direction',
   'vct_id',
@@ -820,7 +820,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_off_cord_sys'::name);
-SELECT columns_are('bde'::name, 'crs_off_cord_sys'::name, 
+SELECT columns_are('bde'::name, 'crs_off_cord_sys'::name,
 ARRAY[
   'cos_id',
   'description',
@@ -831,7 +831,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_office'::name);
-SELECT columns_are('bde'::name, 'crs_office'::name, 
+SELECT columns_are('bde'::name, 'crs_office'::name,
 ARRAY[
   'fax',
   'internet',
@@ -855,7 +855,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ordinate_adj'::name);
-SELECT columns_are('bde'::name, 'crs_ordinate_adj'::name, 
+SELECT columns_are('bde'::name, 'crs_ordinate_adj'::name,
 ARRAY[
   'audit_id',
   'adj_id',
@@ -876,7 +876,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ordinate_type'::name);
-SELECT columns_are('bde'::name, 'crs_ordinate_type'::name, 
+SELECT columns_are('bde'::name, 'crs_ordinate_type'::name,
 ARRAY[
   'description',
   'audit_id',
@@ -887,7 +887,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_parcel_bndry'::name);
-SELECT columns_are('bde'::name, 'crs_parcel'::name, 
+SELECT columns_are('bde'::name, 'crs_parcel'::name,
 ARRAY[
   'nonsurvey_def',
   'appellation_date',
@@ -908,7 +908,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_parcel_dimen'::name);
-SELECT columns_are('bde'::name, 'crs_parcel_bndry'::name, 
+SELECT columns_are('bde'::name, 'crs_parcel_bndry'::name,
 ARRAY[
   'pri_id',
   'reversed',
@@ -918,7 +918,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_parcel_label'::name);
-SELECT columns_are('bde'::name, 'crs_parcel_dimen'::name, 
+SELECT columns_are('bde'::name, 'crs_parcel_dimen'::name,
 ARRAY[
   'audit_id',
   'obn_id',
@@ -926,7 +926,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_parcel'::name);
-SELECT columns_are('bde'::name, 'crs_parcel_label'::name, 
+SELECT columns_are('bde'::name, 'crs_parcel_label'::name,
 ARRAY[
   'se_row_id',
   'id',
@@ -936,7 +936,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_parcel_ring'::name);
-SELECT columns_are('bde'::name, 'crs_parcel_ring'::name, 
+SELECT columns_are('bde'::name, 'crs_parcel_ring'::name,
 ARRAY[
   'id',
   'is_ring',
@@ -946,7 +946,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_programme'::name);
-SELECT columns_are('bde'::name, 'crs_programme'::name, 
+SELECT columns_are('bde'::name, 'crs_programme'::name,
 ARRAY[
   'id',
   'status',
@@ -963,7 +963,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_proprietor'::name);
-SELECT columns_are('bde'::name, 'crs_proprietor'::name, 
+SELECT columns_are('bde'::name, 'crs_proprietor'::name,
 ARRAY[
   'minor',
   'minor_dob',
@@ -981,7 +981,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_reduct_meth'::name);
-SELECT columns_are('bde'::name, 'crs_reduct_meth'::name, 
+SELECT columns_are('bde'::name, 'crs_reduct_meth'::name,
 ARRAY[
   'id',
   'status',
@@ -991,7 +991,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_reduct_run'::name);
-SELECT columns_are('bde'::name, 'crs_reduct_run'::name, 
+SELECT columns_are('bde'::name, 'crs_reduct_run'::name,
 ARRAY[
   'id',
   'rdm_id',
@@ -1004,7 +1004,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ref_survey'::name);
-SELECT columns_are('bde'::name, 'crs_ref_survey'::name, 
+SELECT columns_are('bde'::name, 'crs_ref_survey'::name,
 ARRAY[
   'sur_wrk_id_new',
   'bearing_corr',
@@ -1013,7 +1013,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_road_ctr_line'::name);
-SELECT columns_are('bde'::name, 'crs_road_ctr_line'::name, 
+SELECT columns_are('bde'::name, 'crs_road_ctr_line'::name,
 ARRAY[
   'status',
   'shape',
@@ -1025,7 +1025,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_road_name_asc'::name);
-SELECT columns_are('bde'::name, 'crs_road_name'::name, 
+SELECT columns_are('bde'::name, 'crs_road_name'::name,
 ARRAY[
   'sufi',
   'id',
@@ -1039,7 +1039,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_road_name'::name);
-SELECT columns_are('bde'::name, 'crs_road_name_asc'::name, 
+SELECT columns_are('bde'::name, 'crs_road_name_asc'::name,
 ARRAY[
   'rna_id',
   'rcl_id',
@@ -1049,7 +1049,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_setup'::name);
-SELECT columns_are('bde'::name, 'crs_setup'::name, 
+SELECT columns_are('bde'::name, 'crs_setup'::name,
 ARRAY[
   'type',
   'valid_flag',
@@ -1061,7 +1061,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_site_locality'::name);
-SELECT columns_are('bde'::name, 'crs_site'::name, 
+SELECT columns_are('bde'::name, 'crs_site'::name,
 ARRAY[
   'id',
   'type',
@@ -1072,7 +1072,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_site'::name);
-SELECT columns_are('bde'::name, 'crs_site_locality'::name, 
+SELECT columns_are('bde'::name, 'crs_site_locality'::name,
 ARRAY[
   'loc_id',
   'audit_id',
@@ -1080,7 +1080,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_stat_act_parcl'::name);
-SELECT columns_are('bde'::name, 'crs_stat_act_parcl'::name, 
+SELECT columns_are('bde'::name, 'crs_stat_act_parcl'::name,
 ARRAY[
   'audit_id',
   'name',
@@ -1093,7 +1093,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_statist_area'::name);
-SELECT columns_are('bde'::name, 'crs_stat_version'::name, 
+SELECT columns_are('bde'::name, 'crs_stat_version'::name,
 ARRAY[
   'version',
   'area_class',
@@ -1105,7 +1105,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_statute_action'::name);
-SELECT columns_are('bde'::name, 'crs_statist_area'::name, 
+SELECT columns_are('bde'::name, 'crs_statist_area'::name,
 ARRAY[
   'name',
   'name_abrev',
@@ -1122,7 +1122,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_statute'::name);
-SELECT columns_are('bde'::name, 'crs_statute'::name, 
+SELECT columns_are('bde'::name, 'crs_statute'::name,
 ARRAY[
   'in_force_date',
   'name_and_date',
@@ -1136,7 +1136,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_stat_version'::name);
-SELECT columns_are('bde'::name, 'crs_statute_action'::name, 
+SELECT columns_are('bde'::name, 'crs_statute_action'::name,
 ARRAY[
   'status',
   'sur_wrk_id_vesting',
@@ -1153,7 +1153,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_street_address'::name);
-SELECT columns_are('bde'::name, 'crs_street_address'::name, 
+SELECT columns_are('bde'::name, 'crs_street_address'::name,
 ARRAY[
   'audit_id',
   'house_number',
@@ -1173,7 +1173,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_sur_admin_area'::name);
-SELECT columns_are('bde'::name, 'crs_sur_admin_area'::name, 
+SELECT columns_are('bde'::name, 'crs_sur_admin_area'::name,
 ARRAY[
   'sur_wrk_id',
   'audit_id',
@@ -1183,7 +1183,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_sur_plan_ref'::name);
-SELECT columns_are('bde'::name, 'crs_sur_plan_ref'::name, 
+SELECT columns_are('bde'::name, 'crs_sur_plan_ref'::name,
 ARRAY[
   'shape',
   'wrk_id',
@@ -1192,7 +1192,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_survey_image'::name);
-SELECT columns_are('bde'::name, 'crs_survey'::name, 
+SELECT columns_are('bde'::name, 'crs_survey'::name,
 ARRAY[
   'dlr_amnd_date',
   'wrk_id',
@@ -1224,7 +1224,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_survey'::name);
-SELECT columns_are('bde'::name, 'crs_survey_image'::name, 
+SELECT columns_are('bde'::name, 'crs_survey_image'::name,
 ARRAY[
   'type',
   'sur_wrk_id',
@@ -1233,7 +1233,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_sys_code_group'::name);
-SELECT columns_are('bde'::name, 'crs_sys_code'::name, 
+SELECT columns_are('bde'::name, 'crs_sys_code'::name,
 ARRAY[
   'start_date',
   'end_date',
@@ -1248,7 +1248,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_sys_code'::name);
-SELECT columns_are('bde'::name, 'crs_sys_code_group'::name, 
+SELECT columns_are('bde'::name, 'crs_sys_code_group'::name,
 ARRAY[
   'code',
   'audit_id',
@@ -1262,7 +1262,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_title_action'::name);
-SELECT columns_are('bde'::name, 'crs_title'::name, 
+SELECT columns_are('bde'::name, 'crs_title'::name,
 ARRAY[
   'ttl_title_no_head_srs',
   'title_no',
@@ -1293,7 +1293,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_title_doc_ref'::name);
-SELECT columns_are('bde'::name, 'crs_title_action'::name, 
+SELECT columns_are('bde'::name, 'crs_title_action'::name,
 ARRAY[
   'audit_id',
   'ttl_title_no',
@@ -1302,7 +1302,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_title_estate'::name);
-SELECT columns_are('bde'::name, 'crs_title_doc_ref'::name, 
+SELECT columns_are('bde'::name, 'crs_title_doc_ref'::name,
 ARRAY[
   'type',
   'tin_id',
@@ -1311,7 +1311,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_title_memorial'::name);
-SELECT columns_are('bde'::name, 'crs_title_estate'::name, 
+SELECT columns_are('bde'::name, 'crs_title_estate'::name,
 ARRAY[
   'type',
   'ttl_title_no',
@@ -1331,7 +1331,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_title_mem_text'::name);
-SELECT columns_are('bde'::name, 'crs_title_mem_text'::name, 
+SELECT columns_are('bde'::name, 'crs_title_mem_text'::name,
 ARRAY[
   'audit_id',
   'col_1_text',
@@ -1348,7 +1348,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_title'::name);
-SELECT columns_are('bde'::name, 'crs_title_memorial'::name, 
+SELECT columns_are('bde'::name, 'crs_title_memorial'::name,
 ARRAY[
   'col_6_size',
   'id',
@@ -1377,7 +1377,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_topology_class'::name);
-SELECT columns_are('bde'::name, 'crs_topology_class'::name, 
+SELECT columns_are('bde'::name, 'crs_topology_class'::name,
 ARRAY[
   'audit_id',
   'name',
@@ -1386,7 +1386,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_transact_type'::name);
-SELECT columns_are('bde'::name, 'crs_transact_type'::name, 
+SELECT columns_are('bde'::name, 'crs_transact_type'::name,
 ARRAY[
   'partial_discharge',
   'grp',
@@ -1437,7 +1437,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ttl_enc'::name);
-SELECT columns_are('bde'::name, 'crs_ttl_enc'::name, 
+SELECT columns_are('bde'::name, 'crs_ttl_enc'::name,
 ARRAY[
   'act_tin_id_ext',
   'act_id_ext',
@@ -1450,7 +1450,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ttl_hierarchy'::name);
-SELECT columns_are('bde'::name, 'crs_ttl_hierarchy'::name, 
+SELECT columns_are('bde'::name, 'crs_ttl_hierarchy'::name,
 ARRAY[
   'act_id_ext',
   'act_tin_id_ext',
@@ -1464,7 +1464,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ttl_inst'::name);
-SELECT columns_are('bde'::name, 'crs_ttl_inst'::name, 
+SELECT columns_are('bde'::name, 'crs_ttl_inst'::name,
 ARRAY[
   'dlg_id',
   'id',
@@ -1496,7 +1496,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ttl_inst_title'::name);
-SELECT columns_are('bde'::name, 'crs_ttl_inst_title'::name, 
+SELECT columns_are('bde'::name, 'crs_ttl_inst_title'::name,
 ARRAY[
   'tin_id',
   'ttl_title_no',
@@ -1505,7 +1505,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_unit_of_meas'::name);
-SELECT columns_are('bde'::name, 'crs_unit_of_meas'::name, 
+SELECT columns_are('bde'::name, 'crs_unit_of_meas'::name,
 ARRAY[
   'code',
   'description',
@@ -1513,7 +1513,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_user'::name);
-SELECT columns_are('bde'::name, 'crs_user'::name, 
+SELECT columns_are('bde'::name, 'crs_user'::name,
 ARRAY[
   'usr_id_coordinator',
   'corporate_name',
@@ -1568,7 +1568,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_vector'::name);
-SELECT columns_are('bde'::name, 'crs_vector'::name, 
+SELECT columns_are('bde'::name, 'crs_vector'::name,
 ARRAY[
   'nod_id_end',
   'length',
@@ -1582,7 +1582,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_vertx_sequence'::name);
-SELECT columns_are('bde'::name, 'crs_vertx_sequence'::name, 
+SELECT columns_are('bde'::name, 'crs_vertx_sequence'::name,
 ARRAY[
   'value2',
   'lin_id',
@@ -1592,7 +1592,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_work'::name);
-SELECT columns_are('bde'::name, 'crs_work'::name, 
+SELECT columns_are('bde'::name, 'crs_work'::name,
 ARRAY[
   'usr_id_principal',
   'cel_id',
@@ -1679,6 +1679,111 @@ SELECT has_index('bde'::name, 'crs_sys_code'::name, 'fk_sco_scg_code'::name, ARR
 SELECT has_index('bde'::name, 'crs_vector'::name, 'shx_vct_shape'::name, ARRAY['shape']);
 -- }
 
+-- Test bde_write_appellation
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,null,null,null,null,null,null),
+    '', 'bde_write_appellation 1');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,null,null,null,null,null,'14'),
+    '14', 'bde_write_appellation 2');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,null,null,null,null,'13','14'),
+    '13 Block 14', 'bde_write_appellation 3');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,null,null,null,'12','13','14'),
+    '13 12 Block 14', 'bde_write_appellation 4');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,null,null,'11','12','13','14'),
+    '13 12 Block 14 11', 'bde_write_appellation 5');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,null,'10','11','12','13','14'),
+    '13 12 Block 14 11 10', 'bde_write_appellation 6');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,'9','10','11','12','13','14'),
+    '13 12 Block 14 11 10', 'bde_write_appellation 7');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,'8','9','10','11','12','13','14'),
+    '13 12 Block 14 Block 8 11 10', 'bde_write_appellation 8');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,'7','8','9','10','11','12','13','14'),
+    '13 12 Block 14 7 Block 8 11 10',
+    'bde_write_appellation 9');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,'6','7','8','9','10','11','12','13','14'),
+    '13 12 Block 14 6 7 Block 8 11 10',
+    'bde_write_appellation 10');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,'5','6','7','8','9','10','11','12','13','14'),
+    '13 12 Block 14 5 6 7 Block 8 11 10',
+    'bde_write_appellation 11');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,'4','5','6','7','8','9','10','11','12','13','14'),
+    '13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 12');
+SELECT is(bde.bde_write_appellation
+    (null,null,'3','4','5','6','7','8','9','10','11','12','13','14'),
+    '3 share of 13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 13');
+SELECT is(bde.bde_write_appellation
+    (null,'2','3','4','5','6','7','8','9','10','11','12','13','14'),
+    '3 share of 13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 14');
+SELECT is(bde.bde_write_appellation
+    ('1','2','3','4','5','6','7','8','9','10','11','12','13','14'),
+    '3 share of 13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 15');
+SELECT is(bde.bde_write_appellation
+    ('PART','2','3','4','5','6','7','8','9','10','11','12','13','14'),
+    'Part3 share of 13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 16');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','3','4','5','6','7','8','9','10','11','12','13','14'),
+    'Part Part3 share of 13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 17');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','4','5','6','7','8','9','10','11','12','13','14'),
+    'Part Part 13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 18');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','5','6','7','8','9','10','11','12','13','14'),
+    'Part Part 13 12 Block 14 5 6 7 Block 8 11 10',
+    'bde_write_appellation 19');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','7','8','9','10','11','12','13','14'),
+    'Part Part 13 12 Block 14 7 Block 8 11 10',
+    'bde_write_appellation 20');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','8','9','10','11','12','13','14'),
+    'Part Part 13 12 Block 14 Block 8 11 10',
+    'bde_write_appellation 21');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','9','10','11','12','13','14'),
+    'Part Part 13 12 Block 14 11 10',
+    'bde_write_appellation 22');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','PRFX','10','11','12','13','14'),
+    'Part Part 13 12 Block 14 10 11',
+    'bde_write_appellation 23');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','PRFX','','11','12','13','14'),
+    'Part Part 13 12 Block 14 11',
+    'bde_write_appellation 24');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','PRFX','','','12','13','14'),
+    'Part Part 13 12 Block 14',
+    'bde_write_appellation 25');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','PRFX','','','','13','14'),
+    'Part Part 13 Block 14',
+    'bde_write_appellation 26');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','PRFX','','','','','14'),
+    'Part Part 14',
+    'bde_write_appellation 27');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','PRFX','','','','',''),
+    'Part Part',
+    'bde_write_appellation 28');
 
 SELECT * FROM finish();
 
