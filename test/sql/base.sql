@@ -1788,9 +1788,6 @@ SELECT is(bde.bde_write_appellation
 
 -- Test bde_get_combined_appellation {
 
---OTHR
-
-
 copy bde.crs_appellation from stdin ( delimiter '|' );
 1|GNRL|Y|N|CURR|WHOL|\N|SURD|Lower Hawea|SECT|43|\N|\N|V|SUFX|\N|\N|\N|\N|\N|5084|200798
 2|GNRL|Y|N|CURR|PART|\N|SURD|Clutha|SECT|3|\N|\N|XXXVI|SUFX|\N|\N|\N|\N|\N|5107|201212
