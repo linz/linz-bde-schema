@@ -1786,6 +1786,64 @@ SELECT is(bde.bde_write_appellation
     'bde_write_appellation 28');
 -- }
 
+-- Test bde_get_combined_appellation {
+
+--OTHR
+
+
+copy bde.crs_appellation from stdin ( delimiter '|' );
+1|GNRL|Y|N|CURR|WHOL|\N|SURD|Lower Hawea|SECT|43|\N|\N|V|SUFX|\N|\N|\N|\N|\N|5084|200798
+2|GNRL|Y|N|CURR|PART|\N|SURD|Clutha|SECT|3|\N|\N|XXXVI|SUFX|\N|\N|\N|\N|\N|5107|201212
+3|GNRL|Y|Y|CURR|WHOL|\N|DP|13918|LOT|32|\N|\N|\N|PRFX|\N|\N|\N|\N|\N|3705368|1399023
+4|GNRL|N|Y|CURR|PART|\N|DP|8007|LOT|61|\N|\N|\N|PRFX|\N|\N|\N|\N|\N|3792885|1535355
+5|GNRL|Y|Y|CURR|WHOL|\N|DP|2425|LOT|11|\N|\N|VIII|PRFX|\N|\N|\N|\N|\N|3793571|1428424
+6|GNRL|Y|Y|CURR|WHOL|\N|DP|28568|LOT|5|\N|\N|\N|PRFX|\N|\N|\N|\N|\N|3824354|1438685
+7|GNRL|N|Y|HIST|PART|\N|DP|26040|LOT|2|\N|\N|\N|PRFX|\N|\N|\N|\N|\N|3935083|1689914
+7|GNRL|Y|Y|CURR|PART|\N|DP|26042|LOT|2|\N|\N|\N|PRFX|\N|18484652|11189968|\N|\N|7187126|5831252
+11|MAOR|Y|N|CURR|WHOL|Maori Reserve 883 (Rakipaoa)|\N|\N|\N|\N|\N|\N|\N|\N|\N|\N|\N|\N|\N|141034|928194
+12|MAOR|Y|N|HIST|WHOL|Ohapi|\N|\N|\N|909|\N|\N|\N|\N|\N|16592162|9687268|\N|\N|6832755|5404695
+13|MAOR|N|Y|CURR|WHOL|Nuhaka|\N|\N|\N|2E3D6|\N|\N|\N|\N|\N|\N|\N|\N|\N|6910776|5501059
+14|MAOR|Y|Y|CURR|WHOL|Torere Pa|\N|\N|\N|12|\N|\N|\N|\N|\N|\N|\N|\N|\N|7117088|5745388
+21|PART|Y|Y|CURR|WHOL|\N|DP|181158|LOT|28|\N|\N|\N|PRFX|\N|\N|\N|\N|\N|6740001|5278098
+31|OTHR|N|Y|CURR|WHOL|\N|\N|\N|\N|\N|\N|\N|\N|\N|Stopped Road|\N|\N|\N|\N|3000867|289
+32|OTHR|N|Y|HIST|PART|\N|\N|\N|\N|\N|\N|\N|\N|\N|Closed Street Block V Lower Kaikorai Survey District|\N|\N|\N|\N|3001281|427
+33|OTHR|N|Y|CURR|PART|\N|\N|\N|\N|\N|\N|\N|\N|\N|Section 44 River Sections East Taieri Survey District|\N|\N|\N|\N|3001833|611
+34|OTHR|Y|Y|CURR|PART|\N|\N|\N|\N|\N|\N|\N|\N|\N|Closed Road Block II Clutha Survey District|\N|\N|\N|\N|3041661|13887
+35|OTHR|Y|Y|CURR|WHOL|\N|\N|\N|\N|\N|\N|\N|\N|\N|Section 102 Irregular Block East Taieri Survey District|\N|\N|\N|\N|3044865|14955
+36|OTHR|Y|N|CURR|WHOL|\N|\N|\N|\N|\N|\N|\N|\N|\N|Future Development Accessory Unit 9A Deposited Plan 22767|\N|\N|\N|\N|443|173809
+\.
+
+SELECT results_eq($$
+	SELECT DISTINCT par_id,
+		   bde.bde_get_combined_appellation(par_id, 'N') app_short,
+		   bde.bde_get_combined_appellation(par_id, 'Y') app_long
+	FROM bde.crs_appellation
+	ORDER BY par_id
+$$, $$ VALUES
+	(1,'43 Block V Lower Hawea','43 Block V Lower Hawea'),
+	(2,'Part 3 Block XXXVI Clutha','Part 3 Block XXXVI Clutha'),
+	(3,'32 DP 13918','32 13918'),
+	(4,'Part 61 DP 8007','Part 61 8007'),
+	(5,'11 Block VIII DP 2425','11 Block VIII 2425'),
+	(6,'5 DP 28568','5 28568'),
+	(7,'Part 2 DP 26042','Part 2 26042'),
+	(11,'Maori Reserve 883 (Rakipaoa) Block','Maori Reserve 883 (Rakipaoa) Block'),
+	(12,null,null),
+	(13,'Nuhaka 2E3D6 Block','Nuhaka 2E3D6 Block'),
+	(14,'Torere Pa 12 Block','Torere Pa 12 Block'),
+	(21,'28 Block 28 DP 181158','28 Block 28 181158'),
+	(31,'Stopped Road','Stopped Road'),
+	(32,null,null),
+	(33,'Part Section 44 River Sections East Taieri Survey District','Part Section 44 River Sections East Taieri Survey District'),
+	(34,'Part Closed Road Block II Clutha Survey District','Part Closed Road Block II Clutha Survey District'),
+	(35,'Section 102 Irregular Block East Taieri Survey District','Section 102 Irregular Block East Taieri Survey District'),
+	(36,'Future Development Accessory Unit 9A Deposited Plan 22767','Future Development Accessory Unit 9A Deposited Plan 22767')
+$$,
+	'bde_get_combined_appellation should behave as expected'
+);
+
+-- }
+
 SELECT * FROM finish();
 
 ROLLBACK;
