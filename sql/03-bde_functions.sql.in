@@ -35,26 +35,19 @@ $$;
 --
 
 /**
-* Retrieve the title or survey appellation for a specific parcel and format it.
+* Format title or survey appellation for a specific parcel record.
 * Note this function has the same logic as Landonline.
 *
-* @param par_id       Parcel id of the appellation
-* @param p_context    Either 'SURV' (survey) or 'TITL' (title). This defines the appellation
-*                     string context that is returned. In many cases this will return
-*                     the same value but differs in many cases due to historic differences
-*                     in survey and title registration processes. This difference can
-*                     be small such as "LOT 8" vs "Allot 8", but in other cases the
-*                     appellation string can be completely different.
+* @param app          crs_appellation record
 * @param p_long       Either 'Y' or 'N'. This defines if the appellation should be in long
 *                     or short appellation format. e.g 'Lot 1 Deposited Plan 1234' vs 'Lot 1 DP 1234'.
 * @return             The formatted appellation string
 */
-
-CREATE OR REPLACE FUNCTION bde_get_app_specific(p_par_id INTEGER, p_context VARCHAR, p_long CHAR) RETURNS text
+-- {
+CREATE OR REPLACE FUNCTION bde_get_app_specific(app bde.crs_appellation, p_long CHAR) RETURNS text
     AS $$
 DECLARE
     v_app_text            TEXT;
-    v_app_id              crs_appellation.id%TYPE;
     v_app_type            crs_appellation."type"%TYPE;
     v_part_indicator      crs_appellation.part_indicator%TYPE;
     v_count_app           INTEGER;
@@ -79,11 +72,10 @@ BEGIN
     v_part := '';
     v_share := '1/1';
 
-    SELECT
-        APP.id,
-        APP.type,
-        APP.part_indicator,
-        COALESCE( (CASE p_long
+
+    v_app_type := APP.type;
+    v_part_indicator := APP.part_indicator;
+    v_parcel_type := COALESCE( (CASE p_long
                     WHEN 'Y' THEN
                         bde_get_desccode( 'ASAP', APP.parcel_type)::TEXT
                     WHEN 'N' THEN
@@ -93,54 +85,32 @@ BEGIN
                             ELSE
                                bde_get_charcode('ASAP',APP.parcel_type)::TEXT
                         END
-                   END), ''),
-        COALESCE( APP.parcel_value, ''),
-        COALESCE( (CASE p_long
-                    WHEN 'Y' THEN
-                        bde_get_desccode('ASAP',APP.second_parcel_type)::TEXT
-                    WHEN 'N' THEN
-                         bde_get_charcode('ASAP',APP.second_parcel_type)::TEXT
-                   END), ''),
-        COALESCE( APP.second_prcl_value, ''),
-        COALESCE( APP.block_number, ''),
-        COALESCE( APP.appellation_value, ''),
-        COALESCE( (CASE p_long
-                    WHEN 'Y' THEN
-                        bde_get_desccode('ASAU',APP.sub_type)::TEXT
-                    WHEN 'N' THEN
-                          CASE WHEN APP.sub_type in ( 'DP', 'LT', 'SO', 'ML', 'DPS' )
-                            THEN
-                                APP.sub_type::TEXT
-                            ELSE
-                                bde_get_charcode('ASAU',APP.sub_type)::TEXT
-                          END
-                   END), ''),
-        COALESCE( APP.sub_type_position, ''),
-        COALESCE( APP.maori_name, ''),
-        COALESCE( APP.parcel_value, ''),
-        COALESCE( APP.other_appellation, '')
-    INTO
-        v_app_id,
-        v_app_type,
-        v_part_indicator,
-        v_parcel_type,
-        v_parcel_value,
-        v_2_parcel_type,
-        v_2_parcel_value,
-        v_block_number,
-        v_app_val,
-        v_sub_type,
-        v_sub_type_pos,
-        v_maori_name,
-        v_maori_parcel,
-        v_other_app
-    FROM
-        crs_appellation APP
-    WHERE
-        APP.par_id = p_par_id AND
-        APP.status = 'CURR' AND
-        ((p_context = v_title AND APP.title = 'Y' ) OR
-         (p_context = v_surv AND APP.survey = 'Y' ));
+                   END), '');
+    v_parcel_value := COALESCE( APP.parcel_value, '');
+    v_2_parcel_type := COALESCE( (CASE p_long
+                WHEN 'Y' THEN
+                    bde_get_desccode('ASAP',APP.second_parcel_type)::TEXT
+                WHEN 'N' THEN
+                     bde_get_charcode('ASAP',APP.second_parcel_type)::TEXT
+               END), '');
+    v_2_parcel_value := COALESCE( APP.second_prcl_value, '');
+    v_block_number := COALESCE( APP.block_number, '');
+    v_app_val := COALESCE( APP.appellation_value, '');
+    v_sub_type := COALESCE( (CASE p_long
+                WHEN 'Y' THEN
+                    bde_get_desccode('ASAU',APP.sub_type)::TEXT
+                WHEN 'N' THEN
+                      CASE WHEN APP.sub_type in ( 'DP', 'LT', 'SO', 'ML', 'DPS' )
+                        THEN
+                            APP.sub_type::TEXT
+                        ELSE
+                            bde_get_charcode('ASAU',APP.sub_type)::TEXT
+                      END
+               END), '');
+    v_sub_type_pos := COALESCE( APP.sub_type_position, '');
+    v_maori_name := COALESCE( APP.maori_name, '');
+    v_maori_parcel := COALESCE( APP.parcel_value, '');
+    v_other_app := COALESCE( APP.other_appellation, '');
 
     IF ( v_app_type = 'GNRL' ) THEN
         v_maori_name        := '';
@@ -189,6 +159,43 @@ BEGIN
     RETURN v_app_text;
 END;
     $$ LANGUAGE plpgsql STABLE STRICT;
+--}
+
+ALTER FUNCTION bde_get_app_specific(bde.crs_appellation, CHAR) OWNER TO bde_dba;
+REVOKE ALL ON FUNCTION bde_get_app_specific(bde.crs_appellation, CHAR) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION bde_get_app_specific(bde.crs_appellation, CHAR) TO bde_admin;
+GRANT EXECUTE ON FUNCTION bde_get_app_specific(bde.crs_appellation, CHAR) TO bde_user;
+
+/**
+* Retrieve the title or survey appellation for a specific parcel and format it.
+* Note this function has the same logic as Landonline.
+*
+* @param par_id       Parcel id of the appellation
+* @param p_context    Either 'SURV' (survey) or 'TITL' (title). This defines the appellation
+*                     string context that is returned. In many cases this will return
+*                     the same value but differs in many cases due to historic differences
+*                     in survey and title registration processes. This difference can
+*                     be small such as "LOT 8" vs "Allot 8", but in other cases the
+*                     appellation string can be completely different.
+* @param p_long       Either 'Y' or 'N'. This defines if the appellation should be in long
+*                     or short appellation format. e.g 'Lot 1 Deposited Plan 1234' vs 'Lot 1 DP 1234'.
+* @return             The formatted appellation string
+*/
+
+--{
+CREATE OR REPLACE FUNCTION bde_get_app_specific(p_par_id INTEGER, p_context VARCHAR, p_long CHAR)
+RETURNS text AS $$
+    SELECT
+        bde_get_app_specific(APP, p_long)
+    FROM
+        crs_appellation APP
+    WHERE
+        APP.par_id = p_par_id AND
+        APP.status = 'CURR' AND
+        ((p_context = 'TITL' AND APP.title = 'Y' ) OR
+         (p_context = 'SURV' AND APP.survey = 'Y' ));
+    $$ LANGUAGE sql STABLE STRICT;
+--}
 
 ALTER FUNCTION bde_get_app_specific(INTEGER, VARCHAR, CHAR) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_get_app_specific(INTEGER, VARCHAR, CHAR) FROM PUBLIC;
