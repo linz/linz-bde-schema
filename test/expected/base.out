@@ -287,4 +287,5 @@ ok 284 - bde_write_appellation 25
 ok 285 - bde_write_appellation 26
 ok 286 - bde_write_appellation 27
 ok 287 - bde_write_appellation 28
-1..287
+ok 288 - bde_get_combined_appellation should behave as expected
+1..288
