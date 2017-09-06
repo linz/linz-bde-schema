@@ -733,45 +733,17 @@ GRANT EXECUTE ON FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR,
 
 
 CREATE OR REPLACE FUNCTION bde_get_combined_appellation(p_par_id INTEGER, p_long CHAR)
-    RETURNS TEXT AS $$
-DECLARE
-    v_surv_app      CHAR(1);
-    v_title_app     CHAR(1);
-    v_app_count     BIGINT;
-    v_temp_app      TEXT;
-    v_appellation   TEXT;
-BEGIN
-    v_appellation := NULL;
-
+RETURNS TEXT AS $$
     SELECT
-        max(survey) as survey,
-        max(title) as title,
-        count(*)
-    INTO
-        v_surv_app,
-        v_title_app,
-        v_app_count
+        bde_get_app_specific(APP, p_long)
     FROM
-        crs_appellation
+        crs_appellation APP
     WHERE
-        par_id = p_par_id AND
-        status = 'CURR'
-    GROUP BY
-        par_id;
-
-    IF FOUND THEN
-        IF v_title_app = 'Y' AND v_surv_app = 'Y' THEN
-            v_appellation := bde_get_app_specific(p_par_id, 'SURV', p_long);
-        ELSIF v_surv_app = 'Y' THEN
-            v_appellation := bde_get_app_specific(p_par_id, 'SURV', p_long);
-        ELSE
-            v_appellation := bde_get_app_specific(p_par_id, 'TITL', p_long);
-        END IF;
-    END IF;
-
-    RETURN v_appellation;
-END;
-    $$ LANGUAGE plpgsql STABLE STRICT;
+        APP.par_id = p_par_id AND status = 'CURR'
+    ORDER BY
+        survey desc, title desc
+    LIMIT 1;
+$$ LANGUAGE sql STABLE STRICT;
 
 ALTER FUNCTION bde_get_combined_appellation(INTEGER, CHAR) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_get_combined_appellation(INTEGER, CHAR) FROM PUBLIC;
