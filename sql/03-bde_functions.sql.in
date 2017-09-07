@@ -620,8 +620,7 @@ GRANT EXECUTE ON FUNCTION bde_get_useroff(VARCHAR) TO bde_user;
 
 --
 -- Name: bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT);
---
-
+-- {
 CREATE OR REPLACE FUNCTION bde_write_appellation(
     p_part_indicator VARCHAR,
     p_lgd_part VARCHAR,
@@ -638,93 +637,38 @@ CREATE OR REPLACE FUNCTION bde_write_appellation(
     p_maori_name VARCHAR,
     p_other_app TEXT
 )
-RETURNS TEXT
-    AS $$
-DECLARE
-    v_part               VARCHAR(5);
-    v_share              VARCHAR(9);
-    v_block              VARCHAR(7);
-    v_output             TEXT;
-BEGIN
-    v_part          := ' Part';
-    v_share         := ' share of';
-    v_block         := ' Block';
-    v_output        := '';
+RETURNS TEXT AS $$
+	WITH ret AS (
+		SELECT TRIM(both FROM (
+		CASE WHEN p_part_indicator = 'PART' THEN ' Part' ELSE '' END ||
+		CASE WHEN p_lgd_part = 'PART' THEN ' Part' ELSE '' END ||
 
-    IF ( p_part_indicator = 'PART' ) THEN
-        v_output := v_output || v_part;
-    END IF;
+		array_to_string(ARRAY[
+			CASE WHEN p_share <> '1/1' THEN format('%s share of', p_share) ELSE '' END,
+			CASE WHEN p_maori_name <> '' THEN format('%s', p_maori_name) ELSE NULL END,
+			CASE WHEN p_maori_parcel <> '' THEN format('%s', p_maori_parcel) ELSE NULL END,
+			CASE WHEN p_maori_parcel <> '' OR p_maori_name <> '' THEN 'Block' ELSE NULL END,
+			CASE WHEN p_other_app <> '' THEN format('%s', p_other_app) ELSE NULL END,
+			CASE WHEN p_parcel_type <> '' THEN format('%s', p_parcel_type) ELSE NULL END,
+			CASE WHEN p_parcel_value <> '' THEN format('%s', p_parcel_value) ELSE NULL END,
+			CASE WHEN p_2_parcel_type <> '' THEN format('%s', p_2_parcel_type) ELSE NULL END,
+			CASE WHEN p_2_parcel_value <> '' THEN format('%s', p_2_parcel_value) ELSE NULL END,
+			CASE WHEN p_block_number <> '' THEN format('Block %s', p_block_number) ELSE NULL END
+		], ' ') ||
 
-    IF ( p_lgd_part = 'PART' ) THEN
-        v_output := v_output || v_part;
-    END IF;
-
-    IF ( p_share <> '1/1' ) THEN
-        v_output := v_output || p_share::TEXT || v_share;
-    END IF;
-
-    IF ( char_length(p_maori_name) > 0 ) THEN
-        v_output := v_output || ' ' || p_maori_name;
-    END IF;
-
-    IF ( char_length(p_maori_parcel) > 0 ) THEN
-        v_output := v_output || ' ' || p_maori_parcel;
-    END IF;
-
-    IF ( char_length(p_maori_name) > 0 ) OR ( char_length(p_maori_parcel) > 0 ) THEN
-        v_output := v_output || v_block;
-    END IF;
-
-    IF ( char_length(p_other_app) > 0 ) THEN
-        v_output := v_output || ' ' || p_other_app;
-    END IF;
-
-    IF ( char_length(p_parcel_type) > 0 ) THEN
-        v_output := v_output || ' ' || p_parcel_type;
-    END IF;
-
-    IF ( char_length(p_parcel_value) > 0 ) THEN
-        v_output := v_output || ' ' || p_parcel_value;
-    END IF;
-
-    IF ( char_length(p_2_parcel_type) > 0 ) THEN
-        v_output := v_output || ' ' || p_2_parcel_type;
-    END IF;
-
-    IF ( char_length(p_2_parcel_value) > 0 ) THEN
-        v_output := v_output || ' ' || p_2_parcel_value;
-    END IF;
-
-    IF ( char_length(p_block_number) > 0 ) THEN
-        v_output := v_output || v_block || ' ' || p_block_number;
-    END IF;
-
-    IF ( p_sub_type_pos = 'PRFX' ) THEN
-        IF ( char_length(p_sub_type) > 0 ) THEN
-            v_output := v_output || ' ' || p_sub_type;
-        END IF;
-
-        IF ( char_length(p_app_val) > 0 ) THEN
-            v_output := v_output || ' ' || p_app_val;
-        END IF;
-    ELSE
-        IF ( char_length(p_app_val) > 0 ) THEN
-            v_output := v_output || ' ' || p_app_val;
-        END IF;
-
-        IF ( char_length(p_sub_type) > 0 ) THEN
-            v_output := v_output || ' ' || p_sub_type;
-        END IF;
-    END IF;
-
-    v_output := TRIM(both FROM v_output);
-    IF length(v_output) > 2048 THEN
-        v_output := 'Appellation Too Long';
-    END IF;
-
-    RETURN v_output;
-END;
-    $$ LANGUAGE plpgsql;
+		CASE WHEN p_sub_type_pos = 'PRFX' THEN
+			CASE WHEN p_sub_type <> '' THEN format(' %s', p_sub_type) ELSE '' END ||
+			CASE WHEN p_app_val <> '' THEN format(' %s', p_app_val) ELSE '' END
+		ELSE
+			CASE WHEN p_app_val <> '' THEN format(' %s', p_app_val) ELSE '' END ||
+			CASE WHEN p_sub_type <> '' THEN format(' %s', p_sub_type) ELSE '' END
+		END
+		)) ret
+	)
+	SELECT CASE WHEN length(ret) > 2048 THEN 'Appellation Too Long' ELSE ret END
+	FROM ret;
+$$ LANGUAGE sql IMMUTABLE;
+-- }
 
 ALTER FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) FROM PUBLIC;
