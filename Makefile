@@ -25,7 +25,7 @@ SQLSCRIPTS = \
   sql/versioning/01-version_tables.sql
   $(END)
 
-EXTRA_CLEAN = sql/05-bde_version.sql sql/04-bde_functions.sql
+EXTRA_CLEAN = sql/05-bde_version.sql sql/03-bde_functions.sql
 
 .dummy:
 
