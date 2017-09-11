@@ -215,7 +215,7 @@ CREATE OR REPLACE FUNCTION bde_get_charcode(p_code_group VARCHAR, p_code VARCHAR
     WHERE
         scg_code = $1 AND
         code = $2;
-$$ LANGUAGE sql STRICT;
+$$ LANGUAGE sql STABLE STRICT;
 
 
 ALTER FUNCTION bde_get_charcode(VARCHAR, VARCHAR) OWNER TO bde_dba;
@@ -256,7 +256,7 @@ BEGIN
 
     RETURN v_survey;
 END;
-    $$ LANGUAGE plpgsql STRICT;
+    $$ LANGUAGE plpgsql STABLE STRICT;
 
 
 ALTER FUNCTION bde_get_dataset(INTEGER) OWNER TO bde_dba;
@@ -272,7 +272,7 @@ CREATE OR REPLACE FUNCTION bde_get_datasource(p_wrk_id INTEGER) RETURNS CHAR(4) 
     SELECT data_source
     FROM   crs_survey
     WHERE  wrk_id = $1;
-$$ LANGUAGE sql STRICT;
+$$ LANGUAGE sql STABLE STRICT;
 
 ALTER FUNCTION bde_get_datasource(INTEGER) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_get_datasource(INTEGER) FROM PUBLIC;
@@ -288,7 +288,7 @@ CREATE OR REPLACE FUNCTION bde_get_desccode(p_code_group VARCHAR, p_code VARCHAR
     FROM   crs_sys_code SCO
     WHERE  SCO.scg_code = $1
     AND    SCO.code     = $2;
-$$ LANGUAGE sql STRICT;
+$$ LANGUAGE sql STABLE STRICT;
 
 ALTER FUNCTION bde_get_desccode(VARCHAR, VARCHAR) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_get_desccode(VARCHAR, VARCHAR) FROM PUBLIC;
@@ -303,7 +303,7 @@ CREATE OR REPLACE FUNCTION bde_get_district(p_loc_id INTEGER) RETURNS VARCHAR AS
     SELECT name
     FROM   crs_locality
     WHERE  id = $1;
-$$ LANGUAGE sql STRICT;
+$$ LANGUAGE sql STABLE STRICT;
 
 ALTER FUNCTION bde_get_district(INTEGER) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_get_district(INTEGER) FROM PUBLIC;
@@ -384,7 +384,7 @@ BEGIN
 
     RETURN;
 END;
-    $$ LANGUAGE plpgsql STRICT;
+    $$ LANGUAGE plpgsql STABLE STRICT;
 
 ALTER FUNCTION bde_get_mrknodename(INTEGER, VARCHAR) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_get_mrknodename(INTEGER, VARCHAR) FROM PUBLIC;
@@ -397,7 +397,7 @@ GRANT EXECUTE ON FUNCTION bde_get_mrknodename(INTEGER, VARCHAR) TO bde_user;
 
 CREATE OR REPLACE FUNCTION bde_get_markname(p_mrk_id INTEGER) RETURNS VARCHAR AS $$
     SELECT mrk_name FROM bde_get_mrknodename($1, 'MARK')
-$$ LANGUAGE sql STRICT;
+$$ LANGUAGE sql STABLE STRICT;
 
 
 ALTER FUNCTION bde_get_markname(INTEGER) OWNER TO bde_dba;
@@ -411,7 +411,7 @@ GRANT EXECUTE ON FUNCTION bde_get_markname(INTEGER) TO bde_user;
 
 CREATE OR REPLACE FUNCTION bde_get_nodename(p_nod_id INTEGER) RETURNS VARCHAR AS $$
     SELECT mrk_name FROM bde_get_mrknodename($1, 'NODE')
-$$ LANGUAGE sql STRICT;
+$$ LANGUAGE sql STABLE STRICT;
 
 
 ALTER FUNCTION bde_get_nodename(INTEGER) OWNER TO bde_dba;
@@ -443,7 +443,7 @@ BEGIN
 
     RETURN v_name;
 END;
-    $$ LANGUAGE plpgsql STRICT;
+    $$ LANGUAGE plpgsql STABLE STRICT;
 
 
 ALTER FUNCTION bde_get_nodename(INTEGER, VARCHAR) OWNER TO bde_dba;
@@ -465,7 +465,7 @@ CREATE OR REPLACE FUNCTION bde_get_nodeorder(p_node_id INTEGER) RETURNS VARCHAR 
     AND     COO.cor_id = COR.id
     AND     COO.cos_id = COS.id
     AND     COS.dtm_id = DTM.id;
-$$ LANGUAGE sql STRICT;
+$$ LANGUAGE sql STABLE STRICT;
 
 ALTER FUNCTION bde_get_nodeorder(INTEGER) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_get_nodeorder(INTEGER) FROM PUBLIC;
@@ -482,7 +482,7 @@ CREATE OR REPLACE FUNCTION bde_get_office(p_loc_id INTEGER) RETURNS VARCHAR AS $
             crs_land_district LDT
     WHERE   LDT.loc_id = $1
     AND     LDT.off_code = OFC.code;
-$$ LANGUAGE sql STRICT;
+$$ LANGUAGE sql STABLE STRICT;
 
 
 ALTER FUNCTION bde_get_office(INTEGER) OWNER TO bde_dba;
@@ -563,7 +563,7 @@ BEGIN
 
     RETURN v_fullroadname;
 END;
-    $$ LANGUAGE plpgsql STRICT;
+    $$ LANGUAGE plpgsql STABLE STRICT;
 
 
 ALTER FUNCTION bde_get_roadname(INTEGER, DOUBLE PRECISION) OWNER TO bde_dba;
@@ -580,7 +580,7 @@ CREATE OR REPLACE FUNCTION bde_get_trtcode(p_code_group VARCHAR, p_type VARCHAR)
    FROM   crs_transact_type
    WHERE  grp  = $1
    AND    type = $2;
-$$ LANGUAGE sql STRICT;
+$$ LANGUAGE sql STABLE STRICT;
 
 ALTER FUNCTION bde_get_trtcode(VARCHAR, VARCHAR) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_get_trtcode(VARCHAR, VARCHAR) FROM PUBLIC;
@@ -595,7 +595,7 @@ CREATE OR REPLACE FUNCTION bde_get_username(p_user_id VARCHAR) RETURNS VARCHAR A
     SELECT given_names  || ' ' || surname
     FROM   crs_user
     WHERE  id = $1;
-$$ LANGUAGE sql STRICT;
+$$ LANGUAGE sql STABLE STRICT;
 
 ALTER FUNCTION bde_get_username(VARCHAR) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_get_username(VARCHAR) FROM PUBLIC;
@@ -610,7 +610,7 @@ CREATE OR REPLACE FUNCTION bde_get_useroff(p_user_id VARCHAR) RETURNS VARCHAR AS
     SELECT off_code
     FROM   crs_user
     WHERE  id = $1;
-$$ LANGUAGE sql STRICT;
+$$ LANGUAGE sql STABLE STRICT;
 
 
 ALTER FUNCTION bde_get_useroff(VARCHAR) OWNER TO bde_dba;
@@ -724,7 +724,7 @@ BEGIN
 
     RETURN v_output;
 END;
-    $$ LANGUAGE plpgsql;
+    $$ LANGUAGE plpgsql IMMUTABLE;
 
 ALTER FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) FROM PUBLIC;
@@ -875,7 +875,7 @@ BEGIN
     END IF;
     RETURN v_description;
 END;
-    $$ LANGUAGE plpgsql VOLATILE STRICT;
+    $$ LANGUAGE plpgsql STABLE STRICT;
 
 ALTER FUNCTION bde_get_par_stat_act(INTEGER, INTEGER) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_get_par_stat_act(INTEGER, INTEGER) FROM PUBLIC;
@@ -932,7 +932,7 @@ BEGIN
         ORDER BY
             2;
     END;
-$body$ LANGUAGE plpgsql;
+$body$ LANGUAGE plpgsql STABLE;
 
 ALTER FUNCTION bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION) OWNER TO bde_dba;
 REVOKE ALL ON FUNCTION bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION) FROM PUBLIC;
@@ -975,7 +975,7 @@ BEGIN
     END LOOP;
     RETURN v_ndrop;
 END
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$ LANGUAGE plpgsql VOLATILE SECURITY DEFINER;
 
 ALTER FUNCTION bde_drop_idle_connections(INTEGER) OWNER TO bde_dba;
 REVOKE ALL PRIVILEGES ON FUNCTION bde_drop_idle_connections(INTEGER) FROM PUBLIC;
