@@ -158,7 +158,7 @@ BEGIN
 
     RETURN v_app_text;
 END;
-    $$ LANGUAGE plpgsql STABLE STRICT;
+    $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 --}
 
 ALTER FUNCTION bde_get_app_specific(bde.crs_appellation, CHAR) OWNER TO bde_dba;
