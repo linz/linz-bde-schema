@@ -6,6 +6,7 @@ REVISION = $(shell test -d .git && git describe --always || echo $(VERSION))
 SED = sed
 
 datadir=${DESTDIR}/usr/share/linz-bde-schema
+bindir=${DESTDIR}/usr/local/bin
 
 #
 # Uncoment these line to support testing via pg_regress
@@ -24,6 +25,10 @@ SQLSCRIPTS = \
   sql/99-patches.sql \
   sql/versioning/01-version_tables.sql
   $(END)
+
+SCRIPTS = \
+    scripts/linz-bde-schema-load \
+    $(END)
 
 EXTRA_CLEAN = sql/05-bde_version.sql sql/03-bde_functions.sql
 
@@ -44,6 +49,8 @@ install: $(SQLSCRIPTS)
 	cp sql/*.sql ${datadir}/sql
 	mkdir -p ${datadir}/sql/versioning
 	cp sql/versioning/*.sql ${datadir}/sql/versioning
+	mkdir -p ${bindir}
+	cp $(SCRIPTS) ${bindir}
 
 uninstall:
 	rm -rf ${datadir}

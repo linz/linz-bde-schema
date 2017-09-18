@@ -18,40 +18,31 @@ First install the project into the OS data share directory:
 sudo make install
 ```
 
-Then you need to install the PostGIS and dbpatch extensions:
+Then you can load the schema into a target database
 
 ```shell
-createdb $DB_NAME
-psql $DB_NAME -c "CREATE EXTENSION postgis"
-psql $DB_NAME -c "CREATE SCHEMA _patches"
-psql $DB_NAME -c "CREATE EXTENSION dbpatch SCHEMA _patches"
+linz-bde-schema-load $DB_NAME
 ```
 
-You can then execute the installed SQL files with something like:
+If you don't want to install the indexes, add `--noindexes
+to the `linz-bde-schema-load` invocation:
 
 ```shell
-for file in /usr/share/linz-bde-schema/sql/*.sql
-    do psql $DB_NAME -f $file -v ON_ERROR_STOP=1
-done
+linz-bde-schema-load --noindexes $DB_NAME
 ```
 
-or the following commands if you don't want to install the indexes:
+If you would like to revision the table, add `--revision`
+to the `linz-bde-schema-load` invocation:
 
 ```shell
-psql $DB_NAME -f /usr/share/linz-bde-schema/sql/01-bde_roles.sql
-psql $DB_NAME -f /usr/share/linz-bde-schema/sql/02-bde_schema.sql
-psql $DB_NAME -f /usr/share/linz-bde-schema/sql/03-bde_functions.sql
-psql $DB_NAME -f /usr/share/linz-bde-schema/sql/05-bde_version.sql
-psql $DB_NAME -f /usr/share/linz-bde-schema/sql/99-patches.sql
+linz-bde-schema-load --noindexes --revision $DB_NAME
 ```
+Upgrade
+-------
 
-If you would like to revision the table then install the `table_version`
-extension and then run the versioning SQL script:
-
-```shell
-psql $DB_NAME -c "CREATE EXTENSION table_version"
-psql $DB_NAME -f /usr/share/linz-bde-schema/sql/versioning/01-version_tables.sql
-```
+You can upgrade the schema in an existing database by following
+the install procedure. The `linz-bde-schema-load` script is able
+to both install or upgrade databases.
 
 Testing
 -------
@@ -60,7 +51,7 @@ Testing is done using `pg_regress` and `PgTap`.
 To run the tests run the following command:
 
 ```shell
-make test
+make check
 ```
 
 Building Debian packaging
