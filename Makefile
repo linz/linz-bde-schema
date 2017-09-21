@@ -38,11 +38,8 @@ EXTRA_CLEAN = sql/05-bde_version.sql sql/03-bde_functions.sql
 
 all: $(SQLSCRIPTS)
 
-sql/05-bde_version.sql: sql/05-bde_version.sql.in
-	$(SED) -e 's/@@VERSION@@/$(VERSION)/' $< > $@
-
-sql/03-bde_functions.sql: sql/03-bde_functions.sql.in Makefile
-	$(SED) -e 's/\$$Id\$$/$(REVISION)/' $< > $@
+%.sql: %.sql.in Makefile
+	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s/@@REVISION@@/$(REVISION)/' $< > $@
 
 install: $(SQLSCRIPTS)
 	mkdir -p ${datadir}/sql
