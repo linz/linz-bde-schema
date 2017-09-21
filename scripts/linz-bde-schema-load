@@ -6,6 +6,10 @@ export ADD_REVISIONS=no
 export PSQL=psql
 export SCRIPTSDIR=/usr/share/linz-bde-schema/sql/
 
+if test -n "${BDESCHEMA_SQLDIR}"; then
+    SCRIPTSDIR=${BDESCHEMA_SQLDIR}
+fi
+
 while test -n "$1"; do
     if test $1 = "--noindexes"; then
         SKIP_INDEXES=yes
