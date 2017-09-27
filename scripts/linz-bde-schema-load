@@ -10,6 +10,14 @@ if test -n "${BDESCHEMA_SQLDIR}"; then
     SCRIPTSDIR=${BDESCHEMA_SQLDIR}
 fi
 
+if test ! -f "${SCRIPTSDIR}/02-bde_schema.sql"; then
+    cat >&2 <<EOF
+Cannot find 02-bde_schema.sql in ${SCRIPTSDIR}
+Please set LDSBDESCHEMA_SQLDIR environment variable
+EOF
+    exit 1
+fi
+
 while test -n "$1"; do
     if test $1 = "--noindexes"; then
         SKIP_INDEXES=yes
