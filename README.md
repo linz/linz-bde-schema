@@ -38,6 +38,9 @@ to the `linz-bde-schema-load` invocation:
 linz-bde-schema-load --noindexes --revision $DB_NAME
 ```
 
+Add `--noextension` switch if required extensions are
+not available on the database system.
+
 NOTE: the loader script will expect to find SQL scripts
       under `/usr/share/linz-bde-schema/sql`, if you want
       them found in a different directory you can set the
