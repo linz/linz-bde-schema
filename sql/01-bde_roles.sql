@@ -17,7 +17,7 @@ BEGIN
 
 IF NOT EXISTS (SELECT * FROM pg_roles where rolname = 'bde_dba') THEN
     CREATE ROLE bde_dba
-        SUPERUSER INHERIT CREATEDB CREATEROLE;
+        NOSUPERUSER INHERIT CREATEDB CREATEROLE;
     ALTER ROLE bde_dba SET search_path=bde, bde_control, public;
 END IF;
 
