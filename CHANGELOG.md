@@ -3,6 +3,10 @@
 All notable changes for the LINZ BDE schema are documented in this file.
 
 ## 1.1.0dev - YYYY-MM-DD
+### Important changes
+- `bde_dba` role is not granted SUPERUSER anymore (lack of which
+  would forbid `COPY TABLE FROM <file>`, used by `linz-bde-uploader`
+  up to version 2.3.x - 2.4.x will work fine)
 ### Added
 - `bde_get_app_specific` function taking `crs_appellation` record
 - `linz-bde-schema-load` script
