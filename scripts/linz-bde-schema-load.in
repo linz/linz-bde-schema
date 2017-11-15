@@ -7,6 +7,11 @@ export EXTENSION_MODE=on
 export PSQL=psql
 export SCRIPTSDIR=/usr/share/linz-bde-schema/sql/
 
+if test "$1" = "--version"; then
+    echo "@@VERSION@@ @@REVISION@@"
+    exit 0
+fi
+
 if test -n "${BDESCHEMA_SQLDIR}"; then
     SCRIPTSDIR=${BDESCHEMA_SQLDIR}
 fi
@@ -36,6 +41,7 @@ done
 
 if test -z "$DB_NAME"; then
     echo "Usage: $0 [--noindexes] [--revision] [--noextension] <database>" >&2
+    echo "       $0 --version" >&2
     exit 1
 fi
 
@@ -50,7 +56,7 @@ if test "${EXTENSION_MODE}" = "off"; then
 fi
 ${LOADER} ${OPTS} $PGDATABASE _patches || exit 1
 
-# Enable table_version fi needed
+# Enable table_version if needed
 if test "${ADD_REVISIONS}" = "yes"; then
     LOADER=`pg_config --bindir`/table_version-loader
     OPTS=

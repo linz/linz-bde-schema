@@ -26,28 +26,34 @@ SQLSCRIPTS = \
   sql/versioning/01-version_tables.sql
   $(END)
 
-SCRIPTS = \
+SCRIPTS_built = \
     scripts/linz-bde-schema-load \
     $(END)
 
-EXTRA_CLEAN = sql/05-bde_version.sql sql/03-bde_functions.sql
+EXTRA_CLEAN = \
+    sql/05-bde_version.sql \
+    sql/03-bde_functions.sql \
+    $(SCRIPTS_built)
 
 .dummy:
 
 # Need install to depend on something for debuild
 
-all: $(SQLSCRIPTS)
+all: $(SQLSCRIPTS) $(SCRIPTS_built)
 
 %.sql: %.sql.in Makefile
 	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s/@@REVISION@@/$(REVISION)/' $< > $@
 
-install: $(SQLSCRIPTS)
+scripts/linz-bde-schema-load: scripts/linz-bde-schema-load.in
+	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s/@@REVISION@@/$(REVISION)/' $< > $@
+
+install: $(SQLSCRIPTS) $(SCRIPTS_built)
 	mkdir -p ${datadir}/sql
 	cp sql/*.sql ${datadir}/sql
 	mkdir -p ${datadir}/sql/versioning
 	cp sql/versioning/*.sql ${datadir}/sql/versioning
 	mkdir -p ${bindir}
-	cp $(SCRIPTS) ${bindir}
+	cp $(SCRIPTS_built) ${bindir}
 
 uninstall:
 	rm -rf ${datadir}
