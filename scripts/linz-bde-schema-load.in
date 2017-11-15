@@ -50,6 +50,12 @@ export PGDATABASE=$DB_NAME
 
 # Enable dbpatch
 LOADER=`pg_config --bindir`/dbpatch-loader
+if test \! -f ${LOADER}; then
+    echo "$0 depends on dbpatch-loader which cannot be found in `pg_config --bindir`" >&2
+    echo "did you install dbpatch ? (1.2.0 or later needed)" >&2
+    exit 1
+fi
+
 OPTS=
 if test "${EXTENSION_MODE}" = "off"; then
     OPTS="--no-extension"
