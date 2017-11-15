@@ -63,3 +63,4 @@ script:
   - make
   - make check || { cat regression.diffs; false; }
   - sudo env "PATH=$PATH" make install
+  - make installcheck
