@@ -53,9 +53,9 @@ before_install:
   - psql --version
   - psql -c 'select version()'
   - find `pg_config --pkglibdir`| grep postgis
-  - wget https://github.com/linz/postgresql-dbpatch/archive/1.1.0.tar.gz
-  - tar xzf 1.1.0.tar.gz
-  - cd postgresql-dbpatch-1.1.0
+  - wget https://github.com/linz/postgresql-dbpatch/archive/1.2.0.tar.gz
+  - tar xzf 1.2.0.tar.gz
+  - cd postgresql-dbpatch-1.2.0
   - make
   - sudo env "PATH=$PATH" make install
   - cd ..
