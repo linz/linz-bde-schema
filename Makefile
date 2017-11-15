@@ -55,6 +55,25 @@ install: $(SQLSCRIPTS) $(SCRIPTS_built)
 	mkdir -p ${bindir}
 	cp $(SCRIPTS_built) ${bindir}
 
+# TODO: run the full test after preparing the db ?
+installcheck:
+
+	dropdb --if-exists linz-bde-schema-test-db
+
+	createdb linz-bde-schema-test-db
+	linz-bde-schema-load linz-bde-schema-test-db
+	linz-bde-schema-load linz-bde-schema-test-db
+	psql -tAc 'select bde.bde_version()' linz-bde-schema-test-db
+	linz-bde-schema-load --version
+	dropdb linz-bde-schema-test-db
+
+	createdb linz-bde-schema-test-db
+	linz-bde-schema-load --noextension linz-bde-schema-test-db
+	linz-bde-schema-load --noextension linz-bde-schema-test-db
+	psql -tAc 'select bde.bde_version()' linz-bde-schema-test-db
+	linz-bde-schema-load --version
+	dropdb linz-bde-schema-test-db
+
 uninstall:
 	rm -rf ${datadir}
 
