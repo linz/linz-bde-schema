@@ -46,6 +46,7 @@ all: $(SQLSCRIPTS) $(SCRIPTS_built)
 
 scripts/linz-bde-schema-load: scripts/linz-bde-schema-load.in
 	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s/@@REVISION@@/$(REVISION)/' $< > $@
+	chmod +x $@
 
 install: $(SQLSCRIPTS) $(SCRIPTS_built)
 	mkdir -p ${datadir}/sql
