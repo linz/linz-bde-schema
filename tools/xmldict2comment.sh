@@ -21,14 +21,17 @@ xsltproc /dev/stdin $SOURCE << EOF
   <xsl:output method="text"/>
   <xsl:template match="entity-list">
     <xsl:for-each select="entity">
-      <xsl:text>COMMENT ON TABLE bde.</xsl:text>
-      <xsl:value-of select="code"/>
-      <xsl:text> IS \$DESC\$
-</xsl:text>
-      <xsl:value-of select="description"/>
-      <xsl:text>\$DESC\$;
+      <xsl:if test="contains(code, 'CRS_')">
+          <xsl:text>COMMENT ON TABLE bde.</xsl:text>
+          <xsl:value-of select="code"/>
+          <xsl:text> IS \$DESC\$
+    </xsl:text>
+          <xsl:value-of select="description"/>
+          <xsl:text>
+\$DESC\$;
 
 </xsl:text>
+      </xsl:if>
     </xsl:for-each>
   </xsl:template>
 </xsl:stylesheet>
