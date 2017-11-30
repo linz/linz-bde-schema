@@ -458,9 +458,9 @@ https://data.linz.govt.nz/table/2000
 $DESC$;
 
 COMMENT ON TABLE bde.crs_stat_version IS $DESC$
-A Statistical Area Class, e.
+A Statistical Area Class, e.g. Territorial Authority, may have more than one version.
 
-g. Territorial Authority, may have more than one version. Versioning allows both the former and latter versions of statistical area boundary changes to be stored in Landonline.
+Versioning allows both the former and latter versions of statistical area boundary changes to be stored in Landonline.
 
 https://data.linz.govt.nz/table/1999
 $DESC$;
