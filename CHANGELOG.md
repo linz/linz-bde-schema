@@ -10,7 +10,7 @@ All notable changes for the LINZ BDE schema are documented in this file.
 ### Added
 - `bde_get_app_specific` function taking `crs_appellation` record
 - `linz-bde-schema-load` script
-- Table comments
+- Table comments and scripts to generate them from various sources
 ### Enhanced
 - `bde_get_combined_appellation` x2 speed up
 
