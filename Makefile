@@ -42,10 +42,10 @@ EXTRA_CLEAN = \
 all: $(SQLSCRIPTS) $(SCRIPTS_built)
 
 %.sql: %.sql.in Makefile
-	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s/@@REVISION@@/$(REVISION)/' $< > $@
+	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 
 scripts/linz-bde-schema-load: scripts/linz-bde-schema-load.in
-	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s/@@REVISION@@/$(REVISION)/' $< > $@
+	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 	chmod +x $@
 
 install: $(SQLSCRIPTS) $(SCRIPTS_built)
