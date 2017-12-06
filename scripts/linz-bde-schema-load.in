@@ -49,7 +49,7 @@ export PGDATABASE=$DB_NAME
 
 
 # Enable dbpatch
-PGBIN=`pg_config --bindir`
+PGBIN=`pg_config --bindir 2> /dev/null`
 test -n "$PGBIN" && PATH=$PATH:$PGBIN
 LOADER=dbpatch-loader
 which $LOADER > /dev/null || {
