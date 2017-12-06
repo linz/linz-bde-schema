@@ -49,12 +49,14 @@ export PGDATABASE=$DB_NAME
 
 
 # Enable dbpatch
-LOADER=`pg_config --bindir`/dbpatch-loader
-if test \! -f ${LOADER}; then
-    echo "$0 depends on dbpatch-loader which cannot be found in `pg_config --bindir`" >&2
-    echo "did you install dbpatch ? (1.2.0 or later needed)" >&2
+PGBIN=`pg_config --bindir`
+test -n "$PGBIN" && PATH=$PATH:$PGBIN
+LOADER=dbpatch-loader
+which $LOADER > /dev/null || {
+    echo "$0 depends on $LOADER, which cannot be found in current PATH." >&2
+    echo "Did you install dbpatch ? (1.2.0 or later needed)" >&2
     exit 1
-fi
+}
 
 OPTS=
 if test "${EXTENSION_MODE}" = "off"; then
@@ -64,7 +66,12 @@ ${LOADER} ${OPTS} $PGDATABASE _patches || exit 1
 
 # Enable table_version if needed
 if test "${ADD_REVISIONS}" = "yes"; then
-    LOADER=`pg_config --bindir`/table_version-loader
+    LOADER=table_version-loader
+    which $LOADER > /dev/null || {
+        echo "$0 depends on $LOADER, which cannot be found in current PATH." >&2
+        echo "Did you install table_version ? (1.4.0 or later needed)" >&2
+        exit 1
+    }
     OPTS=
     if test "${EXTENSION_MODE}" = "off"; then
         OPTS="--no-extension"
