@@ -57,20 +57,15 @@ before_install:
   - psql --version
   - psql -c 'select version()'
   - find `pg_config --pkglibdir`| grep postgis
+  # Enable fetching packages from packagecloud
+  # test and production repositories
+  - curl -s https://packagecloud.io/install/repositories/linz/test/script.deb.sh | sudo bash
+  - curl -s https://packagecloud.io/install/repositories/linz/prod/script.deb.sh | sudo bash
   # Install dbpatch
-  - wget https://github.com/linz/postgresql-dbpatch/archive/1.2.0.tar.gz
-  - tar xzf 1.2.0.tar.gz
-  - cd postgresql-dbpatch-1.2.0
-  - make
-  - sudo env "PATH=$PATH" make install
-  - cd ..
+  - sudo apt-get install postgresql-`echo $PG | cut -d/ -f1`-dbpatch
   # Install table_version
-  - wget https://github.com/linz/postgresql-tableversion/archive/master.tar.gz
-  - tar xzf master.tar.gz
-  - cd postgresql-tableversion-master
-  - make
-  - sudo env "PATH=$PATH" make install
-  - cd .. && rm -rf postgresql-tableversion-master
+  - sudo apt-cache search tableversion
+  - sudo apt-get install postgresql-`echo $PG | cut -d/ -f1`-tableversion
 script:
   - make
   - make check || { cat regression.diffs; false; }
