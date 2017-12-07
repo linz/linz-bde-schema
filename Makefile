@@ -12,10 +12,6 @@ bindir=${DESTDIR}/usr/bin
 # Uncoment these line to support testing via pg_regress
 #
 
-PG_CONFIG    = pg_config
-PGXS := $(shell $(PG_CONFIG) --pgxs)
-PG_REGRESS := $(dir $(PGXS))../../src/test/regress/pg_regress
-
 SQLSCRIPTS = \
   sql/01-bde_roles.sql \
   sql/02-bde_schema.sql \
@@ -79,11 +75,10 @@ uninstall:
 	rm -rf ${datadir}
 
 check test: $(SQLSCRIPTS)
-	${PG_REGRESS} \
-   --inputdir=./ \
-   --inputdir=test \
-   --load-language=plpgsql \
-   --dbname=regression base
+	export PGDATABASE=regress_linz_bde_schema; \
+	dropdb --if-exists $$PGDATABASE; \
+	createdb $$PGDATABASE; \
+	pg_prove test/
 
 clean:
 	rm -f regression.diffs
