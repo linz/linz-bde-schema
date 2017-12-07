@@ -3,6 +3,8 @@
 All notable changes for the LINZ BDE schema are documented in this file.
 
 ## 1.1.1dev - YYYY-MM-DD
+### Enhanced
+- Robustness and usability improvements in `linz-bde-schema-load`
 
 ## 1.1.0 - 2017-12-04
 ### Important changes
