@@ -46,6 +46,10 @@ matrix:
         - postgresql-9.6-postgis-2.3
 
 before_install:
+  # Install common packages
+  - sudo apt-get -qq update
+  - sudo apt-get install -y pgtap
+  # Show some build info
   - apt-cache search postgis
   - echo $PATH
   - which pg_config
@@ -53,6 +57,7 @@ before_install:
   - psql --version
   - psql -c 'select version()'
   - find `pg_config --pkglibdir`| grep postgis
+  # Install dbpatch
   - wget https://github.com/linz/postgresql-dbpatch/archive/1.2.0.tar.gz
   - tar xzf 1.2.0.tar.gz
   - cd postgresql-dbpatch-1.2.0
