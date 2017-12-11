@@ -4,6 +4,12 @@ All notable changes for the LINZ BDE schema are documented in this file.
 
 ## 1.2.0dev - YYYY-MM-DD
 
+## 1.1.1 - 2017-12-11
+### Enhanced
+- Robustness and usability improvements in `linz-bde-schema-load`
+- Drop build dependency on postgresql-dev package
+- Add comments for roles
+
 ## 1.1.0 - 2017-12-04
 ### Important changes
 - `bde_dba` role is not granted SUPERUSER anymore (lack of which
