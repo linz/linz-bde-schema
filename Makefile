@@ -1,6 +1,6 @@
 # Minimal script to install the SQL creation scripts ready for postinst script.
 
-VERSION=1.1.1dev
+VERSION=1.1.1
 REVISION = $(shell test -d .git && git describe --always || echo $(VERSION))
 
 SED = sed
