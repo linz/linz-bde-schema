@@ -24,6 +24,16 @@ COMMENT ON ROLE bde_dba IS $COMMENT$
 'Owns all objects in bde schema. Has rights to manage all of them.'
 $COMMENT$;
 
+-- User loading this script must be part of the `bde_dba` team
+-- in order to be able to give ownerhip of created objects
+-- to it, instead of getting a message like:
+--
+--   ERROR:  must be member of role "testrole"
+--
+-- See https://github.com/linz/linz-bde-schema/issues/71
+--
+EXECUTE 'GRANT bde_dba TO ' || quote_ident(current_user);
+
 IF NOT EXISTS (SELECT * FROM pg_roles where rolname = 'bde_admin') THEN
     CREATE ROLE bde_admin
         NOSUPERUSER INHERIT NOCREATEDB NOCREATEROLE;
