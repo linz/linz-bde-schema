@@ -19,9 +19,28 @@
 SET client_min_messages TO WARNING;
 
 CREATE EXTENSION postgis;
-
+CREATE EXTENSION pgtap;
 CREATE SCHEMA _patches;
 CREATE EXTENSION dbpatch SCHEMA _patches;
+
+-- Switch to unprivileged role
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT * FROM pg_roles
+                   WHERE rolname = 'linz_bde_schema_test_role')
+    THEN
+        CREATE ROLE linz_bde_schema_test_role
+            NOSUPERUSER CREATEDB CREATEROLE;
+    END IF;
+
+    EXECUTE format('GRANT ALL ON DATABASE %I TO linz_bde_schema_test_role',
+        current_database());
+    GRANT ALL ON SCHEMA _patches  TO linz_bde_schema_test_role;
+    GRANT ALL ON ALL TABLES IN SCHEMA _patches  TO linz_bde_schema_test_role;
+    SET session_authorization TO linz_bde_schema_test_role;
+END $$;
+
+
 
 \i sql/01-bde_roles.sql
 \i sql/02-bde_schema.sql
@@ -32,9 +51,7 @@ CREATE EXTENSION dbpatch SCHEMA _patches;
 
 BEGIN;
 
-CREATE EXTENSION pgtap;
-
-SELECT * FROM no_plan();
+SELECT * FROM plan(288);
 
 SELECT has_schema('bde'::name);
 
@@ -1844,4 +1861,18 @@ $$,
 SELECT * FROM finish();
 
 ROLLBACK;
+
+-- Cleanup
+DO $$
+BEGIN
+    RESET session_authorization;
+    EXECUTE format('REASSIGN OWNED BY linz_bde_schema_test_role TO %I',
+        current_user);
+    EXECUTE format('REVOKE ALL ON DATABASE %I FROM linz_bde_schema_test_role',
+        current_database());
+    REVOKE ALL ON SCHEMA _patches  FROM linz_bde_schema_test_role;
+    REVOKE ALL ON ALL TABLES IN SCHEMA _patches FROM linz_bde_schema_test_role;
+    DROP ROLE linz_bde_schema_test_role;
+END; $$;
+
 
