@@ -2,7 +2,7 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
-## 1.1.2dev - 2017-12-DD
+## 1.1.2 - 2017-12-20
 ### Fixed
 - Ability to enable schema for non-superuser (#72)
   ( loading user is granted `bde_dba` role )
