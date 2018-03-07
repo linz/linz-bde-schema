@@ -4,6 +4,8 @@ All notable changes for the LINZ BDE schema are documented in this file.
 
 ## 1.2.0dev - YYYY-MM-DD
 - Have loader create postgis extension in the public schema (#83)
+- Do not try to drop functions in bde schema whose name
+  does not start in `bde_` (#81)
 
 ## 1.1.2 - 2017-12-20
 ### Fixed
