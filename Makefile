@@ -60,15 +60,21 @@ installcheck:
 	createdb linz-bde-schema-test-db
 	linz-bde-schema-load linz-bde-schema-test-db
 	linz-bde-schema-load linz-bde-schema-test-db
-	psql -tAc 'select bde.bde_version()' linz-bde-schema-test-db
-	linz-bde-schema-load --version
+	export PGDATABASE=linz-bde-schema-test-db; \
+	V=`psql -XtAc 'select bde.bde_version()'` && \
+	echo $$V && test "$$V" = "$(VERSION)" && \
+	V=`linz-bde-schema-load --version` && \
+	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
 	dropdb linz-bde-schema-test-db
 
 	createdb linz-bde-schema-test-db
 	linz-bde-schema-load --noextension linz-bde-schema-test-db
 	linz-bde-schema-load --noextension linz-bde-schema-test-db
-	psql -tAc 'select bde.bde_version()' linz-bde-schema-test-db
-	linz-bde-schema-load --version
+	export PGDATABASE=linz-bde-schema-test-db; \
+	V=`psql -XtAc 'select bde.bde_version()'` && \
+	echo $$V && test "$$V" = "$(VERSION)" && \
+	V=`linz-bde-schema-load --version` && \
+	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
 	dropdb linz-bde-schema-test-db
 
 uninstall:
