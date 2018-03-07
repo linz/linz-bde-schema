@@ -2,7 +2,12 @@ Source: linz-bde-schema
 Section: database
 Priority: extra
 Build-Depends: debhelper (>= 7),
-               postgresql-server-dev-9.3
+               postgresql-server-dev-9.3 |
+               postgresql-server-dev-9.4 |
+               postgresql-server-dev-9.5 |
+               postgresql-server-dev-9.6 |
+               postgresql-server-dev-10  |
+               postgresql-server-dev-all
 Standards-Version: 3.9.5
 Maintainer: Jeremy Palmer (LINZ) <jpalmer@linz.govt.nz>
 Homepage: http://www.linz.govt.nz
