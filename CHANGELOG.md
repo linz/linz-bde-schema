@@ -3,6 +3,7 @@
 All notable changes for the LINZ BDE schema are documented in this file.
 
 ## 1.2.0dev - YYYY-MM-DD
+- Have loader create postgis extension in the public schema (#83)
 
 ## 1.1.2 - 2017-12-20
 ### Fixed

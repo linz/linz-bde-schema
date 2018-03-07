@@ -91,7 +91,7 @@ fi
 
 (
 cat << EOF
-CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS postgis SCHEMA public;
 EOF
 
 for file in ${SCRIPTSDIR}/*.sql; do
