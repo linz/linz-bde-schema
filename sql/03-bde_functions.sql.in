@@ -24,6 +24,7 @@ BEGIN
         SELECT v_schema || '.' || proname || '(' || pg_get_function_identity_arguments(oid) || ')'
         FROM pg_proc
         WHERE pronamespace=(SELECT oid FROM pg_namespace WHERE nspname = v_schema)
+          AND proname like 'bde_%'
     LOOP
         EXECUTE 'DROP FUNCTION ' || v_pcid;
     END LOOP;
