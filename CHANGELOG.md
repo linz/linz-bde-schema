@@ -3,13 +3,19 @@
 All notable changes for the LINZ BDE schema are documented in this file.
 
 ## 1.2.0dev - YYYY-MM-DD
+### Changed
+- Landonline 3.17 support (#80):
+ - Remove `tan_required` and `creates_tan` cols from `bde.crs_transact_type`
+ - Add `img_id` and `description` cols to `bde.crs_stat_act_parcl`
+### Enhanced
 - Have loader create postgis extension in the public schema (#83)
+- Add test for loading schema with `table_version` (#88)
 - Do not try to drop functions in bde schema whose name
   does not start in `bde_` (#81)
+- Grant CREATE on `table_version` schema to `bde_dba` (#70)
+### Fixed
 - Fix 1.0.2 patch to work in presence of `table_version` but
   unversioned BDE tables (#89)
-- Grant CREATE on `table_version` schema to `bde_dba` (#70)
-- Add test for loading schema with `table_version` (#88)
 
 ## 1.1.2 - 2017-12-20
 ### Fixed

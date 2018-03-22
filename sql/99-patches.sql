@@ -58,5 +58,77 @@ $$
 $P$
 );
 
+-------------------------------------------------------------------------------
+-- 1.2.0 Remove tan columns from crs_transact_type
+-------------------------------------------------------------------------------
+
+PERFORM _patches.apply_patch(
+    'BDE 1.2.0 / LOL 3.17: Remove tan column from bde.crs_transact_type',
+    $P$
+DO $$
+BEGIN
+-- If table is versioend, use table_version API to drop columns
+IF EXISTS ( SELECT * FROM pg_extension  WHERE extname = 'table_version' )
+THEN
+    IF table_version.ver_is_table_versioned('bde', 'crs_transact_type')
+    THEN
+        PERFORM table_version.ver_versioned_table_drop_column(
+            'bde',
+            'crs_transact_type',
+            'tan_required'
+        );
+        PERFORM table_version.ver_versioned_table_drop_column(
+            'bde',
+            'crs_transact_type',
+            'creates_tan'
+        );
+        RETURN;
+    END IF;
+END IF;
+-- Otherwise use direct ALTER TABLE
+ALTER TABLE bde.crs_transact_type DROP COLUMN tan_required;
+ALTER TABLE bde.crs_transact_type DROP COLUMN creates_tan;
+END;
+$$
+$P$
+);
+
+-------------------------------------------------------------------------------
+-- 1.2.0 Add img_id and description columns to crs_stat_act_parcl
+-------------------------------------------------------------------------------
+
+PERFORM _patches.apply_patch(
+    'BDE 1.2.0 / LOL 3.17: Add img_id and description columns to bde.crs_stat_act_parcl',
+    $P$
+DO $$
+BEGIN
+-- If table is versioend, use table_version API to add columns
+IF EXISTS ( SELECT * FROM pg_extension  WHERE extname = 'table_version' )
+THEN
+    IF table_version.ver_is_table_versioned('bde', 'crs_stat_act_parcl')
+    THEN
+        PERFORM table_version.ver_versioned_table_add_column(
+            'bde',
+            'crs_stat_act_parcl',
+            'img_id',
+            'INTEGER'
+        );
+        PERFORM table_version.ver_versioned_table_add_column(
+            'bde',
+            'crs_stat_act_parcl',
+            'description',
+            'VARCHAR'
+        );
+        RETURN;
+  END IF;
+END IF;
+-- Otherwise use direct ALTER TABLE
+ALTER TABLE bde.crs_stat_act_parcl ADD COLUMN img_id INTEGER;
+ALTER TABLE bde.crs_stat_act_parcl ADD COLUMN description VARCHAR;
+END;
+$$
+$P$
+);
+
 END;
 $PATCHES$;

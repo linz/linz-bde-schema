@@ -1122,7 +1122,9 @@ ARRAY[
   'status',
   'par_id',
   'sta_id',
-  'comments'
+  'comments',
+  'img_id',
+  'description'
   ]);
 
 SELECT has_table('bde'::name, 'crs_statist_area'::name);
@@ -1434,8 +1436,6 @@ ARRAY[
   'prevents_reg',
   'audit_id',
   'curr',
-  'tan_required',
-  'creates_tan',
   'electronic',
   'fees_exempt_allw',
   'trt_type_discrg',
