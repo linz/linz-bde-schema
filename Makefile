@@ -77,6 +77,16 @@ installcheck:
 	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
 	dropdb linz-bde-schema-test-db
 
+	createdb linz-bde-schema-test-db
+	linz-bde-schema-load --revision linz-bde-schema-test-db
+	linz-bde-schema-load --revision linz-bde-schema-test-db
+	export PGDATABASE=linz-bde-schema-test-db; \
+	V=`psql -XtAc 'select bde.bde_version()'` && \
+	echo $$V && test "$$V" = "$(VERSION)" && \
+	V=`linz-bde-schema-load --version` && \
+	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
+	dropdb linz-bde-schema-test-db
+
 uninstall:
 	rm -rf ${datadir}
 
