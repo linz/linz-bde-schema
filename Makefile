@@ -3,6 +3,8 @@
 VERSION=1.2.0dev
 REVISION = $(shell test -d .git && git describe --always || echo $(VERSION))
 
+TEST_DATABASE = regress_linz_bde_schema
+
 SED = sed
 
 datadir=${DESTDIR}/usr/share/linz-bde-schema
@@ -25,6 +27,9 @@ SQLSCRIPTS = \
 SCRIPTS_built = \
     scripts/linz-bde-schema-load \
     $(END)
+
+TEST_SCRIPTS = \
+    test/base.pg
 
 EXTRA_CLEAN = \
     sql/05-bde_version.sql \
@@ -90,11 +95,18 @@ installcheck:
 uninstall:
 	rm -rf ${datadir}
 
-check test: $(SQLSCRIPTS)
-	export PGDATABASE=regress_linz_bde_schema; \
+check test: $(SQLSCRIPTS) $(TEST_SCRIPTS)
+	export PGDATABASE=$(TEST_DATABASE); \
 	dropdb --if-exists $$PGDATABASE; \
 	createdb $$PGDATABASE; \
-	pg_prove test/
+	pg_prove test/;
+	# Test with versioning
+	export PGDATABASE=$(TEST_DATABASE); \
+	dropdb --if-exists $$PGDATABASE && \
+	createdb $$PGDATABASE && \
+	mkdir -p test-versioned/ && \
+	sed 's/^--VERSIONED-- //' test/base.pg > test-versioned/base.pg && \
+	pg_prove test-versioned/
 
 clean:
 	rm -f regression.diffs

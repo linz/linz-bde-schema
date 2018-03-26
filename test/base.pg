@@ -20,6 +20,7 @@ SET client_min_messages TO WARNING;
 
 CREATE EXTENSION postgis;
 CREATE EXTENSION pgtap;
+--VERSIONED-- CREATE EXTENSION table_version;
 CREATE SCHEMA _patches;
 CREATE EXTENSION dbpatch SCHEMA _patches;
 
@@ -48,6 +49,7 @@ END $$;
 \i sql/04-bde_schema_index.sql
 \i sql/05-bde_version.sql
 \i sql/99-patches.sql
+--VERSIONED-- \i sql/versioning/01-version_tables.sql
 
 BEGIN;
 
