@@ -25,7 +25,7 @@ CREATE EXTENSION pgtap;
 --VERSIONED-- -- As of table_version 1.4.x the ver_enable_versioning function was
 --VERSIONED-- -- not security definer and thus possibly lacked privileges to
 --VERSIONED-- -- write in pg_depend.
---VERSIONED-- -- See https://github.com/linz/postgresql-tableversion/issues/98
+--VERSIONED-- -- See https://github.com/linz/postgresql-tableversion/issues/100
 --VERSIONED-- -- FIXME: drop this or make it conditionally based on
 --VERSIONED-- --        table_version version when it'll be fixed
 --VERSIONED-- ALTER FUNCTION table_version.ver_enable_versioning(regclass) SECURITY DEFINER;
