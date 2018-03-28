@@ -64,6 +64,13 @@ before_install:
   - make
   - sudo env "PATH=$PATH" make install
   - cd ..
+  # Install table_version
+  - wget https://github.com/linz/postgresql-tableversion/archive/master.tar.gz
+  - tar xzf master.tar.gz
+  - cd postgresql-tableversion-master
+  - make
+  - sudo env "PATH=$PATH" make install
+  - cd .. && rm -rf postgresql-tableversion-master
 script:
   - make
   - make check || { cat regression.diffs; false; }
