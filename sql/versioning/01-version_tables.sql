@@ -27,6 +27,11 @@ BEGIN
         RETURN;
     END IF;
 
+	-- Owners of versioned tables need to have
+    -- CREATE permission on schema table_version
+    -- See https://github.com/linz/linz-bde-schema/issues/70
+    GRANT CREATE ON SCHEMA table_version TO bde_dba;
+
     PERFORM table_version.ver_create_revision('Initial revisioning for BDE tables');
 
     FOR v_schema, v_table IN
