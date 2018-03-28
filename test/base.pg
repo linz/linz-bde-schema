@@ -1820,7 +1820,13 @@ SELECT is(bde.bde_write_appellation
 
 -- Test bde_get_combined_appellation {
 
-copy bde.crs_appellation from stdin ( delimiter '|' );
+DO $$ BEGIN
+IF EXISTS ( SELECT * FROM pg_extension WHERE extname = 'table_version' )
+THEN IF table_version.ver_is_table_versioned('bde', 'crs_work') THEN
+    PERFORM table_version.ver_create_revision('test fixture');
+END IF; END IF; END; $$;
+
+COPY bde.crs_appellation FROM STDIN ( delimiter '|' );
 1|GNRL|Y|N|CURR|WHOL|\N|SURD|Lower Hawea|SECT|43|\N|\N|V|SUFX|\N|\N|\N|\N|\N|5084|200798
 2|GNRL|Y|N|CURR|PART|\N|SURD|Clutha|SECT|3|\N|\N|XXXVI|SUFX|\N|\N|\N|\N|\N|5107|201212
 3|GNRL|Y|Y|CURR|WHOL|\N|DP|13918|LOT|32|\N|\N|\N|PRFX|\N|\N|\N|\N|\N|3705368|1399023
@@ -1841,6 +1847,12 @@ copy bde.crs_appellation from stdin ( delimiter '|' );
 35|OTHR|Y|Y|CURR|WHOL|\N|\N|\N|\N|\N|\N|\N|\N|\N|Section 102 Irregular Block East Taieri Survey District|\N|\N|\N|\N|3044865|14955
 36|OTHR|Y|N|CURR|WHOL|\N|\N|\N|\N|\N|\N|\N|\N|\N|Future Development Accessory Unit 9A Deposited Plan 22767|\N|\N|\N|\N|443|173809
 \.
+
+DO $$ BEGIN
+IF EXISTS ( SELECT * FROM pg_extension WHERE extname = 'table_version' )
+THEN IF table_version.ver_is_table_versioned('bde', 'crs_work') THEN
+    PERFORM table_version.ver_complete_revision();
+END IF; END IF; END; $$;
 
 SELECT results_eq($$
 	SELECT DISTINCT par_id,
