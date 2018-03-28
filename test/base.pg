@@ -38,6 +38,11 @@ BEGIN
         current_database());
     GRANT ALL ON SCHEMA _patches  TO linz_bde_schema_test_role;
     GRANT ALL ON ALL TABLES IN SCHEMA _patches  TO linz_bde_schema_test_role;
+
+--VERSIONED-- -- NOTE: GRANT OPTION is needed so that linz_bde_schema_test_role can
+--VERSIONED-- --       grant CREATE on table_version to bde_dba (as requested by
+--VERSIONED-- --       sql/versioning/01-version_tables.sql)
+--VERSIONED-- GRANT ALL ON SCHEMA table_version  TO linz_bde_schema_test_role WITH GRANT OPTION;
     SET session_authorization TO linz_bde_schema_test_role;
 END $$;
 
