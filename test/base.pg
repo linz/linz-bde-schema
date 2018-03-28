@@ -1646,7 +1646,6 @@ ARRAY[
   'audit_id',
   'usr_id_prin_firm',
   'manual_rules',
-  'annotations',
   'trv_id',
   'usr_id_firm',
   'pro_id',
