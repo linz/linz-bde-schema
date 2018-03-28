@@ -20,7 +20,16 @@ SET client_min_messages TO WARNING;
 
 CREATE EXTENSION postgis;
 CREATE EXTENSION pgtap;
+
 --VERSIONED-- CREATE EXTENSION table_version;
+--VERSIONED-- -- As of table_version 1.4.x the ver_enable_versioning function was
+--VERSIONED-- -- not security definer and thus possibly lacked privileges to
+--VERSIONED-- -- write in pg_depend.
+--VERSIONED-- -- See https://github.com/linz/postgresql-tableversion/issues/98
+--VERSIONED-- -- FIXME: drop this or make it conditionally based on
+--VERSIONED-- --        table_version version when it'll be fixed
+--VERSIONED-- ALTER FUNCTION table_version.ver_enable_versioning(regclass) SECURITY DEFINER;
+
 CREATE SCHEMA _patches;
 CREATE EXTENSION dbpatch SCHEMA _patches;
 
@@ -42,7 +51,7 @@ BEGIN
 --VERSIONED-- -- NOTE: GRANT OPTION is needed so that linz_bde_schema_test_role can
 --VERSIONED-- --       grant CREATE on table_version to bde_dba (as requested by
 --VERSIONED-- --       sql/versioning/01-version_tables.sql)
---VERSIONED-- GRANT ALL ON SCHEMA table_version  TO linz_bde_schema_test_role WITH GRANT OPTION;
+--VERSIONED-- GRANT ALL ON SCHEMA table_version TO linz_bde_schema_test_role WITH GRANT OPTION;
     SET session_authorization TO linz_bde_schema_test_role;
 END $$;
 
@@ -1879,6 +1888,9 @@ BEGIN
         current_database());
     REVOKE ALL ON SCHEMA _patches  FROM linz_bde_schema_test_role;
     REVOKE ALL ON ALL TABLES IN SCHEMA _patches FROM linz_bde_schema_test_role;
+--VERSIONED-- -- TODO: figure out which "dependent privileges exist", to
+--VERSIONED-- --      replace the CASCADE with fine-grained REVOKEs
+--VERSIONED-- REVOKE ALL ON SCHEMA table_version FROM linz_bde_schema_test_role CASCADE;
     DROP ROLE linz_bde_schema_test_role;
 END; $$;
 
