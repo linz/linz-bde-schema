@@ -6,6 +6,10 @@ All notable changes for the LINZ BDE schema are documented in this file.
 - Have loader create postgis extension in the public schema (#83)
 - Do not try to drop functions in bde schema whose name
   does not start in `bde_` (#81)
+- Fix 1.0.2 patch to work in presence of `table_version` but
+  unversioned BDE tables (#89)
+- Grant CREATE on `table_version` schema to `bde_dba` (#70)
+- Add test for loading schema with `table_version` (#88)
 
 ## 1.1.2 - 2017-12-20
 ### Fixed
