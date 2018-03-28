@@ -42,15 +42,17 @@ PERFORM _patches.apply_patch(
     $P$
 DO $$
 BEGIN
+-- If table is versioend, use table_version API to add columns
 IF EXISTS ( SELECT * FROM pg_extension  WHERE extname = 'table_version' )
 THEN
   IF table_version.ver_is_table_versioned('bde', 'crs_work')
   THEN
       PERFORM table_version.ver_versioned_table_drop_column('bde', 'crs_work', 'annotations');
-  ELSE
-      ALTER TABLE bde.crs_work DROP COLUMN annotations;
+      RETURN;
   END IF;
 END IF;
+-- Otherwise use direct ALTER TABLE
+ALTER TABLE bde.crs_work DROP COLUMN annotations;
 END;
 $$
 $P$
@@ -58,4 +60,3 @@ $P$
 
 END;
 $PATCHES$;
-
