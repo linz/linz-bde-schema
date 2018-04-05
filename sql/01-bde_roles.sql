@@ -28,7 +28,7 @@ $COMMENT$;
 -- in order to be able to give ownerhip of created objects
 -- to it, instead of getting a message like:
 --
---   ERROR:  must be member of role "testrole"
+--   ERROR:  must be member of role "bde_dba"
 --
 -- See https://github.com/linz/linz-bde-schema/issues/71
 --
