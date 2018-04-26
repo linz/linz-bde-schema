@@ -100,12 +100,22 @@ check test: $(SQLSCRIPTS) $(TEST_SCRIPTS)
 	dropdb --if-exists $$PGDATABASE; \
 	createdb $$PGDATABASE; \
 	pg_prove test/;
-	# Test with versioning
+	# Test with versioning after patches
 	export PGDATABASE=$(TEST_DATABASE); \
 	dropdb --if-exists $$PGDATABASE && \
 	createdb $$PGDATABASE && \
 	mkdir -p test-versioned/ && \
 	sed 's/^--VERSIONED-- //' test/base.pg > test-versioned/base.pg && \
+	pg_prove test-versioned/
+	# Test with versioning before patches (the sed line swaps
+	# order of 99-patches.sql and version_tables.sql files)
+	export PGDATABASE=$(TEST_DATABASE); \
+	dropdb --if-exists $$PGDATABASE && \
+	createdb $$PGDATABASE && \
+	mkdir -p test-versioned/ && \
+	sed 's/^--VERSIONED-- //' test/base.pg | \
+        sed -n '/99-patches/ { h; :a; n; /version_tables.sql/ { p; x } }; p' \
+        > test-versioned/base.pg && \
 	pg_prove test-versioned/
 
 clean:
