@@ -29,6 +29,16 @@ CREATE EXTENSION pgtap;
 --VERSIONED-- -- FIXME: drop this or make it conditionally based on
 --VERSIONED-- --        table_version version when it'll be fixed
 --VERSIONED-- ALTER FUNCTION table_version.ver_enable_versioning(regclass) SECURITY DEFINER;
+--VERSIONED-- -- As of table_version 1.4.x the
+--VERSIONED-- -- ver_versioned_table_{add,drop}_column functions were
+--VERSIONED-- -- not security definers and thus possibly lacked privileges to
+--VERSIONED-- -- add/drop columns in the revision tables created by
+--VERSIONED-- -- security-definer ver_enable_versioning
+--VERSIONED-- -- See https://github.com/linz/postgresql-tableversion/issues/113
+--VERSIONED-- -- FIXME: drop this or make it conditionally based on
+--VERSIONED-- --        table_version version when it'll be fixed
+--VERSIONED-- ALTER FUNCTION table_version.ver_versioned_table_drop_column(name, name, name) SECURITY DEFINER;
+--VERSIONED-- ALTER FUNCTION table_version.ver_versioned_table_add_column(name, name, name, text) SECURITY DEFINER;
 
 CREATE SCHEMA _patches;
 CREATE EXTENSION dbpatch SCHEMA _patches;
