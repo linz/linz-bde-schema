@@ -77,7 +77,9 @@ END $$;
 
 BEGIN;
 
-SELECT * FROM plan(288);
+SELECT * FROM plan(288
+--VERSIONED-- + 210
+);
 
 SELECT has_schema('bde'::name);
 
@@ -1667,6 +1669,9 @@ ARRAY[
   ]);
 
 -- }
+
+-- Test revision tables existance and their composition
+--VERSIONED-- \i test/base-revision-tables.pg.inc
 
 -- Test functions existance {
 
