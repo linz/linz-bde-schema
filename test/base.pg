@@ -21,7 +21,6 @@ SET client_min_messages TO WARNING;
 CREATE EXTENSION postgis;
 CREATE EXTENSION pgtap;
 
---VERSIONED-- CREATE EXTENSION table_version;
 --VERSIONED-- -- As of table_version 1.4.x the ver_enable_versioning function was
 --VERSIONED-- -- not security definer and thus possibly lacked privileges to
 --VERSIONED-- -- write in pg_depend.
