@@ -106,6 +106,16 @@ check test: $(SQLSCRIPTS) $(TEST_SCRIPTS)
 	createdb $$PGDATABASE && \
 	mkdir -p test-versioned/ && \
 	sed 's/^--VERSIONED-- //' test/base.pg > test-versioned/base.pg && \
+	table_version-loader $$PGDATABASE && \
+	pg_prove test-versioned/
+	# Test with versioning after patches and table_version
+	# installed NOT as an extension
+	export PGDATABASE=$(TEST_DATABASE); \
+	dropdb --if-exists $$PGDATABASE && \
+	createdb $$PGDATABASE && \
+	mkdir -p test-versioned/ && \
+	sed 's/^--VERSIONED-- //' test/base.pg > test-versioned/base.pg && \
+	table_version-loader --no-extension $$PGDATABASE && \
 	pg_prove test-versioned/
 	# Test with versioning before patches (the sed line swaps
 	# order of 99-patches.sql and version_tables.sql files)
@@ -116,6 +126,18 @@ check test: $(SQLSCRIPTS) $(TEST_SCRIPTS)
 	sed 's/^--VERSIONED-- //' test/base.pg | \
         sed -n '/99-patches/ { h; :a; n; /version_tables.sql/ { p; x } }; p' \
         > test-versioned/base.pg && \
+	table_version-loader $$PGDATABASE && \
+	pg_prove test-versioned/
+	# Test with versioning before patches and table_version
+	# installed NOT as an extension
+	export PGDATABASE=$(TEST_DATABASE); \
+	dropdb --if-exists $$PGDATABASE && \
+	createdb $$PGDATABASE && \
+	mkdir -p test-versioned/ && \
+	sed 's/^--VERSIONED-- //' test/base.pg | \
+        sed -n '/99-patches/ { h; :a; n; /version_tables.sql/ { p; x } }; p' \
+        > test-versioned/base.pg && \
+	table_version-loader --no-extension $$PGDATABASE && \
 	pg_prove test-versioned/
 
 clean:
