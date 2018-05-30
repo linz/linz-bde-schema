@@ -1835,7 +1835,7 @@ SELECT is(bde.bde_write_appellation
 -- Test bde_get_combined_appellation {
 
 DO $$ DECLARE tvowner TEXT; BEGIN
-IF EXISTS ( SELECT * FROM pg_extension WHERE extname = 'table_version' )
+IF EXISTS ( SELECT * FROM pg_proc WHERE proname = 'ver_is_table_versioned' )
 THEN IF table_version.ver_is_table_versioned('bde', 'crs_work') THEN
 
     PERFORM table_version.ver_create_revision('test fixture');
@@ -1884,7 +1884,7 @@ COPY bde.crs_appellation FROM STDIN ( delimiter '|' );
 \.
 
 DO $$ BEGIN
-IF EXISTS ( SELECT * FROM pg_extension WHERE extname = 'table_version' )
+IF EXISTS ( SELECT * FROM pg_proc WHERE proname = 'ver_is_table_versioned' )
 THEN IF table_version.ver_is_table_versioned('bde', 'crs_work') THEN
     PERFORM table_version.ver_complete_revision();
 END IF; END IF; END; $$;
