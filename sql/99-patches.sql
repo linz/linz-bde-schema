@@ -43,7 +43,11 @@ PERFORM _patches.apply_patch(
 DO $$
 BEGIN
 -- If table is versioend, use table_version API to add columns
-IF EXISTS ( SELECT * FROM pg_extension  WHERE extname = 'table_version' )
+IF EXISTS (SELECT p.oid FROM pg_catalog.pg_proc p,
+                             pg_catalog.pg_namespace n
+                        WHERE p.proname = 'ver_is_table_versioned'
+                        AND n.oid = p.pronamespace
+                        AND n.nspname = 'table_version')
 THEN
   IF table_version.ver_is_table_versioned('bde', 'crs_work')
   THEN
@@ -68,7 +72,11 @@ PERFORM _patches.apply_patch(
 DO $$
 BEGIN
 -- If table is versioend, use table_version API to drop columns
-IF EXISTS ( SELECT * FROM pg_extension  WHERE extname = 'table_version' )
+IF EXISTS (SELECT p.oid FROM pg_catalog.pg_proc p,
+                             pg_catalog.pg_namespace n
+                        WHERE p.proname = 'ver_is_table_versioned'
+                        AND n.oid = p.pronamespace
+                        AND n.nspname = 'table_version')
 THEN
     IF table_version.ver_is_table_versioned('bde', 'crs_transact_type')
     THEN
@@ -102,8 +110,12 @@ PERFORM _patches.apply_patch(
     $P$
 DO $$
 BEGIN
--- If table is versioend, use table_version API to add columns
-IF EXISTS ( SELECT * FROM pg_extension  WHERE extname = 'table_version' )
+-- If table is versioned, use table_version API to add columns
+IF EXISTS (SELECT p.oid FROM pg_catalog.pg_proc p,
+                             pg_catalog.pg_namespace n
+                        WHERE p.proname = 'ver_is_table_versioned'
+                        AND n.oid = p.pronamespace
+                        AND n.nspname = 'table_version')
 THEN
     IF table_version.ver_is_table_versioned('bde', 'crs_stat_act_parcl')
     THEN
