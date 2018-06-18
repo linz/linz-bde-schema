@@ -2,6 +2,10 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.2.1 - 2018-06-18
+### Changed
+- Do not assume `table_version` is installed as an extension (#89)
+
 ## 1.2.0 - 2018-04-11
 ### Changed
 - Landonline 3.17 support (#80):
