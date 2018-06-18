@@ -39,7 +39,7 @@ SET search_path = bde, public;
 -- BDE table crs_action
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_action (
+CREATE TABLE bde.crs_action (
     tin_id INTEGER NOT NULL,
     id INTEGER NOT NULL,
     sequence INTEGER NOT NULL,
@@ -54,28 +54,28 @@ CREATE TABLE crs_action (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_action
+ALTER TABLE ONLY bde.crs_action
     ADD UNIQUE (tin_id, id);
 
-ALTER TABLE ONLY crs_action
+ALTER TABLE ONLY bde.crs_action
     ADD CONSTRAINT pkey_crs_action PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_action ALTER COLUMN tin_id SET STATISTICS 500;
-ALTER TABLE crs_action ALTER COLUMN att_type SET STATISTICS 500;
-ALTER TABLE crs_action ALTER COLUMN ste_id SET STATISTICS 500;
-ALTER TABLE crs_action ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_action ALTER COLUMN tin_id SET STATISTICS 500;
+ALTER TABLE bde.crs_action ALTER COLUMN att_type SET STATISTICS 500;
+ALTER TABLE bde.crs_action ALTER COLUMN ste_id SET STATISTICS 500;
+ALTER TABLE bde.crs_action ALTER COLUMN audit_id SET STATISTICS 500;
 
-ALTER TABLE crs_action OWNER TO bde_dba;
+ALTER TABLE bde.crs_action OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_action FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_action TO bde_admin;
-GRANT SELECT ON TABLE crs_action TO bde_user;
+REVOKE ALL ON TABLE bde.crs_action FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_action TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_action TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_action_type
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_action_type (
+CREATE TABLE bde.crs_action_type (
     type VARCHAR(4) NOT NULL,
     description VARCHAR(200) NOT NULL,
     system_action CHAR(1) NOT NULL,
@@ -84,23 +84,23 @@ CREATE TABLE crs_action_type (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_action_type
+ALTER TABLE ONLY bde.crs_action_type
     ADD CONSTRAINT pkey_crs_action_type PRIMARY KEY (audit_id);
 
-ALTER TABLE ONLY crs_action_type
+ALTER TABLE ONLY bde.crs_action_type
     ADD UNIQUE (type);
 
-ALTER TABLE crs_action_type OWNER TO bde_dba;
+ALTER TABLE bde.crs_action_type OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_action_type FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_action_type TO bde_admin;
-GRANT SELECT ON TABLE crs_action_type TO bde_user;
+REVOKE ALL ON TABLE bde.crs_action_type FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_action_type TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_action_type TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adj_obs_change
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_adj_obs_change (
+CREATE TABLE bde.crs_adj_obs_change (
     adj_id INTEGER NOT NULL,
     obn_id INTEGER NOT NULL,
     orig_status VARCHAR(4) NOT NULL,
@@ -127,50 +127,50 @@ CREATE TABLE crs_adj_obs_change (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_adj_obs_change
+ALTER TABLE ONLY bde.crs_adj_obs_change
     ADD UNIQUE (adj_id, obn_id);
 
-ALTER TABLE ONLY crs_adj_obs_change
+ALTER TABLE ONLY bde.crs_adj_obs_change
     ADD CONSTRAINT pkey_crs_adj_obs_change PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_adj_obs_change ALTER COLUMN adj_id SET STATISTICS 1000;
-ALTER TABLE crs_adj_obs_change ALTER COLUMN obn_id SET STATISTICS 1000;
-ALTER TABLE crs_adj_obs_change ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_adj_obs_change ALTER COLUMN adj_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_adj_obs_change ALTER COLUMN obn_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_adj_obs_change ALTER COLUMN audit_id SET STATISTICS 1000;
 
-ALTER TABLE crs_adj_obs_change OWNER TO bde_dba;
+ALTER TABLE bde.crs_adj_obs_change OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_adj_obs_change FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_adj_obs_change TO bde_admin;
-GRANT SELECT ON TABLE crs_adj_obs_change TO bde_user;
+REVOKE ALL ON TABLE bde.crs_adj_obs_change FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_adj_obs_change TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_adj_obs_change TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adj_user_coef
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_adj_user_coef (
+CREATE TABLE bde.crs_adj_user_coef (
     adc_id INTEGER NOT NULL,
     adj_id INTEGER NOT NULL,
     value VARCHAR(255),
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_adj_user_coef
+ALTER TABLE ONLY bde.crs_adj_user_coef
     ADD CONSTRAINT pkey_crs_adj_user_coef PRIMARY KEY (audit_id);
 
-ALTER TABLE ONLY crs_adj_user_coef
+ALTER TABLE ONLY bde.crs_adj_user_coef
     ADD UNIQUE (adc_id, adj_id);
 
-ALTER TABLE crs_adj_user_coef OWNER TO bde_dba;
+ALTER TABLE bde.crs_adj_user_coef OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_adj_user_coef FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_adj_user_coef TO bde_admin;
-GRANT SELECT ON TABLE crs_adj_user_coef TO bde_user;
+REVOKE ALL ON TABLE bde.crs_adj_user_coef FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_adj_user_coef TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_adj_user_coef TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adjust_coef
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_adjust_coef (
+CREATE TABLE bde.crs_adjust_coef (
     id INTEGER NOT NULL,
     adm_id INTEGER NOT NULL,
     default_value VARCHAR(255),
@@ -180,23 +180,23 @@ CREATE TABLE crs_adjust_coef (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_adjust_coef
+ALTER TABLE ONLY bde.crs_adjust_coef
     ADD CONSTRAINT pkey_crs_adjust_coef PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_adjust_coef
+ALTER TABLE ONLY bde.crs_adjust_coef
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_adjust_coef OWNER TO bde_dba;
+ALTER TABLE bde.crs_adjust_coef OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_adjust_coef FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_adjust_coef TO bde_admin;
-GRANT SELECT ON TABLE crs_adjust_coef TO bde_user;
+REVOKE ALL ON TABLE bde.crs_adjust_coef FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_adjust_coef TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_adjust_coef TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adjust_method
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_adjust_method (
+CREATE TABLE bde.crs_adjust_method (
     id INTEGER NOT NULL,
     status VARCHAR(4) NOT NULL,
     software_used VARCHAR(4) NOT NULL,
@@ -206,23 +206,23 @@ CREATE TABLE crs_adjust_method (
     description VARCHAR(100)
 );
 
-ALTER TABLE ONLY crs_adjust_method
+ALTER TABLE ONLY bde.crs_adjust_method
     ADD CONSTRAINT pkey_crs_adjust_method PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_adjust_method
+ALTER TABLE ONLY bde.crs_adjust_method
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_adjust_method OWNER TO bde_dba;
+ALTER TABLE bde.crs_adjust_method OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_adjust_method FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_adjust_method TO bde_admin;
-GRANT SELECT ON TABLE crs_adjust_method TO bde_user;
+REVOKE ALL ON TABLE bde.crs_adjust_method FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_adjust_method TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_adjust_method TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adjustment_run
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_adjustment_run (
+CREATE TABLE bde.crs_adjustment_run (
     id INTEGER NOT NULL,
     adm_id INTEGER NOT NULL,
     cos_id INTEGER NOT NULL,
@@ -239,31 +239,31 @@ CREATE TABLE crs_adjustment_run (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_adjustment_run
+ALTER TABLE ONLY bde.crs_adjustment_run
     ADD CONSTRAINT pkey_crs_adjustment_run PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_adjustment_run
+ALTER TABLE ONLY bde.crs_adjustment_run
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_adjustment_run ALTER COLUMN adm_id SET STATISTICS 250;
-ALTER TABLE crs_adjustment_run ALTER COLUMN audit_id SET STATISTICS 250;
-ALTER TABLE crs_adjustment_run ALTER COLUMN cos_id SET STATISTICS 250;
-ALTER TABLE crs_adjustment_run ALTER COLUMN id SET STATISTICS 250;
-ALTER TABLE crs_adjustment_run ALTER COLUMN status SET STATISTICS 250;
-ALTER TABLE crs_adjustment_run ALTER COLUMN usr_id_exec SET STATISTICS 250;
-ALTER TABLE crs_adjustment_run ALTER COLUMN wrk_id SET STATISTICS 250;
+ALTER TABLE bde.crs_adjustment_run ALTER COLUMN adm_id SET STATISTICS 250;
+ALTER TABLE bde.crs_adjustment_run ALTER COLUMN audit_id SET STATISTICS 250;
+ALTER TABLE bde.crs_adjustment_run ALTER COLUMN cos_id SET STATISTICS 250;
+ALTER TABLE bde.crs_adjustment_run ALTER COLUMN id SET STATISTICS 250;
+ALTER TABLE bde.crs_adjustment_run ALTER COLUMN status SET STATISTICS 250;
+ALTER TABLE bde.crs_adjustment_run ALTER COLUMN usr_id_exec SET STATISTICS 250;
+ALTER TABLE bde.crs_adjustment_run ALTER COLUMN wrk_id SET STATISTICS 250;
 
-ALTER TABLE crs_adjustment_run OWNER TO bde_dba;
+ALTER TABLE bde.crs_adjustment_run OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_adjustment_run FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_adjustment_run TO bde_admin;
-GRANT SELECT ON TABLE crs_adjustment_run TO bde_user;
+REVOKE ALL ON TABLE bde.crs_adjustment_run FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_adjustment_run TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_adjustment_run TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adoption
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_adoption (
+CREATE TABLE bde.crs_adoption (
     obn_id_new INTEGER NOT NULL,
     obn_id_orig INTEGER,
     sur_wrk_id_orig INTEGER NOT NULL,
@@ -273,75 +273,75 @@ CREATE TABLE crs_adoption (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_adoption
+ALTER TABLE ONLY bde.crs_adoption
     ADD CONSTRAINT pkey_crs_adoption PRIMARY KEY (obn_id_new);
 
-ALTER TABLE ONLY crs_adoption
+ALTER TABLE ONLY bde.crs_adoption
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_adoption ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_adoption ALTER COLUMN obn_id_new SET STATISTICS 500;
-ALTER TABLE crs_adoption ALTER COLUMN obn_id_orig SET STATISTICS 500;
-ALTER TABLE crs_adoption ALTER COLUMN sur_wrk_id_orig SET STATISTICS 500;
+ALTER TABLE bde.crs_adoption ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_adoption ALTER COLUMN obn_id_new SET STATISTICS 500;
+ALTER TABLE bde.crs_adoption ALTER COLUMN obn_id_orig SET STATISTICS 500;
+ALTER TABLE bde.crs_adoption ALTER COLUMN sur_wrk_id_orig SET STATISTICS 500;
 
-ALTER TABLE crs_adoption OWNER TO bde_dba;
+ALTER TABLE bde.crs_adoption OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_adoption FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_adoption TO bde_admin;
-GRANT SELECT ON TABLE crs_adoption TO bde_user;
+REVOKE ALL ON TABLE bde.crs_adoption FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_adoption TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_adoption TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_affected_parcl
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_affected_parcl (
+CREATE TABLE bde.crs_affected_parcl (
     sur_wrk_id INTEGER NOT NULL,
     par_id INTEGER NOT NULL,
     action VARCHAR(4) NOT NULL,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_affected_parcl
+ALTER TABLE ONLY bde.crs_affected_parcl
     ADD UNIQUE (sur_wrk_id, par_id);
 
-ALTER TABLE ONLY crs_affected_parcl
+ALTER TABLE ONLY bde.crs_affected_parcl
     ADD CONSTRAINT pkey_crs_affected_parcl PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_affected_parcl ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_affected_parcl ALTER COLUMN par_id SET STATISTICS 500;
-ALTER TABLE crs_affected_parcl ALTER COLUMN sur_wrk_id SET STATISTICS 500;
+ALTER TABLE bde.crs_affected_parcl ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_affected_parcl ALTER COLUMN par_id SET STATISTICS 500;
+ALTER TABLE bde.crs_affected_parcl ALTER COLUMN sur_wrk_id SET STATISTICS 500;
 
-ALTER TABLE crs_affected_parcl OWNER TO bde_dba;
+ALTER TABLE bde.crs_affected_parcl OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_affected_parcl FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_affected_parcl TO bde_admin;
-GRANT SELECT ON TABLE crs_affected_parcl TO bde_user;
+REVOKE ALL ON TABLE bde.crs_affected_parcl FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_affected_parcl TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_affected_parcl TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_alias
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_alias (
+CREATE TABLE bde.crs_alias (
     id INTEGER NOT NULL,
     prp_id INTEGER NOT NULL,
     surname VARCHAR(100) NOT NULL,
     other_names VARCHAR(100)
 );
 
-ALTER TABLE ONLY crs_alias
+ALTER TABLE ONLY bde.crs_alias
     ADD CONSTRAINT pkey_crs_alias PRIMARY KEY (id);
 
-ALTER TABLE crs_alias OWNER TO bde_dba;
+ALTER TABLE bde.crs_alias OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_alias FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_alias TO bde_admin;
-GRANT SELECT ON TABLE crs_alias TO bde_user;
+REVOKE ALL ON TABLE bde.crs_alias FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_alias TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_alias TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_appellation
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_appellation (
+CREATE TABLE bde.crs_appellation (
     par_id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     title CHAR(1) NOT NULL,
@@ -366,35 +366,35 @@ CREATE TABLE crs_appellation (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_appellation
+ALTER TABLE ONLY bde.crs_appellation
     ADD CONSTRAINT pkey_crs_appellation PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_appellation
+ALTER TABLE ONLY bde.crs_appellation
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_appellation ALTER COLUMN act_id_crt SET STATISTICS 500;
-ALTER TABLE crs_appellation ALTER COLUMN act_id_ext SET STATISTICS 500;
-ALTER TABLE crs_appellation ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
-ALTER TABLE crs_appellation ALTER COLUMN act_tin_id_ext SET STATISTICS 500;
-ALTER TABLE crs_appellation ALTER COLUMN appellation_value SET STATISTICS 500;
-ALTER TABLE crs_appellation ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_appellation ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE crs_appellation ALTER COLUMN maori_name SET STATISTICS 500;
-ALTER TABLE crs_appellation ALTER COLUMN other_appellation SET STATISTICS 500;
-ALTER TABLE crs_appellation ALTER COLUMN parcel_value SET STATISTICS 500;
-ALTER TABLE crs_appellation ALTER COLUMN par_id SET STATISTICS 500;
+ALTER TABLE bde.crs_appellation ALTER COLUMN act_id_crt SET STATISTICS 500;
+ALTER TABLE bde.crs_appellation ALTER COLUMN act_id_ext SET STATISTICS 500;
+ALTER TABLE bde.crs_appellation ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
+ALTER TABLE bde.crs_appellation ALTER COLUMN act_tin_id_ext SET STATISTICS 500;
+ALTER TABLE bde.crs_appellation ALTER COLUMN appellation_value SET STATISTICS 500;
+ALTER TABLE bde.crs_appellation ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_appellation ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_appellation ALTER COLUMN maori_name SET STATISTICS 500;
+ALTER TABLE bde.crs_appellation ALTER COLUMN other_appellation SET STATISTICS 500;
+ALTER TABLE bde.crs_appellation ALTER COLUMN parcel_value SET STATISTICS 500;
+ALTER TABLE bde.crs_appellation ALTER COLUMN par_id SET STATISTICS 500;
 
-ALTER TABLE crs_appellation OWNER TO bde_dba;
+ALTER TABLE bde.crs_appellation OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_appellation FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_appellation TO bde_admin;
-GRANT SELECT ON TABLE crs_appellation TO bde_user;
+REVOKE ALL ON TABLE bde.crs_appellation FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_appellation TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_appellation TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_comprised_in
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_comprised_in (
+CREATE TABLE bde.crs_comprised_in (
     id INTEGER NOT NULL,
     wrk_id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
@@ -402,20 +402,20 @@ CREATE TABLE crs_comprised_in (
     limited CHAR(1)
 );
 
-ALTER TABLE ONLY crs_comprised_in
+ALTER TABLE ONLY bde.crs_comprised_in
     ADD CONSTRAINT pkey_crs_comprised_in PRIMARY KEY (id);
 
-ALTER TABLE crs_comprised_in OWNER TO bde_dba;
+ALTER TABLE bde.crs_comprised_in OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_comprised_in FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_comprised_in TO bde_admin;
-GRANT SELECT ON TABLE crs_comprised_in TO bde_user;
+REVOKE ALL ON TABLE bde.crs_comprised_in FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_comprised_in TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_comprised_in TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_coordinate
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_coordinate (
+CREATE TABLE bde.crs_coordinate (
     id INTEGER NOT NULL,
     cos_id INTEGER NOT NULL,
     nod_id INTEGER NOT NULL,
@@ -433,36 +433,36 @@ CREATE TABLE crs_coordinate (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_coordinate
+ALTER TABLE ONLY bde.crs_coordinate
     ADD CONSTRAINT pkey_crs_coordinate PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_coordinate
+ALTER TABLE ONLY bde.crs_coordinate
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_coordinate ALTER COLUMN audit_id SET STATISTICS 1000;
-ALTER TABLE crs_coordinate ALTER COLUMN cor_id SET STATISTICS 1000;
-ALTER TABLE crs_coordinate ALTER COLUMN cos_id SET STATISTICS 1000;
-ALTER TABLE crs_coordinate ALTER COLUMN id SET STATISTICS 1000;
-ALTER TABLE crs_coordinate ALTER COLUMN nod_id SET STATISTICS 1000;
-ALTER TABLE crs_coordinate ALTER COLUMN ort_type_1 SET STATISTICS 1000;
-ALTER TABLE crs_coordinate ALTER COLUMN ort_type_2 SET STATISTICS 1000;
-ALTER TABLE crs_coordinate ALTER COLUMN ort_type_3 SET STATISTICS 1000;
-ALTER TABLE crs_coordinate ALTER COLUMN value1 SET STATISTICS 1000;
-ALTER TABLE crs_coordinate ALTER COLUMN value2 SET STATISTICS 1000;
-ALTER TABLE crs_coordinate ALTER COLUMN value3 SET STATISTICS 1000;
-ALTER TABLE crs_coordinate ALTER COLUMN wrk_id_created SET STATISTICS 1000;
+ALTER TABLE bde.crs_coordinate ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_coordinate ALTER COLUMN cor_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_coordinate ALTER COLUMN cos_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_coordinate ALTER COLUMN id SET STATISTICS 1000;
+ALTER TABLE bde.crs_coordinate ALTER COLUMN nod_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_coordinate ALTER COLUMN ort_type_1 SET STATISTICS 1000;
+ALTER TABLE bde.crs_coordinate ALTER COLUMN ort_type_2 SET STATISTICS 1000;
+ALTER TABLE bde.crs_coordinate ALTER COLUMN ort_type_3 SET STATISTICS 1000;
+ALTER TABLE bde.crs_coordinate ALTER COLUMN value1 SET STATISTICS 1000;
+ALTER TABLE bde.crs_coordinate ALTER COLUMN value2 SET STATISTICS 1000;
+ALTER TABLE bde.crs_coordinate ALTER COLUMN value3 SET STATISTICS 1000;
+ALTER TABLE bde.crs_coordinate ALTER COLUMN wrk_id_created SET STATISTICS 1000;
 
-ALTER TABLE crs_coordinate OWNER TO bde_dba;
+ALTER TABLE bde.crs_coordinate OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_coordinate FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_coordinate TO bde_admin;
-GRANT SELECT ON TABLE crs_coordinate TO bde_user;
+REVOKE ALL ON TABLE bde.crs_coordinate FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_coordinate TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_coordinate TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_coordinate_sys
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_coordinate_sys (
+CREATE TABLE bde.crs_coordinate_sys (
     id INTEGER NOT NULL,
     cot_id INTEGER NOT NULL,
     dtm_id INTEGER NOT NULL,
@@ -473,23 +473,23 @@ CREATE TABLE crs_coordinate_sys (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_coordinate_sys
+ALTER TABLE ONLY bde.crs_coordinate_sys
     ADD CONSTRAINT pkey_crs_coordinate_sys PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_coordinate_sys
+ALTER TABLE ONLY bde.crs_coordinate_sys
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_coordinate_sys OWNER TO bde_dba;
+ALTER TABLE bde.crs_coordinate_sys OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_coordinate_sys FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_coordinate_sys TO bde_admin;
-GRANT SELECT ON TABLE crs_coordinate_sys TO bde_user;
+REVOKE ALL ON TABLE bde.crs_coordinate_sys FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_coordinate_sys TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_coordinate_sys TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_coordinate_tpe
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_coordinate_tpe (
+CREATE TABLE bde.crs_coordinate_tpe (
     id INTEGER NOT NULL,
     name VARCHAR(100) NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -508,46 +508,46 @@ CREATE TABLE crs_coordinate_tpe (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_coordinate_tpe
+ALTER TABLE ONLY bde.crs_coordinate_tpe
     ADD CONSTRAINT pkey_crs_coordinate_tpe PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_coordinate_tpe
+ALTER TABLE ONLY bde.crs_coordinate_tpe
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_coordinate_tpe OWNER TO bde_dba;
+ALTER TABLE bde.crs_coordinate_tpe OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_coordinate_tpe FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_coordinate_tpe TO bde_admin;
-GRANT SELECT ON TABLE crs_coordinate_tpe TO bde_user;
+REVOKE ALL ON TABLE bde.crs_coordinate_tpe FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_coordinate_tpe TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_coordinate_tpe TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_cor_precision
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_cor_precision (
+CREATE TABLE bde.crs_cor_precision (
     cor_id INTEGER NOT NULL,
     ort_type VARCHAR(4) NOT NULL,
     decimal_places INTEGER NOT NULL,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_cor_precision
+ALTER TABLE ONLY bde.crs_cor_precision
     ADD UNIQUE (cor_id, ort_type);
 
-ALTER TABLE ONLY crs_cor_precision
+ALTER TABLE ONLY bde.crs_cor_precision
     ADD CONSTRAINT pkey_crs_cor_precision PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_cor_precision OWNER TO bde_dba;
+ALTER TABLE bde.crs_cor_precision OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_cor_precision FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_cor_precision TO bde_admin;
-GRANT SELECT ON TABLE crs_cor_precision TO bde_user;
+REVOKE ALL ON TABLE bde.crs_cor_precision FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_cor_precision TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_cor_precision TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_cord_order
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_cord_order (
+CREATE TABLE bde.crs_cord_order (
     id INTEGER NOT NULL,
     display VARCHAR(4) NOT NULL,
     description VARCHAR(100) NOT NULL,
@@ -557,23 +557,23 @@ CREATE TABLE crs_cord_order (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_cord_order
+ALTER TABLE ONLY bde.crs_cord_order
     ADD CONSTRAINT pkey_crs_cord_order PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_cord_order
+ALTER TABLE ONLY bde.crs_cord_order
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_cord_order OWNER TO bde_dba;
+ALTER TABLE bde.crs_cord_order OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_cord_order FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_cord_order TO bde_admin;
-GRANT SELECT ON TABLE crs_cord_order TO bde_user;
+REVOKE ALL ON TABLE bde.crs_cord_order FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_cord_order TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_cord_order TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_datum
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_datum (
+CREATE TABLE bde.crs_datum (
     id INTEGER NOT NULL,
     name VARCHAR(100) NOT NULL,
     type VARCHAR(4) NOT NULL,
@@ -586,23 +586,23 @@ CREATE TABLE crs_datum (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_datum
+ALTER TABLE ONLY bde.crs_datum
     ADD CONSTRAINT pkey_crs_datum PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_datum
+ALTER TABLE ONLY bde.crs_datum
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_datum OWNER TO bde_dba;
+ALTER TABLE bde.crs_datum OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_datum FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_datum TO bde_admin;
-GRANT SELECT ON TABLE crs_datum TO bde_user;
+REVOKE ALL ON TABLE bde.crs_datum FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_datum TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_datum TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_elect_place
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_elect_place (
+CREATE TABLE bde.crs_elect_place (
     id INTEGER NOT NULL,
     alt_id INTEGER,
     name VARCHAR(100) NOT NULL,
@@ -614,23 +614,23 @@ CREATE TABLE crs_elect_place (
 
 PERFORM AddGeometryColumn('crs_elect_place', 'shape', 4167, 'POINT', 2);
 
-ALTER TABLE ONLY crs_elect_place
+ALTER TABLE ONLY bde.crs_elect_place
     ADD CONSTRAINT pkey_crs_elect_place PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_elect_place
+ALTER TABLE ONLY bde.crs_elect_place
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_elect_place OWNER TO bde_dba;
+ALTER TABLE bde.crs_elect_place OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_elect_place FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_elect_place TO bde_admin;
-GRANT SELECT ON TABLE crs_elect_place TO bde_user;
+REVOKE ALL ON TABLE bde.crs_elect_place FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_elect_place TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_elect_place TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ellipsoid
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_ellipsoid (
+CREATE TABLE bde.crs_ellipsoid (
     id INTEGER NOT NULL,
     name VARCHAR(100) NOT NULL,
     semi_major_axis NUMERIC(22,12) NOT NULL,
@@ -638,23 +638,23 @@ CREATE TABLE crs_ellipsoid (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_ellipsoid
+ALTER TABLE ONLY bde.crs_ellipsoid
     ADD CONSTRAINT pkey_crs_ellipsoid PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_ellipsoid
+ALTER TABLE ONLY bde.crs_ellipsoid
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_ellipsoid OWNER TO bde_dba;
+ALTER TABLE bde.crs_ellipsoid OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_ellipsoid FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_ellipsoid TO bde_admin;
-GRANT SELECT ON TABLE crs_ellipsoid TO bde_user;
+REVOKE ALL ON TABLE bde.crs_ellipsoid FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ellipsoid TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_ellipsoid TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_enc_share
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_enc_share (
+CREATE TABLE bde.crs_enc_share (
     id INTEGER NOT NULL,
     enc_id INTEGER,
     status VARCHAR(4),
@@ -666,24 +666,24 @@ CREATE TABLE crs_enc_share (
     system_ext CHAR(1)
 );
 
-ALTER TABLE ONLY crs_enc_share
+ALTER TABLE ONLY bde.crs_enc_share
     ADD CONSTRAINT pkey_crs_enc_share PRIMARY KEY (id);
 
-ALTER TABLE crs_enc_share ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
-ALTER TABLE crs_enc_share ALTER COLUMN enc_id SET STATISTICS 500;
-ALTER TABLE crs_enc_share ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_enc_share ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
+ALTER TABLE bde.crs_enc_share ALTER COLUMN enc_id SET STATISTICS 500;
+ALTER TABLE bde.crs_enc_share ALTER COLUMN id SET STATISTICS 500;
 
-ALTER TABLE crs_enc_share OWNER TO bde_dba;
+ALTER TABLE bde.crs_enc_share OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_enc_share FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_enc_share TO bde_admin;
-GRANT SELECT ON TABLE crs_enc_share TO bde_user;
+REVOKE ALL ON TABLE bde.crs_enc_share FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_enc_share TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_enc_share TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_encumbrance
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_encumbrance (
+CREATE TABLE bde.crs_encumbrance (
     id INTEGER NOT NULL,
     status VARCHAR(4),
     act_tin_id_orig INTEGER,
@@ -694,24 +694,24 @@ CREATE TABLE crs_encumbrance (
     term VARCHAR(250)
 );
 
-ALTER TABLE ONLY crs_encumbrance
+ALTER TABLE ONLY bde.crs_encumbrance
     ADD CONSTRAINT pkey_crs_encumbrance PRIMARY KEY (id);
 
-ALTER TABLE crs_encumbrance ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
-ALTER TABLE crs_encumbrance ALTER COLUMN act_tin_id_orig SET STATISTICS 500;
-ALTER TABLE crs_encumbrance ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_encumbrance ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
+ALTER TABLE bde.crs_encumbrance ALTER COLUMN act_tin_id_orig SET STATISTICS 500;
+ALTER TABLE bde.crs_encumbrance ALTER COLUMN id SET STATISTICS 500;
 
-ALTER TABLE crs_encumbrance OWNER TO bde_dba;
+ALTER TABLE bde.crs_encumbrance OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_encumbrance FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_encumbrance TO bde_admin;
-GRANT SELECT ON TABLE crs_encumbrance TO bde_user;
+REVOKE ALL ON TABLE bde.crs_encumbrance FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_encumbrance TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_encumbrance TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_encumbrancee
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_encumbrancee (
+CREATE TABLE bde.crs_encumbrancee (
     id INTEGER NOT NULL,
     ens_id INTEGER,
     status VARCHAR(4),
@@ -720,23 +720,23 @@ CREATE TABLE crs_encumbrancee (
     usr_id VARCHAR(20)
 );
 
-ALTER TABLE ONLY crs_encumbrancee
+ALTER TABLE ONLY bde.crs_encumbrancee
     ADD CONSTRAINT pkey_crs_encumbrancee PRIMARY KEY (id);
 
-ALTER TABLE crs_encumbrancee ALTER COLUMN ens_id SET STATISTICS 500;
-ALTER TABLE crs_encumbrancee ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_encumbrancee ALTER COLUMN ens_id SET STATISTICS 500;
+ALTER TABLE bde.crs_encumbrancee ALTER COLUMN id SET STATISTICS 500;
 
-ALTER TABLE crs_encumbrancee OWNER TO bde_dba;
+ALTER TABLE bde.crs_encumbrancee OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_encumbrancee FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_encumbrancee TO bde_admin;
-GRANT SELECT ON TABLE crs_encumbrancee TO bde_user;
+REVOKE ALL ON TABLE bde.crs_encumbrancee FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_encumbrancee TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_encumbrancee TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_estate_share
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_estate_share (
+CREATE TABLE bde.crs_estate_share (
     id INTEGER NOT NULL,
     ett_id INTEGER NOT NULL,
     share VARCHAR(100) NOT NULL,
@@ -754,24 +754,24 @@ CREATE TABLE crs_estate_share (
     transferee_group SMALLINT
 );
 
-ALTER TABLE ONLY crs_estate_share
+ALTER TABLE ONLY bde.crs_estate_share
     ADD CONSTRAINT pkey_crs_estate_share PRIMARY KEY (id);
 
-ALTER TABLE crs_estate_share ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
-ALTER TABLE crs_estate_share ALTER COLUMN ett_id SET STATISTICS 500;
-ALTER TABLE crs_estate_share ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_estate_share ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
+ALTER TABLE bde.crs_estate_share ALTER COLUMN ett_id SET STATISTICS 500;
+ALTER TABLE bde.crs_estate_share ALTER COLUMN id SET STATISTICS 500;
 
-ALTER TABLE crs_estate_share OWNER TO bde_dba;
+ALTER TABLE bde.crs_estate_share OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_estate_share FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_estate_share TO bde_admin;
-GRANT SELECT ON TABLE crs_estate_share TO bde_user;
+REVOKE ALL ON TABLE bde.crs_estate_share FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_estate_share TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_estate_share TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_feature_name
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_feature_name (
+CREATE TABLE bde.crs_feature_name (
     id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     name VARCHAR(100) NOT NULL,
@@ -783,64 +783,64 @@ CREATE TABLE crs_feature_name (
 
 PERFORM AddGeometryColumn('crs_feature_name', 'shape', 4167, 'GEOMETRY', 2);
 
-ALTER TABLE ONLY crs_feature_name
+ALTER TABLE ONLY bde.crs_feature_name
     ADD CONSTRAINT pkey_crs_feature_name PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_feature_name
+ALTER TABLE ONLY bde.crs_feature_name
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_feature_name OWNER TO bde_dba;
+ALTER TABLE bde.crs_feature_name OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_feature_name FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_feature_name TO bde_admin;
-GRANT SELECT ON TABLE crs_feature_name TO bde_user;
+REVOKE ALL ON TABLE bde.crs_feature_name FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_feature_name TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_feature_name TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_geodetic_network
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_geodetic_network  (
+CREATE TABLE bde.crs_geodetic_network  (
     id  INTEGER  NOT NULL,
     code VARCHAR(4),
     description VARCHAR(100)
 );
 
-ALTER TABLE ONLY crs_geodetic_network
+ALTER TABLE ONLY bde.crs_geodetic_network
     ADD CONSTRAINT pkey_crs_geodetic_network PRIMARY KEY (id);
 
-ALTER TABLE crs_geodetic_network OWNER TO bde_dba;
+ALTER TABLE bde.crs_geodetic_network OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_geodetic_network FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_geodetic_network TO bde_admin;
-GRANT SELECT ON TABLE crs_geodetic_network TO bde_user;
+REVOKE ALL ON TABLE bde.crs_geodetic_network FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_geodetic_network TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_geodetic_network TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_geodetic_node_network
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_geodetic_node_network  (
+CREATE TABLE bde.crs_geodetic_node_network  (
     nod_id INTEGER NOT NULL,
     gdn_id INTEGER NOT NULL,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_geodetic_node_network
+ALTER TABLE ONLY bde.crs_geodetic_node_network
     ADD UNIQUE (nod_id, gdn_id);
 
-ALTER TABLE ONLY crs_geodetic_node_network
+ALTER TABLE ONLY bde.crs_geodetic_node_network
     ADD CONSTRAINT pkey_crs_geodetic_node_network PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_geodetic_node_network OWNER TO bde_dba;
+ALTER TABLE bde.crs_geodetic_node_network OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_geodetic_node_network FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_geodetic_node_network TO bde_admin;
-GRANT SELECT ON TABLE crs_geodetic_node_network TO bde_user;
+REVOKE ALL ON TABLE bde.crs_geodetic_node_network FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_geodetic_node_network TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_geodetic_node_network TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_image
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_image (
+CREATE TABLE bde.crs_image (
   id INTEGER NOT NULL,
   barcode_datetime TIMESTAMP,
   ims_id NUMERIC(32),
@@ -851,20 +851,20 @@ CREATE TABLE crs_image (
   usr_id_created VARCHAR(20)
 );
 
-ALTER TABLE ONLY crs_image
+ALTER TABLE ONLY bde.crs_image
     ADD CONSTRAINT pkey_crs_image PRIMARY KEY (id);
 
-ALTER TABLE crs_image OWNER TO bde_dba;
+ALTER TABLE bde.crs_image OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_image FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_image TO bde_admin;
-GRANT SELECT ON TABLE crs_image TO bde_user;
+REVOKE ALL ON TABLE bde.crs_image FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_image TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_image TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_image
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_image_history (
+CREATE TABLE bde.crs_image_history (
     id INTEGER NOT NULL,
     img_id INTEGER NOT NULL,
     ims_id DECIMAL(32),
@@ -875,20 +875,20 @@ CREATE TABLE crs_image_history (
     usr_id VARCHAR(20)
 );
 
-ALTER TABLE ONLY crs_image_history
+ALTER TABLE ONLY bde.crs_image_history
     ADD CONSTRAINT pkey_crs_image_history PRIMARY KEY (id);
 
-ALTER TABLE crs_image_history OWNER TO bde_dba;
+ALTER TABLE bde.crs_image_history OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_image_history FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_image_history TO bde_admin;
-GRANT SELECT ON TABLE crs_image_history TO bde_user;
+REVOKE ALL ON TABLE bde.crs_image_history FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_image_history TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_image_history TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_land_district
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_land_district (
+CREATE TABLE bde.crs_land_district (
     loc_id INTEGER NOT NULL,
     off_code VARCHAR(4) NOT NULL,
     "default" CHAR(1) NOT NULL,
@@ -899,23 +899,23 @@ CREATE TABLE crs_land_district (
 
 PERFORM AddGeometryColumn('crs_land_district', 'shape', 4167, 'GEOMETRY', 2);
 
-ALTER TABLE ONLY crs_land_district
+ALTER TABLE ONLY bde.crs_land_district
     ADD CONSTRAINT pkey_crs_land_district PRIMARY KEY (loc_id);
 
-ALTER TABLE ONLY crs_land_district
+ALTER TABLE ONLY bde.crs_land_district
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_land_district OWNER TO bde_dba;
+ALTER TABLE bde.crs_land_district OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_land_district FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_land_district TO bde_admin;
-GRANT SELECT ON TABLE crs_land_district TO bde_user;
+REVOKE ALL ON TABLE bde.crs_land_district FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_land_district TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_land_district TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_legal_desc
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_legal_desc (
+CREATE TABLE bde.crs_legal_desc (
     id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -925,27 +925,27 @@ CREATE TABLE crs_legal_desc (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_legal_desc
+ALTER TABLE ONLY bde.crs_legal_desc
     ADD CONSTRAINT pkey_crs_legal_desc PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_legal_desc
+ALTER TABLE ONLY bde.crs_legal_desc
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_legal_desc ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_legal_desc ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE crs_legal_desc ALTER COLUMN ttl_title_no SET STATISTICS 500;
+ALTER TABLE bde.crs_legal_desc ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_legal_desc ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_legal_desc ALTER COLUMN ttl_title_no SET STATISTICS 500;
 
-ALTER TABLE crs_legal_desc OWNER TO bde_dba;
+ALTER TABLE bde.crs_legal_desc OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_legal_desc FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_legal_desc TO bde_admin;
-GRANT SELECT ON TABLE crs_legal_desc TO bde_user;
+REVOKE ALL ON TABLE bde.crs_legal_desc FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_legal_desc TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_legal_desc TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_legal_desc_prl
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_legal_desc_prl (
+CREATE TABLE bde.crs_legal_desc_prl (
     lgd_id INTEGER NOT NULL,
     par_id INTEGER NOT NULL,
     sequence INTEGER NOT NULL,
@@ -955,28 +955,28 @@ CREATE TABLE crs_legal_desc_prl (
     sur_wrk_id_crt INTEGER
 );
 
-ALTER TABLE ONLY crs_legal_desc_prl
+ALTER TABLE ONLY bde.crs_legal_desc_prl
     ADD UNIQUE (lgd_id, par_id);
 
-ALTER TABLE ONLY crs_legal_desc_prl
+ALTER TABLE ONLY bde.crs_legal_desc_prl
     ADD CONSTRAINT pkey_crs_legal_desc_prl PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_legal_desc_prl ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_legal_desc_prl ALTER COLUMN lgd_id SET STATISTICS 500;
-ALTER TABLE crs_legal_desc_prl ALTER COLUMN par_id SET STATISTICS 500;
-ALTER TABLE crs_legal_desc_prl ALTER COLUMN sur_wrk_id_crt SET STATISTICS 500;
+ALTER TABLE bde.crs_legal_desc_prl ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_legal_desc_prl ALTER COLUMN lgd_id SET STATISTICS 500;
+ALTER TABLE bde.crs_legal_desc_prl ALTER COLUMN par_id SET STATISTICS 500;
+ALTER TABLE bde.crs_legal_desc_prl ALTER COLUMN sur_wrk_id_crt SET STATISTICS 500;
 
-ALTER TABLE crs_legal_desc_prl OWNER TO bde_dba;
+ALTER TABLE bde.crs_legal_desc_prl OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_legal_desc_prl FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_legal_desc_prl TO bde_admin;
-GRANT SELECT ON TABLE crs_legal_desc_prl TO bde_user;
+REVOKE ALL ON TABLE bde.crs_legal_desc_prl FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_legal_desc_prl TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_legal_desc_prl TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_line
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_line (
+CREATE TABLE bde.crs_line (
     boundary CHAR(1) NOT NULL,
     type VARCHAR(4) NOT NULL,
     description VARCHAR(2048),
@@ -994,29 +994,29 @@ CREATE TABLE crs_line (
 
 PERFORM AddGeometryColumn('crs_line', 'shape', 4167, 'LINESTRING', 2);
 
-ALTER TABLE ONLY crs_line
+ALTER TABLE ONLY bde.crs_line
     ADD CONSTRAINT pkey_crs_line PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_line
+ALTER TABLE ONLY bde.crs_line
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_line ALTER COLUMN audit_id SET STATISTICS 1000;
-ALTER TABLE crs_line ALTER COLUMN id SET STATISTICS 1000;
-ALTER TABLE crs_line ALTER COLUMN nod_id_end SET STATISTICS 1000;
-ALTER TABLE crs_line ALTER COLUMN nod_id_start SET STATISTICS 1000;
-ALTER TABLE crs_line ALTER COLUMN pnx_id_created SET STATISTICS 1000;
+ALTER TABLE bde.crs_line ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_line ALTER COLUMN id SET STATISTICS 1000;
+ALTER TABLE bde.crs_line ALTER COLUMN nod_id_end SET STATISTICS 1000;
+ALTER TABLE bde.crs_line ALTER COLUMN nod_id_start SET STATISTICS 1000;
+ALTER TABLE bde.crs_line ALTER COLUMN pnx_id_created SET STATISTICS 1000;
 
-ALTER TABLE crs_line OWNER TO bde_dba;
+ALTER TABLE bde.crs_line OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_line FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_line TO bde_admin;
-GRANT SELECT ON TABLE crs_line TO bde_user;
+REVOKE ALL ON TABLE bde.crs_line FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_line TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_line TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_locality
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_locality (
+CREATE TABLE bde.crs_locality (
     id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     name VARCHAR(100) NOT NULL,
@@ -1027,23 +1027,23 @@ CREATE TABLE crs_locality (
 
 PERFORM AddGeometryColumn('crs_locality', 'shape', 4167, 'GEOMETRY', 2);
 
-ALTER TABLE ONLY crs_locality
+ALTER TABLE ONLY bde.crs_locality
     ADD CONSTRAINT pkey_crs_locality PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_locality
+ALTER TABLE ONLY bde.crs_locality
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_locality OWNER TO bde_dba;
+ALTER TABLE bde.crs_locality OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_locality FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_locality TO bde_admin;
-GRANT SELECT ON TABLE crs_locality TO bde_user;
+REVOKE ALL ON TABLE bde.crs_locality FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_locality TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_locality TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_maintenance
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_maintenance (
+CREATE TABLE bde.crs_maintenance (
     mrk_id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -1052,23 +1052,23 @@ CREATE TABLE crs_maintenance (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_maintenance
+ALTER TABLE ONLY bde.crs_maintenance
     ADD UNIQUE (mrk_id, type);
 
-ALTER TABLE ONLY crs_maintenance
+ALTER TABLE ONLY bde.crs_maintenance
     ADD CONSTRAINT pkey_crs_maintenance PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_maintenance OWNER TO bde_dba;
+ALTER TABLE bde.crs_maintenance OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_maintenance FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_maintenance TO bde_admin;
-GRANT SELECT ON TABLE crs_maintenance TO bde_user;
+REVOKE ALL ON TABLE bde.crs_maintenance FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_maintenance TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_maintenance TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_map_grid
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_map_grid (
+CREATE TABLE bde.crs_map_grid (
     major_grid VARCHAR(4) NOT NULL,
     minor_grid VARCHAR(4) NOT NULL,
     se_row_id INTEGER,
@@ -1077,23 +1077,23 @@ CREATE TABLE crs_map_grid (
 
 PERFORM AddGeometryColumn('crs_map_grid', 'shape', 4167, 'POLYGON', 2);
 
-ALTER TABLE ONLY crs_map_grid
+ALTER TABLE ONLY bde.crs_map_grid
     ADD CONSTRAINT pkey_crs_map_grid PRIMARY KEY (audit_id);
 
-ALTER TABLE ONLY crs_map_grid
+ALTER TABLE ONLY bde.crs_map_grid
     ADD UNIQUE (major_grid, minor_grid);
 
-ALTER TABLE crs_map_grid OWNER TO bde_dba;
+ALTER TABLE bde.crs_map_grid OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_map_grid FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_map_grid TO bde_admin;
-GRANT SELECT ON TABLE crs_map_grid TO bde_user;
+REVOKE ALL ON TABLE bde.crs_map_grid FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_map_grid TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_map_grid TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mark
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_mark (
+CREATE TABLE bde.crs_mark (
     id INTEGER NOT NULL,
     nod_id INTEGER NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -1115,82 +1115,82 @@ CREATE TABLE crs_mark (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_mark
+ALTER TABLE ONLY bde.crs_mark
     ADD CONSTRAINT pkey_crs_mark PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_mark
+ALTER TABLE ONLY bde.crs_mark
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_mark ALTER COLUMN audit_id SET STATISTICS 1000;
-ALTER TABLE crs_mark ALTER COLUMN id SET STATISTICS 1000;
-ALTER TABLE crs_mark ALTER COLUMN mrk_id_dist SET STATISTICS 1000;
-ALTER TABLE crs_mark ALTER COLUMN mrk_id_repl SET STATISTICS 1000;
-ALTER TABLE crs_mark ALTER COLUMN nod_id SET STATISTICS 1000;
-ALTER TABLE crs_mark ALTER COLUMN wrk_id_created SET STATISTICS 1000;
+ALTER TABLE bde.crs_mark ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_mark ALTER COLUMN id SET STATISTICS 1000;
+ALTER TABLE bde.crs_mark ALTER COLUMN mrk_id_dist SET STATISTICS 1000;
+ALTER TABLE bde.crs_mark ALTER COLUMN mrk_id_repl SET STATISTICS 1000;
+ALTER TABLE bde.crs_mark ALTER COLUMN nod_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_mark ALTER COLUMN wrk_id_created SET STATISTICS 1000;
 
-ALTER TABLE crs_mark OWNER TO bde_dba;
+ALTER TABLE bde.crs_mark OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_mark FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_mark TO bde_admin;
-GRANT SELECT ON TABLE crs_mark TO bde_user;
+REVOKE ALL ON TABLE bde.crs_mark FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mark TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_mark TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mark_name
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_mark_name (
+CREATE TABLE bde.crs_mark_name (
     mrk_id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     name VARCHAR(100) NOT NULL,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_mark_name
+ALTER TABLE ONLY bde.crs_mark_name
     ADD UNIQUE (mrk_id, type);
 
-ALTER TABLE ONLY crs_mark_name
+ALTER TABLE ONLY bde.crs_mark_name
     ADD CONSTRAINT pkey_crs_mark_name PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_mark_name ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_mark_name ALTER COLUMN mrk_id SET STATISTICS 500;
-ALTER TABLE crs_mark_name ALTER COLUMN name SET STATISTICS 500;
+ALTER TABLE bde.crs_mark_name ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_mark_name ALTER COLUMN mrk_id SET STATISTICS 500;
+ALTER TABLE bde.crs_mark_name ALTER COLUMN name SET STATISTICS 500;
 
-ALTER TABLE crs_mark_name OWNER TO bde_dba;
+ALTER TABLE bde.crs_mark_name OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_mark_name FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_mark_name TO bde_admin;
-GRANT SELECT ON TABLE crs_mark_name TO bde_user;
+REVOKE ALL ON TABLE bde.crs_mark_name FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mark_name TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_mark_name TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mark_sup_doc
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_mark_sup_doc (
+CREATE TABLE bde.crs_mark_sup_doc (
     mrk_id INTEGER NOT NULL,
     sud_id INTEGER NOT NULL,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_mark_sup_doc
+ALTER TABLE ONLY bde.crs_mark_sup_doc
     ADD UNIQUE (mrk_id, sud_id);
 
-ALTER TABLE ONLY crs_mark_sup_doc
+ALTER TABLE ONLY bde.crs_mark_sup_doc
     ADD CONSTRAINT pkey_crs_mark_sup_doc PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_mark_sup_doc ALTER COLUMN mrk_id SET STATISTICS 250;
-ALTER TABLE crs_mark_sup_doc ALTER COLUMN sud_id SET STATISTICS 250;
+ALTER TABLE bde.crs_mark_sup_doc ALTER COLUMN mrk_id SET STATISTICS 250;
+ALTER TABLE bde.crs_mark_sup_doc ALTER COLUMN sud_id SET STATISTICS 250;
 
-ALTER TABLE crs_mark_sup_doc OWNER TO bde_dba;
+ALTER TABLE bde.crs_mark_sup_doc OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_mark_sup_doc FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_mark_sup_doc TO bde_admin;
-GRANT SELECT ON TABLE crs_mark_sup_doc TO bde_user;
+REVOKE ALL ON TABLE bde.crs_mark_sup_doc FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mark_sup_doc TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_mark_sup_doc TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mrk_phys_state
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_mrk_phys_state (
+CREATE TABLE bde.crs_mrk_phys_state (
     mrk_id INTEGER NOT NULL,
     wrk_id INTEGER NOT NULL,
     "type" VARCHAR(4) NOT NULL,
@@ -1220,26 +1220,26 @@ CREATE TABLE crs_mrk_phys_state (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_mrk_phys_state
+ALTER TABLE ONLY bde.crs_mrk_phys_state
     ADD UNIQUE (wrk_id, "type", mrk_id);
 
-ALTER TABLE ONLY crs_mrk_phys_state
+ALTER TABLE ONLY bde.crs_mrk_phys_state
     ADD CONSTRAINT pkey_crs_mrk_phys_state PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_mrk_phys_state ALTER COLUMN mrk_id SET STATISTICS 500;
-ALTER TABLE crs_mrk_phys_state ALTER COLUMN wrk_id SET STATISTICS 500;
+ALTER TABLE bde.crs_mrk_phys_state ALTER COLUMN mrk_id SET STATISTICS 500;
+ALTER TABLE bde.crs_mrk_phys_state ALTER COLUMN wrk_id SET STATISTICS 500;
 
-ALTER TABLE crs_mrk_phys_state OWNER TO bde_dba;
+ALTER TABLE bde.crs_mrk_phys_state OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_mrk_phys_state FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_mrk_phys_state TO bde_admin;
-GRANT SELECT ON TABLE crs_mrk_phys_state TO bde_user;
+REVOKE ALL ON TABLE bde.crs_mrk_phys_state FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mrk_phys_state TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_mrk_phys_state TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_mesh_blk (
+CREATE TABLE bde.crs_mesh_blk (
     id INTEGER NOT NULL,
     alt_id INTEGER,
     code VARCHAR(7) NOT NULL,
@@ -1251,83 +1251,83 @@ CREATE TABLE crs_mesh_blk (
 
 PERFORM AddGeometryColumn('crs_mesh_blk', 'shape', 4167, 'GEOMETRY', 2);
 
-ALTER TABLE ONLY crs_mesh_blk
+ALTER TABLE ONLY bde.crs_mesh_blk
     ADD CONSTRAINT pkey_crs_mesh_blk PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_mesh_blk
+ALTER TABLE ONLY bde.crs_mesh_blk
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_mesh_blk ALTER COLUMN alt_id SET STATISTICS 250;
-ALTER TABLE crs_mesh_blk ALTER COLUMN audit_id SET STATISTICS 250;
-ALTER TABLE crs_mesh_blk ALTER COLUMN id SET STATISTICS 250;
+ALTER TABLE bde.crs_mesh_blk ALTER COLUMN alt_id SET STATISTICS 250;
+ALTER TABLE bde.crs_mesh_blk ALTER COLUMN audit_id SET STATISTICS 250;
+ALTER TABLE bde.crs_mesh_blk ALTER COLUMN id SET STATISTICS 250;
 
-ALTER TABLE crs_mesh_blk OWNER TO bde_dba;
+ALTER TABLE bde.crs_mesh_blk OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_mesh_blk FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_mesh_blk TO bde_admin;
-GRANT SELECT ON TABLE crs_mesh_blk TO bde_user;
+REVOKE ALL ON TABLE bde.crs_mesh_blk FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mesh_blk TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_mesh_blk TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk_area
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_mesh_blk_area (
+CREATE TABLE bde.crs_mesh_blk_area (
     mbk_id INTEGER NOT NULL,
     stt_id INTEGER NOT NULL,
     alt_id INTEGER,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_mesh_blk_area
+ALTER TABLE ONLY bde.crs_mesh_blk_area
     ADD UNIQUE (mbk_id, stt_id);
 
-ALTER TABLE ONLY crs_mesh_blk_area
+ALTER TABLE ONLY bde.crs_mesh_blk_area
     ADD CONSTRAINT pkey_crs_mesh_blk_area PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_mesh_blk_area ALTER COLUMN alt_id SET STATISTICS 250;
-ALTER TABLE crs_mesh_blk_area ALTER COLUMN audit_id SET STATISTICS 250;
-ALTER TABLE crs_mesh_blk_area ALTER COLUMN mbk_id SET STATISTICS 250;
-ALTER TABLE crs_mesh_blk_area ALTER COLUMN stt_id SET STATISTICS 250;
+ALTER TABLE bde.crs_mesh_blk_area ALTER COLUMN alt_id SET STATISTICS 250;
+ALTER TABLE bde.crs_mesh_blk_area ALTER COLUMN audit_id SET STATISTICS 250;
+ALTER TABLE bde.crs_mesh_blk_area ALTER COLUMN mbk_id SET STATISTICS 250;
+ALTER TABLE bde.crs_mesh_blk_area ALTER COLUMN stt_id SET STATISTICS 250;
 
-ALTER TABLE crs_mesh_blk_area OWNER TO bde_dba;
+ALTER TABLE bde.crs_mesh_blk_area OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_mesh_blk_area FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_mesh_blk_area TO bde_admin;
-GRANT SELECT ON TABLE crs_mesh_blk_area TO bde_user;
+REVOKE ALL ON TABLE bde.crs_mesh_blk_area FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mesh_blk_area TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_mesh_blk_area TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk_bdry
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_mesh_blk_bdry (
+CREATE TABLE bde.crs_mesh_blk_bdry (
     mbk_id INTEGER NOT NULL,
     mbl_id INTEGER NOT NULL,
     alt_id INTEGER,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_mesh_blk_bdry
+ALTER TABLE ONLY bde.crs_mesh_blk_bdry
     ADD UNIQUE (mbk_id, mbl_id);
 
-ALTER TABLE ONLY crs_mesh_blk_bdry
+ALTER TABLE ONLY bde.crs_mesh_blk_bdry
     ADD CONSTRAINT pkey_crs_mesh_blk_bdry PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_mesh_blk_bdry ALTER COLUMN alt_id SET STATISTICS 500;
-ALTER TABLE crs_mesh_blk_bdry ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_mesh_blk_bdry ALTER COLUMN mbk_id SET STATISTICS 500;
-ALTER TABLE crs_mesh_blk_bdry ALTER COLUMN mbl_id SET STATISTICS 500;
+ALTER TABLE bde.crs_mesh_blk_bdry ALTER COLUMN alt_id SET STATISTICS 500;
+ALTER TABLE bde.crs_mesh_blk_bdry ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_mesh_blk_bdry ALTER COLUMN mbk_id SET STATISTICS 500;
+ALTER TABLE bde.crs_mesh_blk_bdry ALTER COLUMN mbl_id SET STATISTICS 500;
 
-ALTER TABLE crs_mesh_blk_bdry OWNER TO bde_dba;
+ALTER TABLE bde.crs_mesh_blk_bdry OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_mesh_blk_bdry FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_mesh_blk_bdry TO bde_admin;
-GRANT SELECT ON TABLE crs_mesh_blk_bdry TO bde_user;
+REVOKE ALL ON TABLE bde.crs_mesh_blk_bdry FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mesh_blk_bdry TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_mesh_blk_bdry TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk_line
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_mesh_blk_line (
+CREATE TABLE bde.crs_mesh_blk_line (
     id INTEGER NOT NULL,
     line_type VARCHAR(4) NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -1338,55 +1338,55 @@ CREATE TABLE crs_mesh_blk_line (
 
 PERFORM AddGeometryColumn('crs_mesh_blk_line', 'shape', 4167, 'LINESTRING', 2);
 
-ALTER TABLE ONLY crs_mesh_blk_line
+ALTER TABLE ONLY bde.crs_mesh_blk_line
     ADD UNIQUE (audit_id);
 
-ALTER TABLE ONLY crs_mesh_blk_line
+ALTER TABLE ONLY bde.crs_mesh_blk_line
     ADD CONSTRAINT pkey_crs_mesh_blk_line PRIMARY KEY (id);
 
-ALTER TABLE crs_mesh_blk_line ALTER COLUMN alt_id SET STATISTICS 500;
-ALTER TABLE crs_mesh_blk_line ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_mesh_blk_line ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_mesh_blk_line ALTER COLUMN alt_id SET STATISTICS 500;
+ALTER TABLE bde.crs_mesh_blk_line ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_mesh_blk_line ALTER COLUMN id SET STATISTICS 500;
 
-ALTER TABLE crs_mesh_blk_line OWNER TO bde_dba;
+ALTER TABLE bde.crs_mesh_blk_line OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_mesh_blk_line FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_mesh_blk_line TO bde_admin;
-GRANT SELECT ON TABLE crs_mesh_blk_line TO bde_user;
+REVOKE ALL ON TABLE bde.crs_mesh_blk_line FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mesh_blk_line TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_mesh_blk_line TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk_place
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_mesh_blk_place (
+CREATE TABLE bde.crs_mesh_blk_place (
     epl_id INTEGER NOT NULL,
     mbk_id INTEGER NOT NULL,
     alt_id INTEGER,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_mesh_blk_place
+ALTER TABLE ONLY bde.crs_mesh_blk_place
     ADD UNIQUE (epl_id, mbk_id);
 
-ALTER TABLE ONLY crs_mesh_blk_place
+ALTER TABLE ONLY bde.crs_mesh_blk_place
     ADD CONSTRAINT pkey_crs_mesh_blk_place PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_mesh_blk_place ALTER COLUMN alt_id SET STATISTICS 250;
-ALTER TABLE crs_mesh_blk_place ALTER COLUMN audit_id SET STATISTICS 250;
-ALTER TABLE crs_mesh_blk_place ALTER COLUMN epl_id SET STATISTICS 250;
-ALTER TABLE crs_mesh_blk_place ALTER COLUMN mbk_id SET STATISTICS 250;
+ALTER TABLE bde.crs_mesh_blk_place ALTER COLUMN alt_id SET STATISTICS 250;
+ALTER TABLE bde.crs_mesh_blk_place ALTER COLUMN audit_id SET STATISTICS 250;
+ALTER TABLE bde.crs_mesh_blk_place ALTER COLUMN epl_id SET STATISTICS 250;
+ALTER TABLE bde.crs_mesh_blk_place ALTER COLUMN mbk_id SET STATISTICS 250;
 
-ALTER TABLE crs_mesh_blk_place OWNER TO bde_dba;
+ALTER TABLE bde.crs_mesh_blk_place OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_mesh_blk_place FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_mesh_blk_place TO bde_admin;
-GRANT SELECT ON TABLE crs_mesh_blk_place TO bde_user;
+REVOKE ALL ON TABLE bde.crs_mesh_blk_place FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mesh_blk_place TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_mesh_blk_place TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_network_plan
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_network_plan (
+CREATE TABLE bde.crs_network_plan (
     id INTEGER NOT NULL,
     type VARCHAR(10) NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -1395,23 +1395,23 @@ CREATE TABLE crs_network_plan (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_network_plan
+ALTER TABLE ONLY bde.crs_network_plan
     ADD CONSTRAINT pkey_crs_network_plan PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_network_plan
+ALTER TABLE ONLY bde.crs_network_plan
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_network_plan OWNER TO bde_dba;
+ALTER TABLE bde.crs_network_plan OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_network_plan FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_network_plan TO bde_admin;
-GRANT SELECT ON TABLE crs_network_plan TO bde_user;
+REVOKE ALL ON TABLE bde.crs_network_plan FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_network_plan TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_network_plan TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_node
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_node (
+CREATE TABLE bde.crs_node (
     id INTEGER NOT NULL,
     cos_id_official INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
@@ -1426,53 +1426,53 @@ CREATE TABLE crs_node (
 
 PERFORM AddGeometryColumn('crs_node', 'shape', 4167, 'POINT', 2);
 
-ALTER TABLE ONLY crs_node
+ALTER TABLE ONLY bde.crs_node
     ADD CONSTRAINT pkey_crs_node PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_node
+ALTER TABLE ONLY bde.crs_node
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_node ALTER COLUMN alt_id SET STATISTICS 1000;
-ALTER TABLE crs_node ALTER COLUMN audit_id SET STATISTICS 1000;
-ALTER TABLE crs_node ALTER COLUMN cos_id_official SET STATISTICS 1000;
-ALTER TABLE crs_node ALTER COLUMN id SET STATISTICS 1000;
-ALTER TABLE crs_node ALTER COLUMN sit_id SET STATISTICS 1000;
-ALTER TABLE crs_node ALTER COLUMN wrk_id_created SET STATISTICS 1000;
+ALTER TABLE bde.crs_node ALTER COLUMN alt_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_node ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_node ALTER COLUMN cos_id_official SET STATISTICS 1000;
+ALTER TABLE bde.crs_node ALTER COLUMN id SET STATISTICS 1000;
+ALTER TABLE bde.crs_node ALTER COLUMN sit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_node ALTER COLUMN wrk_id_created SET STATISTICS 1000;
 
-ALTER TABLE crs_node OWNER TO bde_dba;
+ALTER TABLE bde.crs_node OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_node FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_node TO bde_admin;
-GRANT SELECT ON TABLE crs_node TO bde_user;
+REVOKE ALL ON TABLE bde.crs_node FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_node TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_node TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_node_prp_order
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_node_prp_order (
+CREATE TABLE bde.crs_node_prp_order (
     dtm_id INTEGER NOT NULL,
     nod_id INTEGER NOT NULL,
     cor_id INTEGER,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_node_prp_order
+ALTER TABLE ONLY bde.crs_node_prp_order
     ADD UNIQUE (dtm_id, nod_id);
 
-ALTER TABLE ONLY crs_node_prp_order
+ALTER TABLE ONLY bde.crs_node_prp_order
     ADD CONSTRAINT pkey_crs_node_prp_order PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_node_prp_order OWNER TO bde_dba;
+ALTER TABLE bde.crs_node_prp_order OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_node_prp_order FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_node_prp_order TO bde_admin;
-GRANT SELECT ON TABLE crs_node_prp_order TO bde_user;
+REVOKE ALL ON TABLE bde.crs_node_prp_order FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_node_prp_order TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_node_prp_order TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_node_works
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_node_works (
+CREATE TABLE bde.crs_node_works (
     nod_id INTEGER NOT NULL,
     wrk_id INTEGER NOT NULL,
     pend_node_status VARCHAR(4),
@@ -1481,27 +1481,27 @@ CREATE TABLE crs_node_works (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_node_works
+ALTER TABLE ONLY bde.crs_node_works
     ADD UNIQUE (nod_id, wrk_id);
 
-ALTER TABLE ONLY crs_node_works
+ALTER TABLE ONLY bde.crs_node_works
     ADD CONSTRAINT pkey_crs_node_works PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_node_works ALTER COLUMN audit_id SET STATISTICS 1000;
-ALTER TABLE crs_node_works ALTER COLUMN nod_id SET STATISTICS 1000;
-ALTER TABLE crs_node_works ALTER COLUMN wrk_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_node_works ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_node_works ALTER COLUMN nod_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_node_works ALTER COLUMN wrk_id SET STATISTICS 1000;
 
-ALTER TABLE crs_node_works OWNER TO bde_dba;
+ALTER TABLE bde.crs_node_works OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_node_works FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_node_works TO bde_admin;
-GRANT SELECT ON TABLE crs_node_works TO bde_user;
+REVOKE ALL ON TABLE bde.crs_node_works FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_node_works TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_node_works TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_nominal_index
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_nominal_index (
+CREATE TABLE bde.crs_nominal_index (
     id INTEGER NOT NULL,
     ttl_title_no VARCHAR(20) NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -1517,27 +1517,27 @@ CREATE TABLE crs_nominal_index (
     system_ext CHAR(1)
 );
 
-ALTER TABLE ONLY crs_nominal_index
+ALTER TABLE ONLY bde.crs_nominal_index
     ADD CONSTRAINT pkey_crs_nominal_index PRIMARY KEY (id);
 
-ALTER TABLE crs_nominal_index ALTER COLUMN corporate_name SET STATISTICS 1000;
-ALTER TABLE crs_nominal_index ALTER COLUMN id SET STATISTICS 1000;
-ALTER TABLE crs_nominal_index ALTER COLUMN other_names SET STATISTICS 1000;
-ALTER TABLE crs_nominal_index ALTER COLUMN prp_id SET STATISTICS 1000;
-ALTER TABLE crs_nominal_index ALTER COLUMN surname SET STATISTICS 1000;
-ALTER TABLE crs_nominal_index ALTER COLUMN ttl_title_no SET STATISTICS 1000;
+ALTER TABLE bde.crs_nominal_index ALTER COLUMN corporate_name SET STATISTICS 1000;
+ALTER TABLE bde.crs_nominal_index ALTER COLUMN id SET STATISTICS 1000;
+ALTER TABLE bde.crs_nominal_index ALTER COLUMN other_names SET STATISTICS 1000;
+ALTER TABLE bde.crs_nominal_index ALTER COLUMN prp_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_nominal_index ALTER COLUMN surname SET STATISTICS 1000;
+ALTER TABLE bde.crs_nominal_index ALTER COLUMN ttl_title_no SET STATISTICS 1000;
 
-ALTER TABLE crs_nominal_index OWNER TO bde_dba;
+ALTER TABLE bde.crs_nominal_index OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_nominal_index FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_nominal_index TO bde_admin;
-GRANT SELECT ON TABLE crs_nominal_index TO bde_user;
+REVOKE ALL ON TABLE bde.crs_nominal_index FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_nominal_index TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_nominal_index TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_obs_accuracy
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_obs_accuracy (
+CREATE TABLE bde.crs_obs_accuracy (
     obn_id1 INTEGER NOT NULL,
     obn_id2 INTEGER NOT NULL,
     value_11 DOUBLE PRECISION,
@@ -1553,28 +1553,28 @@ CREATE TABLE crs_obs_accuracy (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_obs_accuracy
+ALTER TABLE ONLY bde.crs_obs_accuracy
     ADD CONSTRAINT pkey_crs_obs_accuracy PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_obs_accuracy
+ALTER TABLE ONLY bde.crs_obs_accuracy
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_obs_accuracy ALTER COLUMN audit_id SET STATISTICS 1000;
-ALTER TABLE crs_obs_accuracy ALTER COLUMN id SET STATISTICS 1000;
-ALTER TABLE crs_obs_accuracy ALTER COLUMN obn_id1 SET STATISTICS 1000;
-ALTER TABLE crs_obs_accuracy ALTER COLUMN obn_id2 SET STATISTICS 1000;
+ALTER TABLE bde.crs_obs_accuracy ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_obs_accuracy ALTER COLUMN id SET STATISTICS 1000;
+ALTER TABLE bde.crs_obs_accuracy ALTER COLUMN obn_id1 SET STATISTICS 1000;
+ALTER TABLE bde.crs_obs_accuracy ALTER COLUMN obn_id2 SET STATISTICS 1000;
 
-ALTER TABLE crs_obs_accuracy OWNER TO bde_dba;
+ALTER TABLE bde.crs_obs_accuracy OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_obs_accuracy FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_obs_accuracy TO bde_admin;
-GRANT SELECT ON TABLE crs_obs_accuracy TO bde_user;
+REVOKE ALL ON TABLE bde.crs_obs_accuracy FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_obs_accuracy TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_obs_accuracy TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_obs_elem_type
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_obs_elem_type (
+CREATE TABLE bde.crs_obs_elem_type (
     type VARCHAR(4) NOT NULL,
     description VARCHAR(100) NOT NULL,
     uom_code VARCHAR(4) NOT NULL,
@@ -1582,46 +1582,46 @@ CREATE TABLE crs_obs_elem_type (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_obs_elem_type
+ALTER TABLE ONLY bde.crs_obs_elem_type
     ADD UNIQUE (type);
 
-ALTER TABLE ONLY crs_obs_elem_type
+ALTER TABLE ONLY bde.crs_obs_elem_type
     ADD CONSTRAINT pkey_crs_obs_elem_type PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_obs_elem_type OWNER TO bde_dba;
+ALTER TABLE bde.crs_obs_elem_type OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_obs_elem_type FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_obs_elem_type TO bde_admin;
-GRANT SELECT ON TABLE crs_obs_elem_type TO bde_user;
+REVOKE ALL ON TABLE bde.crs_obs_elem_type FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_obs_elem_type TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_obs_elem_type TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_obs_set
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_obs_set (
+CREATE TABLE bde.crs_obs_set (
     id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     reason VARCHAR(100) NOT NULL,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_obs_set
+ALTER TABLE ONLY bde.crs_obs_set
     ADD CONSTRAINT pkey_crs_obs_set PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_obs_set
+ALTER TABLE ONLY bde.crs_obs_set
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_obs_set OWNER TO bde_dba;
+ALTER TABLE bde.crs_obs_set OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_obs_set FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_obs_set TO bde_admin;
-GRANT SELECT ON TABLE crs_obs_set TO bde_user;
+REVOKE ALL ON TABLE bde.crs_obs_set FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_obs_set TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_obs_set TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_obs_type
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_obs_type (
+CREATE TABLE bde.crs_obs_type (
     type VARCHAR(4) NOT NULL,
     sub_type VARCHAR(4) NOT NULL,
     vector_type VARCHAR(4) NOT NULL,
@@ -1635,23 +1635,23 @@ CREATE TABLE crs_obs_type (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_obs_type
+ALTER TABLE ONLY bde.crs_obs_type
     ADD UNIQUE (type, sub_type);
 
-ALTER TABLE ONLY crs_obs_type
+ALTER TABLE ONLY bde.crs_obs_type
     ADD CONSTRAINT pkey_crs_obs_type PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_obs_type OWNER TO bde_dba;
+ALTER TABLE bde.crs_obs_type OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_obs_type FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_obs_type TO bde_admin;
-GRANT SELECT ON TABLE crs_obs_type TO bde_user;
+REVOKE ALL ON TABLE bde.crs_obs_type FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_obs_type TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_obs_type TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_observation
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_observation (
+CREATE TABLE bde.crs_observation (
     id INTEGER NOT NULL,
     obt_type VARCHAR(4),
     obt_sub_type VARCHAR(4),
@@ -1677,35 +1677,35 @@ CREATE TABLE crs_observation (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_observation
+ALTER TABLE ONLY bde.crs_observation
     ADD CONSTRAINT pkey_crs_observation PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_observation
+ALTER TABLE ONLY bde.crs_observation
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_observation ALTER COLUMN audit_id SET STATISTICS 1000;
-ALTER TABLE crs_observation ALTER COLUMN cos_id SET STATISTICS 1000;
-ALTER TABLE crs_observation ALTER COLUMN id SET STATISTICS 1000;
-ALTER TABLE crs_observation ALTER COLUMN obn_id_amendment SET STATISTICS 1000;
-ALTER TABLE crs_observation ALTER COLUMN obs_id SET STATISTICS 1000;
-ALTER TABLE crs_observation ALTER COLUMN obt_sub_type SET STATISTICS 1000;
-ALTER TABLE crs_observation ALTER COLUMN obt_type SET STATISTICS 1000;
-ALTER TABLE crs_observation ALTER COLUMN rdn_id SET STATISTICS 1000;
-ALTER TABLE crs_observation ALTER COLUMN stp_id_local SET STATISTICS 1000;
-ALTER TABLE crs_observation ALTER COLUMN stp_id_remote SET STATISTICS 1000;
-ALTER TABLE crs_observation ALTER COLUMN vct_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_observation ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_observation ALTER COLUMN cos_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_observation ALTER COLUMN id SET STATISTICS 1000;
+ALTER TABLE bde.crs_observation ALTER COLUMN obn_id_amendment SET STATISTICS 1000;
+ALTER TABLE bde.crs_observation ALTER COLUMN obs_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_observation ALTER COLUMN obt_sub_type SET STATISTICS 1000;
+ALTER TABLE bde.crs_observation ALTER COLUMN obt_type SET STATISTICS 1000;
+ALTER TABLE bde.crs_observation ALTER COLUMN rdn_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_observation ALTER COLUMN stp_id_local SET STATISTICS 1000;
+ALTER TABLE bde.crs_observation ALTER COLUMN stp_id_remote SET STATISTICS 1000;
+ALTER TABLE bde.crs_observation ALTER COLUMN vct_id SET STATISTICS 1000;
 
-ALTER TABLE crs_observation OWNER TO bde_dba;
+ALTER TABLE bde.crs_observation OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_observation FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_observation TO bde_admin;
-GRANT SELECT ON TABLE crs_observation TO bde_user;
+REVOKE ALL ON TABLE bde.crs_observation FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_observation TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_observation TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_off_cord_sys
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_off_cord_sys (
+CREATE TABLE bde.crs_off_cord_sys (
     id INTEGER NOT NULL,
     cos_id INTEGER NOT NULL,
     description VARCHAR(100) NOT NULL,
@@ -1715,23 +1715,23 @@ CREATE TABLE crs_off_cord_sys (
 
 PERFORM AddGeometryColumn('crs_off_cord_sys', 'shape', 4167, 'POLYGON', 2);
 
-ALTER TABLE ONLY crs_off_cord_sys
+ALTER TABLE ONLY bde.crs_off_cord_sys
     ADD CONSTRAINT pkey_crs_off_cord_sys PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_off_cord_sys
+ALTER TABLE ONLY bde.crs_off_cord_sys
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_off_cord_sys OWNER TO bde_dba;
+ALTER TABLE bde.crs_off_cord_sys OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_off_cord_sys FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_off_cord_sys TO bde_admin;
-GRANT SELECT ON TABLE crs_off_cord_sys TO bde_user;
+REVOKE ALL ON TABLE bde.crs_off_cord_sys FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_off_cord_sys TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_off_cord_sys TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_office
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_office (
+CREATE TABLE bde.crs_office (
     code VARCHAR(4) NOT NULL,
     name VARCHAR(50) NOT NULL,
     rcs_name VARCHAR(50) NOT NULL,
@@ -1753,23 +1753,23 @@ CREATE TABLE crs_office (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_office
+ALTER TABLE ONLY bde.crs_office
     ADD UNIQUE (code);
 
-ALTER TABLE ONLY crs_office
+ALTER TABLE ONLY bde.crs_office
     ADD CONSTRAINT pkey_crs_office PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_office OWNER TO bde_dba;
+ALTER TABLE bde.crs_office OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_office FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_office TO bde_admin;
-GRANT SELECT ON TABLE crs_office TO bde_user;
+REVOKE ALL ON TABLE bde.crs_office FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_office TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_office TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ordinate_adj
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_ordinate_adj (
+CREATE TABLE bde.crs_ordinate_adj (
     adj_id INTEGER NOT NULL,
     coo_id_source INTEGER NOT NULL,
     sdc_status_prop CHAR(1) NOT NULL,
@@ -1788,28 +1788,28 @@ CREATE TABLE crs_ordinate_adj (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_ordinate_adj
+ALTER TABLE ONLY bde.crs_ordinate_adj
     ADD UNIQUE (coo_id_source, adj_id);
 
-ALTER TABLE ONLY crs_ordinate_adj
+ALTER TABLE ONLY bde.crs_ordinate_adj
     ADD CONSTRAINT pkey_crs_ordinate_adj PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_ordinate_adj ALTER COLUMN adj_id SET STATISTICS 1000;
-ALTER TABLE crs_ordinate_adj ALTER COLUMN coo_id_output SET STATISTICS 1000;
-ALTER TABLE crs_ordinate_adj ALTER COLUMN coo_id_source SET STATISTICS 1000;
-ALTER TABLE crs_ordinate_adj ALTER COLUMN cor_id_prop SET STATISTICS 1000;
+ALTER TABLE bde.crs_ordinate_adj ALTER COLUMN adj_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_ordinate_adj ALTER COLUMN coo_id_output SET STATISTICS 1000;
+ALTER TABLE bde.crs_ordinate_adj ALTER COLUMN coo_id_source SET STATISTICS 1000;
+ALTER TABLE bde.crs_ordinate_adj ALTER COLUMN cor_id_prop SET STATISTICS 1000;
 
-ALTER TABLE crs_ordinate_adj OWNER TO bde_dba;
+ALTER TABLE bde.crs_ordinate_adj OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_ordinate_adj FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_ordinate_adj TO bde_admin;
-GRANT SELECT ON TABLE crs_ordinate_adj TO bde_user;
+REVOKE ALL ON TABLE bde.crs_ordinate_adj FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ordinate_adj TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_ordinate_adj TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ordinate_type
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_ordinate_type (
+CREATE TABLE bde.crs_ordinate_type (
     type VARCHAR(4) NOT NULL,
     uom_code VARCHAR(4) NOT NULL,
     description VARCHAR(100) NOT NULL,
@@ -1818,23 +1818,23 @@ CREATE TABLE crs_ordinate_type (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_ordinate_type
+ALTER TABLE ONLY bde.crs_ordinate_type
     ADD UNIQUE (type);
 
-ALTER TABLE ONLY crs_ordinate_type
+ALTER TABLE ONLY bde.crs_ordinate_type
     ADD CONSTRAINT pkey_crs_ordinate_type PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_ordinate_type OWNER TO bde_dba;
+ALTER TABLE bde.crs_ordinate_type OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_ordinate_type FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_ordinate_type TO bde_admin;
-GRANT SELECT ON TABLE crs_ordinate_type TO bde_user;
+REVOKE ALL ON TABLE bde.crs_ordinate_type FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ordinate_type TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_ordinate_type TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_parcel (
+CREATE TABLE bde.crs_parcel (
     id INTEGER NOT NULL,
     ldt_loc_id INTEGER NOT NULL,
     img_id INTEGER,
@@ -1854,31 +1854,31 @@ CREATE TABLE crs_parcel (
 
 PERFORM AddGeometryColumn('crs_parcel', 'shape', 4167, 'GEOMETRY', 2);
 
-ALTER TABLE ONLY crs_parcel
+ALTER TABLE ONLY bde.crs_parcel
     ADD CONSTRAINT pkey_crs_parcel PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_parcel
+ALTER TABLE ONLY bde.crs_parcel
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_parcel ALTER COLUMN alt_id SET STATISTICS 500;
-ALTER TABLE crs_parcel ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_parcel ALTER COLUMN fen_id SET STATISTICS 500;
-ALTER TABLE crs_parcel ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE crs_parcel ALTER COLUMN img_id SET STATISTICS 500;
-ALTER TABLE crs_parcel ALTER COLUMN ldt_loc_id SET STATISTICS 500;
-ALTER TABLE crs_parcel ALTER COLUMN toc_code SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel ALTER COLUMN alt_id SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel ALTER COLUMN fen_id SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel ALTER COLUMN img_id SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel ALTER COLUMN ldt_loc_id SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel ALTER COLUMN toc_code SET STATISTICS 500;
 
-ALTER TABLE crs_parcel OWNER TO bde_dba;
+ALTER TABLE bde.crs_parcel OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_parcel FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_parcel TO bde_admin;
-GRANT SELECT ON TABLE crs_parcel TO bde_user;
+REVOKE ALL ON TABLE bde.crs_parcel FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_parcel TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_parcel TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel_bndry
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_parcel_bndry (
+CREATE TABLE bde.crs_parcel_bndry (
     pri_id INTEGER NOT NULL,
     sequence INTEGER NOT NULL,
     lin_id INTEGER NOT NULL,
@@ -1886,53 +1886,53 @@ CREATE TABLE crs_parcel_bndry (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_parcel_bndry
+ALTER TABLE ONLY bde.crs_parcel_bndry
     ADD UNIQUE (pri_id, sequence);
 
-ALTER TABLE ONLY crs_parcel_bndry
+ALTER TABLE ONLY bde.crs_parcel_bndry
     ADD CONSTRAINT pkey_crs_parcel_bndry PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_parcel_bndry ALTER COLUMN audit_id SET STATISTICS 1000;
-ALTER TABLE crs_parcel_bndry ALTER COLUMN lin_id SET STATISTICS 1000;
-ALTER TABLE crs_parcel_bndry ALTER COLUMN pri_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_parcel_bndry ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_parcel_bndry ALTER COLUMN lin_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_parcel_bndry ALTER COLUMN pri_id SET STATISTICS 1000;
 
-ALTER TABLE crs_parcel_bndry OWNER TO bde_dba;
+ALTER TABLE bde.crs_parcel_bndry OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_parcel_bndry FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_parcel_bndry TO bde_admin;
-GRANT SELECT ON TABLE crs_parcel_bndry TO bde_user;
+REVOKE ALL ON TABLE bde.crs_parcel_bndry FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_parcel_bndry TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_parcel_bndry TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel_dimen
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_parcel_dimen (
+CREATE TABLE bde.crs_parcel_dimen (
     obn_id INTEGER NOT NULL,
     par_id INTEGER NOT NULL,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_parcel_dimen
+ALTER TABLE ONLY bde.crs_parcel_dimen
     ADD UNIQUE (obn_id, par_id);
 
-ALTER TABLE ONLY crs_parcel_dimen
+ALTER TABLE ONLY bde.crs_parcel_dimen
     ADD CONSTRAINT pkey_crs_parcel_dimen PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_parcel_dimen ALTER COLUMN audit_id SET STATISTICS 1000;
-ALTER TABLE crs_parcel_dimen ALTER COLUMN obn_id SET STATISTICS 1000;
-ALTER TABLE crs_parcel_dimen ALTER COLUMN par_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_parcel_dimen ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_parcel_dimen ALTER COLUMN obn_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_parcel_dimen ALTER COLUMN par_id SET STATISTICS 1000;
 
-ALTER TABLE crs_parcel_dimen OWNER TO bde_dba;
+ALTER TABLE bde.crs_parcel_dimen OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_parcel_dimen FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_parcel_dimen TO bde_admin;
-GRANT SELECT ON TABLE crs_parcel_dimen TO bde_user;
+REVOKE ALL ON TABLE bde.crs_parcel_dimen FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_parcel_dimen TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_parcel_dimen TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel_label
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_parcel_label (
+CREATE TABLE bde.crs_parcel_label (
     id INTEGER NOT NULL,
     par_id INTEGER NOT NULL,
     audit_id INTEGER NOT NULL,
@@ -1941,27 +1941,27 @@ CREATE TABLE crs_parcel_label (
 
 PERFORM AddGeometryColumn('crs_parcel_label', 'shape', 4167, 'POINT', 2);
 
-ALTER TABLE ONLY crs_parcel_label
+ALTER TABLE ONLY bde.crs_parcel_label
     ADD CONSTRAINT pkey_crs_parcel_label PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_parcel_label
+ALTER TABLE ONLY bde.crs_parcel_label
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_parcel_label ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_parcel_label ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE crs_parcel_label ALTER COLUMN par_id SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel_label ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel_label ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel_label ALTER COLUMN par_id SET STATISTICS 500;
 
-ALTER TABLE crs_parcel_label OWNER TO bde_dba;
+ALTER TABLE bde.crs_parcel_label OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_parcel_label FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_parcel_label TO bde_admin;
-GRANT SELECT ON TABLE crs_parcel_label TO bde_user;
+REVOKE ALL ON TABLE bde.crs_parcel_label FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_parcel_label TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_parcel_label TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel_ring
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_parcel_ring (
+CREATE TABLE bde.crs_parcel_ring (
     id INTEGER NOT NULL,
     par_id INTEGER NOT NULL,
     pri_id_parent_ring INTEGER,
@@ -1969,28 +1969,28 @@ CREATE TABLE crs_parcel_ring (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_parcel_ring
+ALTER TABLE ONLY bde.crs_parcel_ring
     ADD CONSTRAINT pkey_crs_parcel_ring PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_parcel_ring
+ALTER TABLE ONLY bde.crs_parcel_ring
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_parcel_ring ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_parcel_ring ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE crs_parcel_ring ALTER COLUMN par_id SET STATISTICS 500;
-ALTER TABLE crs_parcel_ring ALTER COLUMN pri_id_parent_ring SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel_ring ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel_ring ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel_ring ALTER COLUMN par_id SET STATISTICS 500;
+ALTER TABLE bde.crs_parcel_ring ALTER COLUMN pri_id_parent_ring SET STATISTICS 500;
 
-ALTER TABLE crs_parcel_ring OWNER TO bde_dba;
+ALTER TABLE bde.crs_parcel_ring OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_parcel_ring FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_parcel_ring TO bde_admin;
-GRANT SELECT ON TABLE crs_parcel_ring TO bde_user;
+REVOKE ALL ON TABLE bde.crs_parcel_ring FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_parcel_ring TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_parcel_ring TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_programme
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_programme (
+CREATE TABLE bde.crs_programme (
     status VARCHAR(4) NOT NULL,
     type VARCHAR(4) NOT NULL,
     account_id VARCHAR(20),
@@ -2005,23 +2005,23 @@ CREATE TABLE crs_programme (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_programme
+ALTER TABLE ONLY bde.crs_programme
     ADD CONSTRAINT pkey_crs_programme PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_programme
+ALTER TABLE ONLY bde.crs_programme
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_programme OWNER TO bde_dba;
+ALTER TABLE bde.crs_programme OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_programme FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_programme TO bde_admin;
-GRANT SELECT ON TABLE crs_programme TO bde_user;
+REVOKE ALL ON TABLE bde.crs_programme FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_programme TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_programme TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_proprietor
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_proprietor (
+CREATE TABLE bde.crs_proprietor (
     id INTEGER NOT NULL,
     ets_id INTEGER NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -2037,23 +2037,23 @@ CREATE TABLE crs_proprietor (
     system_ext CHAR(1)
 );
 
-ALTER TABLE ONLY crs_proprietor
+ALTER TABLE ONLY bde.crs_proprietor
     ADD CONSTRAINT pkey_crs_proprietor PRIMARY KEY (id);
 
-ALTER TABLE crs_proprietor ALTER COLUMN ets_id SET STATISTICS 500;
-ALTER TABLE crs_proprietor ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_proprietor ALTER COLUMN ets_id SET STATISTICS 500;
+ALTER TABLE bde.crs_proprietor ALTER COLUMN id SET STATISTICS 500;
 
-ALTER TABLE crs_proprietor OWNER TO bde_dba;
+ALTER TABLE bde.crs_proprietor OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_proprietor FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_proprietor TO bde_admin;
-GRANT SELECT ON TABLE crs_proprietor TO bde_user;
+REVOKE ALL ON TABLE bde.crs_proprietor FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_proprietor TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_proprietor TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_reduct_meth
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_reduct_meth (
+CREATE TABLE bde.crs_reduct_meth (
     id INTEGER NOT NULL,
     status VARCHAR(4) NOT NULL,
     description VARCHAR(100) NOT NULL,
@@ -2061,23 +2061,23 @@ CREATE TABLE crs_reduct_meth (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_reduct_meth
+ALTER TABLE ONLY bde.crs_reduct_meth
     ADD CONSTRAINT pkey_crs_reduct_meth PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_reduct_meth
+ALTER TABLE ONLY bde.crs_reduct_meth
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_reduct_meth OWNER TO bde_dba;
+ALTER TABLE bde.crs_reduct_meth OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_reduct_meth FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_reduct_meth TO bde_admin;
-GRANT SELECT ON TABLE crs_reduct_meth TO bde_user;
+REVOKE ALL ON TABLE bde.crs_reduct_meth FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_reduct_meth TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_reduct_meth TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_reduct_run
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_reduct_run (
+CREATE TABLE bde.crs_reduct_run (
     id INTEGER NOT NULL,
     rdm_id INTEGER NOT NULL,
     datetime TIMESTAMP,
@@ -2088,50 +2088,50 @@ CREATE TABLE crs_reduct_run (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_reduct_run
+ALTER TABLE ONLY bde.crs_reduct_run
     ADD CONSTRAINT pkey_crs_reduct_run PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_reduct_run
+ALTER TABLE ONLY bde.crs_reduct_run
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_reduct_run OWNER TO bde_dba;
+ALTER TABLE bde.crs_reduct_run OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_reduct_run FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_reduct_run TO bde_admin;
-GRANT SELECT ON TABLE crs_reduct_run TO bde_user;
+REVOKE ALL ON TABLE bde.crs_reduct_run FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_reduct_run TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_reduct_run TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ref_survey
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_ref_survey (
+CREATE TABLE bde.crs_ref_survey (
     sur_wrk_id_exist INTEGER NOT NULL,
     sur_wrk_id_new INTEGER NOT NULL,
     bearing_corr DECIMAL(16),
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_ref_survey
+ALTER TABLE ONLY bde.crs_ref_survey
     ADD UNIQUE (sur_wrk_id_exist, sur_wrk_id_new);
 
-ALTER TABLE ONLY crs_ref_survey
+ALTER TABLE ONLY bde.crs_ref_survey
     ADD CONSTRAINT pkey_crs_ref_survey PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_ref_survey ALTER COLUMN audit_id SET STATISTICS 250;
-ALTER TABLE crs_ref_survey ALTER COLUMN sur_wrk_id_exist SET STATISTICS 250;
-ALTER TABLE crs_ref_survey ALTER COLUMN sur_wrk_id_new SET STATISTICS 250;
+ALTER TABLE bde.crs_ref_survey ALTER COLUMN audit_id SET STATISTICS 250;
+ALTER TABLE bde.crs_ref_survey ALTER COLUMN sur_wrk_id_exist SET STATISTICS 250;
+ALTER TABLE bde.crs_ref_survey ALTER COLUMN sur_wrk_id_new SET STATISTICS 250;
 
-ALTER TABLE crs_ref_survey OWNER TO bde_dba;
+ALTER TABLE bde.crs_ref_survey OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_ref_survey FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_ref_survey TO bde_admin;
-GRANT SELECT ON TABLE crs_ref_survey TO bde_user;
+REVOKE ALL ON TABLE bde.crs_ref_survey FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ref_survey TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_ref_survey TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_road_ctr_line
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_road_ctr_line (
+CREATE TABLE bde.crs_road_ctr_line (
     id INTEGER NOT NULL,
     alt_id INTEGER,
     status VARCHAR(4) NOT NULL,
@@ -2142,27 +2142,27 @@ CREATE TABLE crs_road_ctr_line (
 
 PERFORM AddGeometryColumn('crs_road_ctr_line', 'shape', 4167, 'LINESTRING', 2);
 
-ALTER TABLE ONLY crs_road_ctr_line
+ALTER TABLE ONLY bde.crs_road_ctr_line
     ADD CONSTRAINT pkey_crs_road_ctr_line PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_road_ctr_line
+ALTER TABLE ONLY bde.crs_road_ctr_line
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_road_ctr_line ALTER COLUMN alt_id SET STATISTICS 250;
-ALTER TABLE crs_road_ctr_line ALTER COLUMN audit_id SET STATISTICS 250;
-ALTER TABLE crs_road_ctr_line ALTER COLUMN id SET STATISTICS 250;
+ALTER TABLE bde.crs_road_ctr_line ALTER COLUMN alt_id SET STATISTICS 250;
+ALTER TABLE bde.crs_road_ctr_line ALTER COLUMN audit_id SET STATISTICS 250;
+ALTER TABLE bde.crs_road_ctr_line ALTER COLUMN id SET STATISTICS 250;
 
-ALTER TABLE crs_road_ctr_line OWNER TO bde_dba;
+ALTER TABLE bde.crs_road_ctr_line OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_road_ctr_line FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_road_ctr_line TO bde_admin;
-GRANT SELECT ON TABLE crs_road_ctr_line TO bde_user;
+REVOKE ALL ON TABLE bde.crs_road_ctr_line FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_road_ctr_line TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_road_ctr_line TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_road_name
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_road_name (
+CREATE TABLE bde.crs_road_name (
     id INTEGER NOT NULL,
     alt_id INTEGER,
     type VARCHAR(4) NOT NULL,
@@ -2174,23 +2174,23 @@ CREATE TABLE crs_road_name (
     sufi INTEGER
 );
 
-ALTER TABLE ONLY crs_road_name
+ALTER TABLE ONLY bde.crs_road_name
     ADD CONSTRAINT pkey_crs_road_name PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_road_name
+ALTER TABLE ONLY bde.crs_road_name
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_road_name OWNER TO bde_dba;
+ALTER TABLE bde.crs_road_name OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_road_name FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_road_name TO bde_admin;
-GRANT SELECT ON TABLE crs_road_name TO bde_user;
+REVOKE ALL ON TABLE bde.crs_road_name FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_road_name TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_road_name TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_road_name_asc
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_road_name_asc (
+CREATE TABLE bde.crs_road_name_asc (
     rna_id INTEGER NOT NULL,
     rcl_id INTEGER NOT NULL,
     alt_id INTEGER,
@@ -2198,28 +2198,28 @@ CREATE TABLE crs_road_name_asc (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_road_name_asc
+ALTER TABLE ONLY bde.crs_road_name_asc
     ADD UNIQUE (rna_id, rcl_id);
 
-ALTER TABLE ONLY crs_road_name_asc
+ALTER TABLE ONLY bde.crs_road_name_asc
     ADD CONSTRAINT pkey_crs_road_name_asc PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_road_name_asc ALTER COLUMN alt_id SET STATISTICS 250;
-ALTER TABLE crs_road_name_asc ALTER COLUMN audit_id SET STATISTICS 250;
-ALTER TABLE crs_road_name_asc ALTER COLUMN rcl_id SET STATISTICS 250;
-ALTER TABLE crs_road_name_asc ALTER COLUMN rna_id SET STATISTICS 250;
+ALTER TABLE bde.crs_road_name_asc ALTER COLUMN alt_id SET STATISTICS 250;
+ALTER TABLE bde.crs_road_name_asc ALTER COLUMN audit_id SET STATISTICS 250;
+ALTER TABLE bde.crs_road_name_asc ALTER COLUMN rcl_id SET STATISTICS 250;
+ALTER TABLE bde.crs_road_name_asc ALTER COLUMN rna_id SET STATISTICS 250;
 
-ALTER TABLE crs_road_name_asc OWNER TO bde_dba;
+ALTER TABLE bde.crs_road_name_asc OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_road_name_asc FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_road_name_asc TO bde_admin;
-GRANT SELECT ON TABLE crs_road_name_asc TO bde_user;
+REVOKE ALL ON TABLE bde.crs_road_name_asc FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_road_name_asc TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_road_name_asc TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_setup
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_setup (
+CREATE TABLE bde.crs_setup (
     id INTEGER NOT NULL,
     nod_id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
@@ -2229,29 +2229,29 @@ CREATE TABLE crs_setup (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_setup
+ALTER TABLE ONLY bde.crs_setup
     ADD CONSTRAINT pkey_crs_setup PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_setup
+ALTER TABLE ONLY bde.crs_setup
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_setup ALTER COLUMN audit_id SET STATISTICS 1000;
-ALTER TABLE crs_setup ALTER COLUMN equipment_type SET STATISTICS 1000;
-ALTER TABLE crs_setup ALTER COLUMN id SET STATISTICS 1000;
-ALTER TABLE crs_setup ALTER COLUMN nod_id SET STATISTICS 1000;
-ALTER TABLE crs_setup ALTER COLUMN wrk_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_setup ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_setup ALTER COLUMN equipment_type SET STATISTICS 1000;
+ALTER TABLE bde.crs_setup ALTER COLUMN id SET STATISTICS 1000;
+ALTER TABLE bde.crs_setup ALTER COLUMN nod_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_setup ALTER COLUMN wrk_id SET STATISTICS 1000;
 
-ALTER TABLE crs_setup OWNER TO bde_dba;
+ALTER TABLE bde.crs_setup OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_setup FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_setup TO bde_admin;
-GRANT SELECT ON TABLE crs_setup TO bde_user;
+REVOKE ALL ON TABLE bde.crs_setup FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_setup TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_setup TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_site
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_site (
+CREATE TABLE bde.crs_site (
     id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     "desc" VARCHAR(2048),
@@ -2260,53 +2260,53 @@ CREATE TABLE crs_site (
     wrk_id_created INTEGER
 );
 
-ALTER TABLE ONLY crs_site
+ALTER TABLE ONLY bde.crs_site
     ADD CONSTRAINT pkey_crs_site PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_site
+ALTER TABLE ONLY bde.crs_site
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_site ALTER COLUMN audit_id SET STATISTICS 250;
-ALTER TABLE crs_site ALTER COLUMN id SET STATISTICS 250;
-ALTER TABLE crs_site ALTER COLUMN wrk_id_created SET STATISTICS 250;
+ALTER TABLE bde.crs_site ALTER COLUMN audit_id SET STATISTICS 250;
+ALTER TABLE bde.crs_site ALTER COLUMN id SET STATISTICS 250;
+ALTER TABLE bde.crs_site ALTER COLUMN wrk_id_created SET STATISTICS 250;
 
-ALTER TABLE crs_site OWNER TO bde_dba;
+ALTER TABLE bde.crs_site OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_site FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_site TO bde_admin;
-GRANT SELECT ON TABLE crs_site TO bde_user;
+REVOKE ALL ON TABLE bde.crs_site FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_site TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_site TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_site_locality
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_site_locality (
+CREATE TABLE bde.crs_site_locality (
     sit_id INTEGER NOT NULL,
     loc_id INTEGER NOT NULL,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_site_locality
+ALTER TABLE ONLY bde.crs_site_locality
     ADD UNIQUE (sit_id, loc_id);
 
-ALTER TABLE ONLY crs_site_locality
+ALTER TABLE ONLY bde.crs_site_locality
     ADD CONSTRAINT pkey_crs_site_locality PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_site_locality ALTER COLUMN audit_id SET STATISTICS 250;
-ALTER TABLE crs_site_locality ALTER COLUMN loc_id SET STATISTICS 250;
-ALTER TABLE crs_site_locality ALTER COLUMN sit_id SET STATISTICS 250;
+ALTER TABLE bde.crs_site_locality ALTER COLUMN audit_id SET STATISTICS 250;
+ALTER TABLE bde.crs_site_locality ALTER COLUMN loc_id SET STATISTICS 250;
+ALTER TABLE bde.crs_site_locality ALTER COLUMN sit_id SET STATISTICS 250;
 
-ALTER TABLE crs_site_locality OWNER TO bde_dba;
+ALTER TABLE bde.crs_site_locality OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_site_locality FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_site_locality TO bde_admin;
-GRANT SELECT ON TABLE crs_site_locality TO bde_user;
+REVOKE ALL ON TABLE bde.crs_site_locality FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_site_locality TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_site_locality TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_stat_act_parcl
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_stat_act_parcl (
+CREATE TABLE bde.crs_stat_act_parcl (
     sta_id INTEGER NOT NULL,
     par_id INTEGER NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -2317,26 +2317,26 @@ CREATE TABLE crs_stat_act_parcl (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_stat_act_parcl
+ALTER TABLE ONLY bde.crs_stat_act_parcl
     ADD UNIQUE (sta_id, par_id);
 
-ALTER TABLE ONLY crs_stat_act_parcl
+ALTER TABLE ONLY bde.crs_stat_act_parcl
     ADD CONSTRAINT pkey_crs_stat_act_parcl PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_stat_act_parcl ALTER COLUMN par_id SET STATISTICS 250;
-ALTER TABLE crs_stat_act_parcl ALTER COLUMN sta_id SET STATISTICS 250;
+ALTER TABLE bde.crs_stat_act_parcl ALTER COLUMN par_id SET STATISTICS 250;
+ALTER TABLE bde.crs_stat_act_parcl ALTER COLUMN sta_id SET STATISTICS 250;
 
-ALTER TABLE crs_stat_act_parcl OWNER TO bde_dba;
+ALTER TABLE bde.crs_stat_act_parcl OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_stat_act_parcl FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_stat_act_parcl TO bde_admin;
-GRANT SELECT ON TABLE crs_stat_act_parcl TO bde_user;
+REVOKE ALL ON TABLE bde.crs_stat_act_parcl FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_stat_act_parcl TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_stat_act_parcl TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_stat_version
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_stat_version (
+CREATE TABLE bde.crs_stat_version (
     version INTEGER NOT NULL,
     area_class VARCHAR(4) NOT NULL,
     "desc" VARCHAR(50),
@@ -2346,23 +2346,23 @@ CREATE TABLE crs_stat_version (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_stat_version
+ALTER TABLE ONLY bde.crs_stat_version
     ADD UNIQUE (version, area_class);
 
-ALTER TABLE ONLY crs_stat_version
+ALTER TABLE ONLY bde.crs_stat_version
     ADD CONSTRAINT pkey_crs_stat_version PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_stat_version OWNER TO bde_dba;
+ALTER TABLE bde.crs_stat_version OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_stat_version FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_stat_version TO bde_admin;
-GRANT SELECT ON TABLE crs_stat_version TO bde_user;
+REVOKE ALL ON TABLE bde.crs_stat_version FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_stat_version TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_stat_version TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_statist_area
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_statist_area (
+CREATE TABLE bde.crs_statist_area (
     id INTEGER NOT NULL,
     name VARCHAR(100) NOT NULL,
     name_abrev VARCHAR(18) NOT NULL,
@@ -2378,23 +2378,23 @@ CREATE TABLE crs_statist_area (
 
 PERFORM AddGeometryColumn('crs_statist_area', 'shape', 4167, 'MULTIPOLYGON', 2);
 
-ALTER TABLE ONLY crs_statist_area
+ALTER TABLE ONLY bde.crs_statist_area
     ADD CONSTRAINT pkey_crs_statist_area PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_statist_area
+ALTER TABLE ONLY bde.crs_statist_area
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_statist_area OWNER TO bde_dba;
+ALTER TABLE bde.crs_statist_area OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_statist_area FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_statist_area TO bde_admin;
-GRANT SELECT ON TABLE crs_statist_area TO bde_user;
+REVOKE ALL ON TABLE bde.crs_statist_area FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_statist_area TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_statist_area TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_statute
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_statute  (
+CREATE TABLE bde.crs_statute  (
     id INTEGER NOT NULL,
     section VARCHAR(100) NOT NULL,
     name_and_date VARCHAR(200) NOT NULL,
@@ -2406,23 +2406,23 @@ CREATE TABLE crs_statute  (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_statute
+ALTER TABLE ONLY bde.crs_statute
     ADD CONSTRAINT pkey_crs_statute PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_statute
+ALTER TABLE ONLY bde.crs_statute
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_statute OWNER TO bde_dba;
+ALTER TABLE bde.crs_statute OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_statute FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_statute TO bde_admin;
-GRANT SELECT ON TABLE crs_statute TO bde_user;
+REVOKE ALL ON TABLE bde.crs_statute FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_statute TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_statute TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_statute_action
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_statute_action (
+CREATE TABLE bde.crs_statute_action (
     type VARCHAR(4) NOT NULL,
     status VARCHAR(4),
     ste_id INTEGER,
@@ -2437,28 +2437,28 @@ CREATE TABLE crs_statute_action (
     gazette_notice_id INTEGER
 );
 
-ALTER TABLE ONLY crs_statute_action
+ALTER TABLE ONLY bde.crs_statute_action
     ADD CONSTRAINT pkey_crs_statute_action PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_statute_action
+ALTER TABLE ONLY bde.crs_statute_action
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_statute_action ALTER COLUMN audit_id SET STATISTICS 250;
-ALTER TABLE crs_statute_action ALTER COLUMN id SET STATISTICS 250;
-ALTER TABLE crs_statute_action ALTER COLUMN ste_id SET STATISTICS 250;
-ALTER TABLE crs_statute_action ALTER COLUMN sur_wrk_id_vesting SET STATISTICS 250;
+ALTER TABLE bde.crs_statute_action ALTER COLUMN audit_id SET STATISTICS 250;
+ALTER TABLE bde.crs_statute_action ALTER COLUMN id SET STATISTICS 250;
+ALTER TABLE bde.crs_statute_action ALTER COLUMN ste_id SET STATISTICS 250;
+ALTER TABLE bde.crs_statute_action ALTER COLUMN sur_wrk_id_vesting SET STATISTICS 250;
 
-ALTER TABLE crs_statute_action OWNER TO bde_dba;
+ALTER TABLE bde.crs_statute_action OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_statute_action FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_statute_action TO bde_admin;
-GRANT SELECT ON TABLE crs_statute_action TO bde_user;
+REVOKE ALL ON TABLE bde.crs_statute_action FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_statute_action TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_statute_action TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_street_address
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_street_address (
+CREATE TABLE bde.crs_street_address (
     house_number VARCHAR(25) NOT NULL,
     range_low INTEGER NOT NULL,
     range_high INTEGER,
@@ -2477,29 +2477,29 @@ CREATE TABLE crs_street_address (
 
 PERFORM AddGeometryColumn('crs_street_address', 'shape', 4167, 'POINT', 2);
 
-ALTER TABLE ONLY crs_street_address
+ALTER TABLE ONLY bde.crs_street_address
     ADD CONSTRAINT pkey_crs_street_address PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_street_address
+ALTER TABLE ONLY bde.crs_street_address
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_street_address ALTER COLUMN alt_id SET STATISTICS 500;
-ALTER TABLE crs_street_address ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_street_address ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE crs_street_address ALTER COLUMN rcl_id SET STATISTICS 500;
-ALTER TABLE crs_street_address ALTER COLUMN rna_id SET STATISTICS 500;
+ALTER TABLE bde.crs_street_address ALTER COLUMN alt_id SET STATISTICS 500;
+ALTER TABLE bde.crs_street_address ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_street_address ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_street_address ALTER COLUMN rcl_id SET STATISTICS 500;
+ALTER TABLE bde.crs_street_address ALTER COLUMN rna_id SET STATISTICS 500;
 
-ALTER TABLE crs_street_address OWNER TO bde_dba;
+ALTER TABLE bde.crs_street_address OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_street_address FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_street_address TO bde_admin;
-GRANT SELECT ON TABLE crs_street_address TO bde_user;
+REVOKE ALL ON TABLE bde.crs_street_address FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_street_address TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_street_address TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_sur_admin_area
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_sur_admin_area (
+CREATE TABLE bde.crs_sur_admin_area (
     sur_wrk_id INTEGER NOT NULL,
     stt_id INTEGER NOT NULL,
     xstt_id INTEGER,
@@ -2507,29 +2507,29 @@ CREATE TABLE crs_sur_admin_area (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_sur_admin_area
+ALTER TABLE ONLY bde.crs_sur_admin_area
     ADD UNIQUE (sur_wrk_id, stt_id);
 
-ALTER TABLE ONLY crs_sur_admin_area
+ALTER TABLE ONLY bde.crs_sur_admin_area
     ADD CONSTRAINT pkey_crs_sur_admin_area PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_sur_admin_area ALTER COLUMN audit_id SET STATISTICS 250;
-ALTER TABLE crs_sur_admin_area ALTER COLUMN eed_req_id SET STATISTICS 250;
-ALTER TABLE crs_sur_admin_area ALTER COLUMN stt_id SET STATISTICS 250;
-ALTER TABLE crs_sur_admin_area ALTER COLUMN sur_wrk_id SET STATISTICS 250;
-ALTER TABLE crs_sur_admin_area ALTER COLUMN xstt_id SET STATISTICS 250;
+ALTER TABLE bde.crs_sur_admin_area ALTER COLUMN audit_id SET STATISTICS 250;
+ALTER TABLE bde.crs_sur_admin_area ALTER COLUMN eed_req_id SET STATISTICS 250;
+ALTER TABLE bde.crs_sur_admin_area ALTER COLUMN stt_id SET STATISTICS 250;
+ALTER TABLE bde.crs_sur_admin_area ALTER COLUMN sur_wrk_id SET STATISTICS 250;
+ALTER TABLE bde.crs_sur_admin_area ALTER COLUMN xstt_id SET STATISTICS 250;
 
-ALTER TABLE crs_sur_admin_area OWNER TO bde_dba;
+ALTER TABLE bde.crs_sur_admin_area OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_sur_admin_area FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_sur_admin_area TO bde_admin;
-GRANT SELECT ON TABLE crs_sur_admin_area TO bde_user;
+REVOKE ALL ON TABLE bde.crs_sur_admin_area FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_sur_admin_area TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_sur_admin_area TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_sur_plan_ref
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_sur_plan_ref (
+CREATE TABLE bde.crs_sur_plan_ref (
     id INTEGER NOT NULL,
     wrk_id INTEGER,
     se_row_id INTEGER
@@ -2537,23 +2537,23 @@ CREATE TABLE crs_sur_plan_ref (
 
 PERFORM AddGeometryColumn('crs_sur_plan_ref', 'shape', 4167, 'POINT', 2);
 
-ALTER TABLE ONLY crs_sur_plan_ref
+ALTER TABLE ONLY bde.crs_sur_plan_ref
     ADD CONSTRAINT pkey_crs_sur_plan_ref PRIMARY KEY (id);
 
-ALTER TABLE crs_sur_plan_ref ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE crs_sur_plan_ref ALTER COLUMN wrk_id SET STATISTICS 500;
+ALTER TABLE bde.crs_sur_plan_ref ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_sur_plan_ref ALTER COLUMN wrk_id SET STATISTICS 500;
 
-ALTER TABLE crs_sur_plan_ref OWNER TO bde_dba;
+ALTER TABLE bde.crs_sur_plan_ref OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_sur_plan_ref FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_sur_plan_ref TO bde_admin;
-GRANT SELECT ON TABLE crs_sur_plan_ref TO bde_user;
+REVOKE ALL ON TABLE bde.crs_sur_plan_ref FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_sur_plan_ref TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_sur_plan_ref TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_survey
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_survey (
+CREATE TABLE bde.crs_survey (
     wrk_id INTEGER NOT NULL,
     ldt_loc_id INTEGER NOT NULL,
     dataset_series CHAR(4) NOT NULL,
@@ -2583,58 +2583,58 @@ CREATE TABLE crs_survey (
     xsv_id INTEGER
 );
 
-ALTER TABLE ONLY crs_survey
+ALTER TABLE ONLY bde.crs_survey
     ADD CONSTRAINT pkey_crs_survey PRIMARY KEY (wrk_id);
 
-ALTER TABLE ONLY crs_survey
+ALTER TABLE ONLY bde.crs_survey
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_survey ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_survey ALTER COLUMN dataset_id SET STATISTICS 500;
-ALTER TABLE crs_survey ALTER COLUMN dataset_series SET STATISTICS 500;
-ALTER TABLE crs_survey ALTER COLUMN dataset_suffix SET STATISTICS 500;
-ALTER TABLE crs_survey ALTER COLUMN fhr_id SET STATISTICS 500;
-ALTER TABLE crs_survey ALTER COLUMN ldt_loc_id SET STATISTICS 500;
-ALTER TABLE crs_survey ALTER COLUMN pnx_id_submitted SET STATISTICS 500;
-ALTER TABLE crs_survey ALTER COLUMN sig_id SET STATISTICS 500;
-ALTER TABLE crs_survey ALTER COLUMN usr_id_sol SET STATISTICS 500;
-ALTER TABLE crs_survey ALTER COLUMN usr_id_sol_firm SET STATISTICS 500;
-ALTER TABLE crs_survey ALTER COLUMN wrk_id SET STATISTICS 500;
+ALTER TABLE bde.crs_survey ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_survey ALTER COLUMN dataset_id SET STATISTICS 500;
+ALTER TABLE bde.crs_survey ALTER COLUMN dataset_series SET STATISTICS 500;
+ALTER TABLE bde.crs_survey ALTER COLUMN dataset_suffix SET STATISTICS 500;
+ALTER TABLE bde.crs_survey ALTER COLUMN fhr_id SET STATISTICS 500;
+ALTER TABLE bde.crs_survey ALTER COLUMN ldt_loc_id SET STATISTICS 500;
+ALTER TABLE bde.crs_survey ALTER COLUMN pnx_id_submitted SET STATISTICS 500;
+ALTER TABLE bde.crs_survey ALTER COLUMN sig_id SET STATISTICS 500;
+ALTER TABLE bde.crs_survey ALTER COLUMN usr_id_sol SET STATISTICS 500;
+ALTER TABLE bde.crs_survey ALTER COLUMN usr_id_sol_firm SET STATISTICS 500;
+ALTER TABLE bde.crs_survey ALTER COLUMN wrk_id SET STATISTICS 500;
 
-ALTER TABLE crs_survey OWNER TO bde_dba;
+ALTER TABLE bde.crs_survey OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_survey FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_survey TO bde_admin;
-GRANT SELECT ON TABLE crs_survey TO bde_user;
+REVOKE ALL ON TABLE bde.crs_survey FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_survey TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_survey TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_survey_image
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_survey_image (
+CREATE TABLE bde.crs_survey_image (
     type VARCHAR(4) NOT NULL,
     sur_wrk_id INTEGER NOT NULL,
     img_id INTEGER NOT NULL,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_survey_image
+ALTER TABLE ONLY bde.crs_survey_image
     ADD UNIQUE (type, sur_wrk_id);
 
-ALTER TABLE ONLY crs_survey_image
+ALTER TABLE ONLY bde.crs_survey_image
     ADD CONSTRAINT pkey_crs_survey_image PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_survey_image OWNER TO bde_dba;
+ALTER TABLE bde.crs_survey_image OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_survey_image FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_survey_image TO bde_admin;
-GRANT SELECT ON TABLE crs_survey_image TO bde_user;
+REVOKE ALL ON TABLE bde.crs_survey_image FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_survey_image TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_survey_image TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_sys_code
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_sys_code (
+CREATE TABLE bde.crs_sys_code (
     scg_code VARCHAR(4) NOT NULL,
     code VARCHAR(4) NOT NULL,
     "desc" VARCHAR(2048),
@@ -2647,23 +2647,23 @@ CREATE TABLE crs_sys_code (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_sys_code
+ALTER TABLE ONLY bde.crs_sys_code
     ADD UNIQUE (scg_code, code);
 
-ALTER TABLE ONLY crs_sys_code
+ALTER TABLE ONLY bde.crs_sys_code
     ADD CONSTRAINT pkey_crs_sys_code PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_sys_code OWNER TO bde_dba;
+ALTER TABLE bde.crs_sys_code OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_sys_code FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_sys_code TO bde_admin;
-GRANT SELECT ON TABLE crs_sys_code TO bde_user;
+REVOKE ALL ON TABLE bde.crs_sys_code FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_sys_code TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_sys_code TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_sys_code_group
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_sys_code_group (
+CREATE TABLE bde.crs_sys_code_group (
     "desc" VARCHAR(100) NOT NULL,
     user_create_flag CHAR(1) NOT NULL,
     user_modify_flag CHAR(1) NOT NULL,
@@ -2675,23 +2675,23 @@ CREATE TABLE crs_sys_code_group (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_sys_code_group
+ALTER TABLE ONLY bde.crs_sys_code_group
     ADD UNIQUE (code);
 
-ALTER TABLE ONLY crs_sys_code_group
+ALTER TABLE ONLY bde.crs_sys_code_group
     ADD CONSTRAINT pkey_crs_sys_code_group PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_sys_code_group OWNER TO bde_dba;
+ALTER TABLE bde.crs_sys_code_group OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_sys_code_group FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_sys_code_group TO bde_admin;
-GRANT SELECT ON TABLE crs_sys_code_group TO bde_user;
+REVOKE ALL ON TABLE bde.crs_sys_code_group FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_sys_code_group TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_sys_code_group TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_title (
+CREATE TABLE bde.crs_title (
     title_no VARCHAR(20) NOT NULL,
     ldt_loc_id INTEGER NOT NULL,
     register_type VARCHAR(4) NOT NULL,
@@ -2720,84 +2720,84 @@ CREATE TABLE crs_title (
     ttl_title_no_head_srs VARCHAR(20)
 );
 
-ALTER TABLE ONLY crs_title
+ALTER TABLE ONLY bde.crs_title
     ADD UNIQUE (title_no);
 
-ALTER TABLE ONLY crs_title
+ALTER TABLE ONLY bde.crs_title
     ADD CONSTRAINT pkey_crs_title PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_title ALTER COLUMN alt_id SET STATISTICS 500;
-ALTER TABLE crs_title ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_title ALTER COLUMN dlg_id SET STATISTICS 500;
-ALTER TABLE crs_title ALTER COLUMN ldt_loc_id SET STATISTICS 500;
-ALTER TABLE crs_title ALTER COLUMN phy_prod_no SET STATISTICS 500;
-ALTER TABLE crs_title ALTER COLUMN ste_id SET STATISTICS 500;
-ALTER TABLE crs_title ALTER COLUMN sur_wrk_id SET STATISTICS 500;
-ALTER TABLE crs_title ALTER COLUMN sur_wrk_id_preallc SET STATISTICS 500;
-ALTER TABLE crs_title ALTER COLUMN title_no SET STATISTICS 500;
-ALTER TABLE crs_title ALTER COLUMN ttl_title_no_srs SET STATISTICS 500;
+ALTER TABLE bde.crs_title ALTER COLUMN alt_id SET STATISTICS 500;
+ALTER TABLE bde.crs_title ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_title ALTER COLUMN dlg_id SET STATISTICS 500;
+ALTER TABLE bde.crs_title ALTER COLUMN ldt_loc_id SET STATISTICS 500;
+ALTER TABLE bde.crs_title ALTER COLUMN phy_prod_no SET STATISTICS 500;
+ALTER TABLE bde.crs_title ALTER COLUMN ste_id SET STATISTICS 500;
+ALTER TABLE bde.crs_title ALTER COLUMN sur_wrk_id SET STATISTICS 500;
+ALTER TABLE bde.crs_title ALTER COLUMN sur_wrk_id_preallc SET STATISTICS 500;
+ALTER TABLE bde.crs_title ALTER COLUMN title_no SET STATISTICS 500;
+ALTER TABLE bde.crs_title ALTER COLUMN ttl_title_no_srs SET STATISTICS 500;
 
-ALTER TABLE crs_title OWNER TO bde_dba;
+ALTER TABLE bde.crs_title OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_title FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_title TO bde_admin;
-GRANT SELECT ON TABLE crs_title TO bde_user;
+REVOKE ALL ON TABLE bde.crs_title FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_title TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_title TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title_action
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_title_action (
+CREATE TABLE bde.crs_title_action (
     ttl_title_no VARCHAR(20) NOT NULL,
     act_tin_id INTEGER NOT NULL,
     act_id INTEGER NOT NULL,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_title_action
+ALTER TABLE ONLY bde.crs_title_action
     ADD UNIQUE (ttl_title_no, act_tin_id, act_id);
 
-ALTER TABLE ONLY crs_title_action
+ALTER TABLE ONLY bde.crs_title_action
     ADD CONSTRAINT pkey_crs_title_action PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_title_action ALTER COLUMN ttl_title_no SET STATISTICS 1000;
-ALTER TABLE crs_title_action ALTER COLUMN act_tin_id SET STATISTICS 1000;
-ALTER TABLE crs_title_action ALTER COLUMN act_id SET STATISTICS 1000;
-ALTER TABLE crs_title_action ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_action ALTER COLUMN ttl_title_no SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_action ALTER COLUMN act_tin_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_action ALTER COLUMN act_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_action ALTER COLUMN audit_id SET STATISTICS 1000;
 
-ALTER TABLE crs_title_action OWNER TO bde_dba;
+ALTER TABLE bde.crs_title_action OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_title_action FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_title_action TO bde_admin;
-GRANT SELECT ON TABLE crs_title_action TO bde_user;
+REVOKE ALL ON TABLE bde.crs_title_action FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_title_action TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_title_action TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title_doc_ref
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_title_doc_ref (
+CREATE TABLE bde.crs_title_doc_ref (
     id INTEGER NOT NULL,
     type VARCHAR(4),
     tin_id INTEGER,
     reference_no VARCHAR(15)
 );
 
-ALTER TABLE ONLY crs_title_doc_ref
+ALTER TABLE ONLY bde.crs_title_doc_ref
     ADD CONSTRAINT pkey_crs_title_doc_ref PRIMARY KEY (id);
 
-ALTER TABLE crs_title_doc_ref ALTER COLUMN id SET STATISTICS 250;
+ALTER TABLE bde.crs_title_doc_ref ALTER COLUMN id SET STATISTICS 250;
 
-ALTER TABLE crs_title_doc_ref OWNER TO bde_dba;
+ALTER TABLE bde.crs_title_doc_ref OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_title_doc_ref FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_title_doc_ref TO bde_admin;
-GRANT SELECT ON TABLE crs_title_doc_ref TO bde_user;
+REVOKE ALL ON TABLE bde.crs_title_doc_ref FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_title_doc_ref TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_title_doc_ref TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title_estate
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_title_estate (
+CREATE TABLE bde.crs_title_estate (
     id INTEGER NOT NULL,
     ttl_title_no VARCHAR(20) NOT NULL,
     type VARCHAR(4) NOT NULL,
@@ -2815,25 +2815,25 @@ CREATE TABLE crs_title_estate (
     tin_id_orig INTEGER
 );
 
-ALTER TABLE ONLY crs_title_estate
+ALTER TABLE ONLY bde.crs_title_estate
     ADD CONSTRAINT pkey_crs_title_estate PRIMARY KEY (id);
 
-ALTER TABLE crs_title_estate ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
-ALTER TABLE crs_title_estate ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE crs_title_estate ALTER COLUMN lgd_id SET STATISTICS 500;
-ALTER TABLE crs_title_estate ALTER COLUMN ttl_title_no SET STATISTICS 500;
+ALTER TABLE bde.crs_title_estate ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
+ALTER TABLE bde.crs_title_estate ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_title_estate ALTER COLUMN lgd_id SET STATISTICS 500;
+ALTER TABLE bde.crs_title_estate ALTER COLUMN ttl_title_no SET STATISTICS 500;
 
-ALTER TABLE crs_title_estate OWNER TO bde_dba;
+ALTER TABLE bde.crs_title_estate OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_title_estate FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_title_estate TO bde_admin;
-GRANT SELECT ON TABLE crs_title_estate TO bde_user;
+REVOKE ALL ON TABLE bde.crs_title_estate FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_title_estate TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_title_estate TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title_mem_text
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_title_mem_text (
+CREATE TABLE bde.crs_title_mem_text (
     ttm_id INTEGER NOT NULL,
     sequence_no INTEGER NOT NULL,
     curr_hist_flag VARCHAR(4) NOT NULL,
@@ -2848,27 +2848,27 @@ CREATE TABLE crs_title_mem_text (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_title_mem_text
+ALTER TABLE ONLY bde.crs_title_mem_text
     ADD UNIQUE (ttm_id, sequence_no);
 
-ALTER TABLE ONLY crs_title_mem_text
+ALTER TABLE ONLY bde.crs_title_mem_text
     ADD CONSTRAINT pkey_crs_title_mem_text PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_title_mem_text ALTER COLUMN ttm_id SET STATISTICS 1000;
-ALTER TABLE crs_title_mem_text ALTER COLUMN sequence_no SET STATISTICS 1000;
-ALTER TABLE crs_title_mem_text ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_mem_text ALTER COLUMN ttm_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_mem_text ALTER COLUMN sequence_no SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_mem_text ALTER COLUMN audit_id SET STATISTICS 1000;
 
-ALTER TABLE crs_title_mem_text OWNER TO bde_dba;
+ALTER TABLE bde.crs_title_mem_text OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_title_mem_text FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_title_mem_text TO bde_admin;
-GRANT SELECT ON TABLE crs_title_mem_text TO bde_user;
+REVOKE ALL ON TABLE bde.crs_title_mem_text FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_title_mem_text TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_title_mem_text TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title_memorial
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_title_memorial (
+CREATE TABLE bde.crs_title_memorial (
     id INTEGER NOT NULL,
     ttl_title_no VARCHAR(20) NOT NULL,
     mmt_code VARCHAR(10) NOT NULL,
@@ -2895,53 +2895,53 @@ CREATE TABLE crs_title_memorial (
     act_tin_id_ext INTEGER
 );
 
-ALTER TABLE ONLY crs_title_memorial
+ALTER TABLE ONLY bde.crs_title_memorial
     ADD CONSTRAINT pkey_crs_title_memorial PRIMARY KEY (id);
 
-ALTER TABLE crs_title_memorial ALTER COLUMN id SET STATISTICS 1000;
-ALTER TABLE crs_title_memorial ALTER COLUMN ttl_title_no SET STATISTICS 1000;
-ALTER TABLE crs_title_memorial ALTER COLUMN mmt_code SET STATISTICS 1000;
-ALTER TABLE crs_title_memorial ALTER COLUMN act_tin_id_crt SET STATISTICS 1000;
-ALTER TABLE crs_title_memorial ALTER COLUMN act_id_crt SET STATISTICS 1000;
-ALTER TABLE crs_title_memorial ALTER COLUMN act_tin_id_orig SET STATISTICS 1000;
-ALTER TABLE crs_title_memorial ALTER COLUMN act_id_orig SET STATISTICS 1000;
-ALTER TABLE crs_title_memorial ALTER COLUMN act_tin_id_ext SET STATISTICS 1000;
-ALTER TABLE crs_title_memorial ALTER COLUMN act_id_ext SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_memorial ALTER COLUMN id SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_memorial ALTER COLUMN ttl_title_no SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_memorial ALTER COLUMN mmt_code SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_memorial ALTER COLUMN act_tin_id_crt SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_memorial ALTER COLUMN act_id_crt SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_memorial ALTER COLUMN act_tin_id_orig SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_memorial ALTER COLUMN act_id_orig SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_memorial ALTER COLUMN act_tin_id_ext SET STATISTICS 1000;
+ALTER TABLE bde.crs_title_memorial ALTER COLUMN act_id_ext SET STATISTICS 1000;
 
-ALTER TABLE crs_title_memorial OWNER TO bde_dba;
+ALTER TABLE bde.crs_title_memorial OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_title_memorial FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_title_memorial TO bde_admin;
-GRANT SELECT ON TABLE crs_title_memorial TO bde_user;
+REVOKE ALL ON TABLE bde.crs_title_memorial FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_title_memorial TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_title_memorial TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_topology_class
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_topology_class  (
+CREATE TABLE bde.crs_topology_class  (
     code VARCHAR(4) NOT NULL,
     type VARCHAR(4) NOT NULL,
     name VARCHAR(100) NOT NULL,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_topology_class
+ALTER TABLE ONLY bde.crs_topology_class
     ADD UNIQUE (code);
 
-ALTER TABLE ONLY crs_topology_class
+ALTER TABLE ONLY bde.crs_topology_class
     ADD CONSTRAINT pkey_crs_topology_class PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_topology_class OWNER TO bde_dba;
+ALTER TABLE bde.crs_topology_class OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_topology_class FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_topology_class TO bde_admin;
-GRANT SELECT ON TABLE crs_topology_class TO bde_user;
+REVOKE ALL ON TABLE bde.crs_topology_class FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_topology_class TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_topology_class TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_transact_type
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_transact_type (
+CREATE TABLE bde.crs_transact_type (
     grp VARCHAR(4) NOT NULL,
     type VARCHAR(4) NOT NULL,
     description VARCHAR(100) NOT NULL,
@@ -2990,23 +2990,23 @@ CREATE TABLE crs_transact_type (
     view_in_search_tree CHAR(1)
 );
 
-ALTER TABLE ONLY crs_transact_type
+ALTER TABLE ONLY bde.crs_transact_type
     ADD UNIQUE (grp, type);
 
-ALTER TABLE ONLY crs_transact_type
+ALTER TABLE ONLY bde.crs_transact_type
     ADD CONSTRAINT pkey_crs_transact_type PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_transact_type OWNER TO bde_dba;
+ALTER TABLE bde.crs_transact_type OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_transact_type FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_transact_type TO bde_admin;
-GRANT SELECT ON TABLE crs_transact_type TO bde_user;
+REVOKE ALL ON TABLE bde.crs_transact_type FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_transact_type TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_transact_type TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ttl_enc
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_ttl_enc (
+CREATE TABLE bde.crs_ttl_enc (
     id INTEGER NOT NULL,
     ttl_title_no VARCHAR(20) NOT NULL,
     enc_id INTEGER NOT NULL,
@@ -3017,25 +3017,25 @@ CREATE TABLE crs_ttl_enc (
     act_tin_id_ext INTEGER
 );
 
-ALTER TABLE ONLY crs_ttl_enc
+ALTER TABLE ONLY bde.crs_ttl_enc
     ADD CONSTRAINT pkey_crs_ttl_enc PRIMARY KEY (id);
 
-ALTER TABLE crs_ttl_enc ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
-ALTER TABLE crs_ttl_enc ALTER COLUMN enc_id SET STATISTICS 500;
-ALTER TABLE crs_ttl_enc ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE crs_ttl_enc ALTER COLUMN ttl_title_no SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_enc ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_enc ALTER COLUMN enc_id SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_enc ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_enc ALTER COLUMN ttl_title_no SET STATISTICS 500;
 
-ALTER TABLE crs_ttl_enc OWNER TO bde_dba;
+ALTER TABLE bde.crs_ttl_enc OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_ttl_enc FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_ttl_enc TO bde_admin;
-GRANT SELECT ON TABLE crs_ttl_enc TO bde_user;
+REVOKE ALL ON TABLE bde.crs_ttl_enc FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ttl_enc TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_ttl_enc TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ttl_hierarchy
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_ttl_hierarchy (
+CREATE TABLE bde.crs_ttl_hierarchy (
     id INTEGER NOT NULL,
     status VARCHAR(4) NOT NULL,
     ttl_title_no_prior VARCHAR(20),
@@ -3047,26 +3047,26 @@ CREATE TABLE crs_ttl_hierarchy (
     act_tin_id_ext INTEGER
 );
 
-ALTER TABLE ONLY crs_ttl_hierarchy
+ALTER TABLE ONLY bde.crs_ttl_hierarchy
     ADD CONSTRAINT pkey_crs_ttl_hierarchy PRIMARY KEY (id);
 
-ALTER TABLE crs_ttl_hierarchy ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
-ALTER TABLE crs_ttl_hierarchy ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE crs_ttl_hierarchy ALTER COLUMN tdr_id SET STATISTICS 500;
-ALTER TABLE crs_ttl_hierarchy ALTER COLUMN ttl_title_no_flw SET STATISTICS 500;
-ALTER TABLE crs_ttl_hierarchy ALTER COLUMN ttl_title_no_prior SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_hierarchy ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_hierarchy ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_hierarchy ALTER COLUMN tdr_id SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_hierarchy ALTER COLUMN ttl_title_no_flw SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_hierarchy ALTER COLUMN ttl_title_no_prior SET STATISTICS 500;
 
-ALTER TABLE crs_ttl_hierarchy OWNER TO bde_dba;
+ALTER TABLE bde.crs_ttl_hierarchy OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_ttl_hierarchy FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_ttl_hierarchy TO bde_admin;
-GRANT SELECT ON TABLE crs_ttl_hierarchy TO bde_user;
+REVOKE ALL ON TABLE bde.crs_ttl_hierarchy FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ttl_hierarchy TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_ttl_hierarchy TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ttl_inst
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_ttl_inst (
+CREATE TABLE bde.crs_ttl_inst (
     id INTEGER NOT NULL,
     inst_no VARCHAR(30) NOT NULL,
     trt_grp VARCHAR(4) NOT NULL,
@@ -3096,80 +3096,80 @@ CREATE TABLE crs_ttl_inst (
     ttin_new_rej CHAR(1) NOT NULL
 );
 
-ALTER TABLE ONLY crs_ttl_inst
+ALTER TABLE ONLY bde.crs_ttl_inst
     ADD CONSTRAINT pkey_crs_ttl_inst PRIMARY KEY (id);
 
-ALTER TABLE crs_ttl_inst ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_ttl_inst ALTER COLUMN dlg_id SET STATISTICS 500;
-ALTER TABLE crs_ttl_inst ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE crs_ttl_inst ALTER COLUMN img_id SET STATISTICS 500;
-ALTER TABLE crs_ttl_inst ALTER COLUMN inst_no SET STATISTICS 500;
-ALTER TABLE crs_ttl_inst ALTER COLUMN ldt_loc_id SET STATISTICS 500;
-ALTER TABLE crs_ttl_inst ALTER COLUMN pro_id SET STATISTICS 500;
-ALTER TABLE crs_ttl_inst ALTER COLUMN tin_id_parent SET STATISTICS 500;
-ALTER TABLE crs_ttl_inst ALTER COLUMN trt_grp SET STATISTICS 500;
-ALTER TABLE crs_ttl_inst ALTER COLUMN trt_type SET STATISTICS 500;
-ALTER TABLE crs_ttl_inst ALTER COLUMN usr_id_approve SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_inst ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_inst ALTER COLUMN dlg_id SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_inst ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_inst ALTER COLUMN img_id SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_inst ALTER COLUMN inst_no SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_inst ALTER COLUMN ldt_loc_id SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_inst ALTER COLUMN pro_id SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_inst ALTER COLUMN tin_id_parent SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_inst ALTER COLUMN trt_grp SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_inst ALTER COLUMN trt_type SET STATISTICS 500;
+ALTER TABLE bde.crs_ttl_inst ALTER COLUMN usr_id_approve SET STATISTICS 500;
 
-ALTER TABLE crs_ttl_inst OWNER TO bde_dba;
+ALTER TABLE bde.crs_ttl_inst OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_ttl_inst FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_ttl_inst TO bde_admin;
-GRANT SELECT ON TABLE crs_ttl_inst TO bde_user;
+REVOKE ALL ON TABLE bde.crs_ttl_inst FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ttl_inst TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_ttl_inst TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ttl_inst_title
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_ttl_inst_title (
+CREATE TABLE bde.crs_ttl_inst_title (
     tin_id INTEGER NOT NULL,
     ttl_title_no VARCHAR(20) NOT NULL,
     created_by_inst CHAR(1),
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_ttl_inst_title
+ALTER TABLE ONLY bde.crs_ttl_inst_title
     ADD UNIQUE (tin_id, ttl_title_no);
 
-ALTER TABLE ONLY crs_ttl_inst_title
+ALTER TABLE ONLY bde.crs_ttl_inst_title
     ADD CONSTRAINT pkey_crs_ttl_inst_title PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_ttl_inst_title ALTER COLUMN tin_id SET STATISTICS 1000;
-ALTER TABLE crs_ttl_inst_title ALTER COLUMN ttl_title_no SET STATISTICS 1000;
+ALTER TABLE bde.crs_ttl_inst_title ALTER COLUMN tin_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_ttl_inst_title ALTER COLUMN ttl_title_no SET STATISTICS 1000;
 
-ALTER TABLE crs_ttl_inst_title OWNER TO bde_dba;
+ALTER TABLE bde.crs_ttl_inst_title OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_ttl_inst_title FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_ttl_inst_title TO bde_admin;
-GRANT SELECT ON TABLE crs_ttl_inst_title TO bde_user;
+REVOKE ALL ON TABLE bde.crs_ttl_inst_title FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ttl_inst_title TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_ttl_inst_title TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_unit_of_meas
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_unit_of_meas (
+CREATE TABLE bde.crs_unit_of_meas (
     code VARCHAR(4) NOT NULL,
     description VARCHAR(100) NOT NULL,
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_unit_of_meas
+ALTER TABLE ONLY bde.crs_unit_of_meas
     ADD UNIQUE (code);
 
-ALTER TABLE ONLY crs_unit_of_meas
+ALTER TABLE ONLY bde.crs_unit_of_meas
     ADD CONSTRAINT pkey_crs_unit_of_meas PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_unit_of_meas OWNER TO bde_dba;
+ALTER TABLE bde.crs_unit_of_meas OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_unit_of_meas FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_unit_of_meas TO bde_admin;
-GRANT SELECT ON TABLE crs_unit_of_meas TO bde_user;
+REVOKE ALL ON TABLE bde.crs_unit_of_meas FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_unit_of_meas TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_unit_of_meas TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_user
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_user (
+CREATE TABLE bde.crs_user (
     id VARCHAR(20) NOT NULL,
     type VARCHAR(4) NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -3222,23 +3222,23 @@ CREATE TABLE crs_user (
     sup_competency_det VARCHAR(2048)
 );
 
-ALTER TABLE ONLY crs_user
+ALTER TABLE ONLY bde.crs_user
     ADD UNIQUE (id);
 
-ALTER TABLE ONLY crs_user
+ALTER TABLE ONLY bde.crs_user
     ADD CONSTRAINT pkey_crs_user PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_user OWNER TO bde_dba;
+ALTER TABLE bde.crs_user OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_user FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_user TO bde_admin;
-GRANT SELECT ON TABLE crs_user TO bde_user;
+REVOKE ALL ON TABLE bde.crs_user FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_user TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_user TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_vector
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_vector (
+CREATE TABLE bde.crs_vector (
     type VARCHAR(4) NOT NULL,
     nod_id_start INTEGER NOT NULL,
     nod_id_end INTEGER,
@@ -3251,28 +3251,28 @@ CREATE TABLE crs_vector (
 
 PERFORM AddGeometryColumn('crs_vector', 'shape', 4167, 'GEOMETRY', 2);
 
-ALTER TABLE ONLY crs_vector
+ALTER TABLE ONLY bde.crs_vector
     ADD CONSTRAINT pkey_crs_vector PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_vector
+ALTER TABLE ONLY bde.crs_vector
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_vector ALTER COLUMN audit_id SET STATISTICS 1000;
-ALTER TABLE crs_vector ALTER COLUMN id SET STATISTICS 1000;
-ALTER TABLE crs_vector ALTER COLUMN nod_id_end SET STATISTICS 1000;
-ALTER TABLE crs_vector ALTER COLUMN nod_id_start SET STATISTICS 1000;
+ALTER TABLE bde.crs_vector ALTER COLUMN audit_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_vector ALTER COLUMN id SET STATISTICS 1000;
+ALTER TABLE bde.crs_vector ALTER COLUMN nod_id_end SET STATISTICS 1000;
+ALTER TABLE bde.crs_vector ALTER COLUMN nod_id_start SET STATISTICS 1000;
 
-ALTER TABLE crs_vector OWNER TO bde_dba;
+ALTER TABLE bde.crs_vector OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_vector FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_vector TO bde_admin;
-GRANT SELECT ON TABLE crs_vector TO bde_user;
+REVOKE ALL ON TABLE bde.crs_vector FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_vector TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_vector TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_vertx_sequence
 --------------------------------------------------------------------------------
 
-CREATE table crs_vertx_sequence (
+CREATE TABLE bde.crs_vertx_sequence (
     lin_id INTEGER NOT NULL,
     sequence SMALLINT NOT NULL,
     value1 NUMERIC(22,12) NOT NULL,
@@ -3280,25 +3280,25 @@ CREATE table crs_vertx_sequence (
     audit_id INTEGER NOT NULL
 );
 
-ALTER TABLE ONLY crs_vertx_sequence
+ALTER TABLE ONLY bde.crs_vertx_sequence
     ADD UNIQUE (lin_id, sequence);
 
-ALTER TABLE ONLY crs_vertx_sequence
+ALTER TABLE ONLY bde.crs_vertx_sequence
     ADD CONSTRAINT pkey_crs_vertx_sequence PRIMARY KEY (audit_id);
 
-ALTER TABLE crs_vertx_sequence ALTER COLUMN lin_id SET STATISTICS 1000;
+ALTER TABLE bde.crs_vertx_sequence ALTER COLUMN lin_id SET STATISTICS 1000;
 
-ALTER TABLE crs_vertx_sequence OWNER TO bde_dba;
+ALTER TABLE bde.crs_vertx_sequence OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_vertx_sequence FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_vertx_sequence TO bde_admin;
-GRANT SELECT ON TABLE crs_vertx_sequence TO bde_user;
+REVOKE ALL ON TABLE bde.crs_vertx_sequence FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_vertx_sequence TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_vertx_sequence TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_work
 --------------------------------------------------------------------------------
 
-CREATE TABLE crs_work (
+CREATE TABLE bde.crs_work (
     id INTEGER NOT NULL,
     trt_grp VARCHAR(4) NOT NULL,
     trt_type VARCHAR(4) NOT NULL,
@@ -3329,41 +3329,41 @@ CREATE TABLE crs_work (
     trv_id INTEGER
 );
 
-ALTER TABLE ONLY crs_work
+ALTER TABLE ONLY bde.crs_work
     ADD CONSTRAINT pkey_crs_work PRIMARY KEY (id);
 
-ALTER TABLE ONLY crs_work
+ALTER TABLE ONLY bde.crs_work
     ADD UNIQUE (audit_id);
 
-ALTER TABLE crs_work ALTER COLUMN alt_id SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN audit_id SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN authorised_date SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN cel_id SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN con_id SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN cos_id SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN lodged_date SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN pro_id SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN trt_grp SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN trt_type SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN usr_id_authorised SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN usr_id_firm SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN usr_id_principal SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN usr_id_prin_firm SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN usr_id_validated SET STATISTICS 500;
-ALTER TABLE crs_work ALTER COLUMN validated_date SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN alt_id SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN audit_id SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN authorised_date SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN cel_id SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN con_id SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN cos_id SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN lodged_date SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN pro_id SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN trt_grp SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN trt_type SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN usr_id_authorised SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN usr_id_firm SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN usr_id_principal SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN usr_id_prin_firm SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN usr_id_validated SET STATISTICS 500;
+ALTER TABLE bde.crs_work ALTER COLUMN validated_date SET STATISTICS 500;
 
-ALTER TABLE crs_work OWNER TO bde_dba;
+ALTER TABLE bde.crs_work OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE crs_work FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE crs_work TO bde_admin;
-GRANT SELECT ON TABLE crs_work TO bde_user;
+REVOKE ALL ON TABLE bde.crs_work FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_work TO bde_admin;
+GRANT SELECT ON TABLE bde.crs_work TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table cbe_title_parcel_association
 --------------------------------------------------------------------------------
 
-CREATE TABLE cbe_title_parcel_association (
+CREATE TABLE bde.cbe_title_parcel_association (
     id INTEGER NOT NULL ,
     ttl_title_no VARCHAR(20) NOT NULL,
     par_id INTEGER NOT NULL,
@@ -3373,18 +3373,18 @@ CREATE TABLE cbe_title_parcel_association (
     last_updated TIMESTAMP NOT NULL
 );
 
-ALTER TABLE ONLY cbe_title_parcel_association
+ALTER TABLE ONLY bde.cbe_title_parcel_association
     ADD CONSTRAINT pkey_cbe_title_parcel_association PRIMARY KEY (id);
 
-ALTER TABLE cbe_title_parcel_association ALTER COLUMN id SET STATISTICS 500;
-ALTER TABLE cbe_title_parcel_association ALTER COLUMN ttl_title_no SET STATISTICS 500;
-ALTER TABLE cbe_title_parcel_association ALTER COLUMN par_id SET STATISTICS 500;
+ALTER TABLE bde.cbe_title_parcel_association ALTER COLUMN id SET STATISTICS 500;
+ALTER TABLE bde.cbe_title_parcel_association ALTER COLUMN ttl_title_no SET STATISTICS 500;
+ALTER TABLE bde.cbe_title_parcel_association ALTER COLUMN par_id SET STATISTICS 500;
 
-ALTER TABLE cbe_title_parcel_association OWNER TO bde_dba;
+ALTER TABLE bde.cbe_title_parcel_association OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE cbe_title_parcel_association FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE cbe_title_parcel_association TO bde_admin;
-GRANT SELECT ON TABLE cbe_title_parcel_association TO bde_user;
+REVOKE ALL ON TABLE bde.cbe_title_parcel_association FROM PUBLIC;
+GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.cbe_title_parcel_association TO bde_admin;
+GRANT SELECT ON TABLE bde.cbe_title_parcel_association TO bde_user;
 
 END;
 $SCHEMA$;
