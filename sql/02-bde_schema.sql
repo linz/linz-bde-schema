@@ -13,7 +13,6 @@
 -- Create tables for holding BDE data in a `bde` schema, granting
 -- appropriate authorizations to bde_* roles.
 --------------------------------------------------------------------------------
-SET client_min_messages TO WARNING;
 
 DO $SCHEMA$
 BEGIN

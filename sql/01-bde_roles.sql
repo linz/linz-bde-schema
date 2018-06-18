@@ -10,7 +10,6 @@
 -- LICENSE file for more information.
 --
 --------------------------------------------------------------------------------
---SET client_min_messages TO WARNING;
 
 DO $ROLES$
 BEGIN
