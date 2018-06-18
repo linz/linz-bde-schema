@@ -2,7 +2,7 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
-## 1.2.1 - 2018-MM-DD
+## 1.2.1 - 2018-06-18
 ### Fixed
 - Fix support for extension-less `table_version` usage (#94)
 ### Enhanced
