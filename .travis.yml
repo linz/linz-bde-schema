@@ -49,6 +49,7 @@ before_install:
   # Install common packages
   - sudo apt-get -qq update
   - sudo apt-get install -y pgtap
+    debhelper fakeroot
   # Show some build info
   - apt-cache search postgis
   - echo $PATH
