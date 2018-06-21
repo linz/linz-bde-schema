@@ -71,3 +71,6 @@ script:
   - make check || { cat regression.diffs; false; }
   - sudo env "PATH=$PATH" make install
   - make installcheck
+  # Test build and installation of debian package
+  - make deb
+  - sudo dpkg -i ../linz-bde-schema*.deb
