@@ -33,8 +33,6 @@ GRANT ALL ON SCHEMA bde TO bde_dba;
 GRANT USAGE ON SCHEMA bde TO bde_admin;
 GRANT USAGE ON SCHEMA bde TO bde_user;
 
-SET search_path = bde, public;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_action
 --------------------------------------------------------------------------------
@@ -612,7 +610,7 @@ CREATE TABLE bde.crs_elect_place (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_elect_place', 'shape', 4167, 'POINT', 2);
+PERFORM AddGeometryColumn('bde', 'crs_elect_place', 'shape', 4167, 'POINT', 2);
 
 ALTER TABLE ONLY bde.crs_elect_place
     ADD CONSTRAINT pkey_crs_elect_place PRIMARY KEY (id);
@@ -781,7 +779,7 @@ CREATE TABLE bde.crs_feature_name (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_feature_name', 'shape', 4167, 'GEOMETRY', 2);
+PERFORM AddGeometryColumn('bde', 'crs_feature_name', 'shape', 4167, 'GEOMETRY', 2);
 
 ALTER TABLE ONLY bde.crs_feature_name
     ADD CONSTRAINT pkey_crs_feature_name PRIMARY KEY (id);
@@ -897,7 +895,7 @@ CREATE TABLE bde.crs_land_district (
     usr_tm_id VARCHAR(20)
 );
 
-PERFORM AddGeometryColumn('crs_land_district', 'shape', 4167, 'GEOMETRY', 2);
+PERFORM AddGeometryColumn('bde', 'crs_land_district', 'shape', 4167, 'GEOMETRY', 2);
 
 ALTER TABLE ONLY bde.crs_land_district
     ADD CONSTRAINT pkey_crs_land_district PRIMARY KEY (loc_id);
@@ -992,7 +990,7 @@ CREATE TABLE bde.crs_line (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_line', 'shape', 4167, 'LINESTRING', 2);
+PERFORM AddGeometryColumn('bde', 'crs_line', 'shape', 4167, 'LINESTRING', 2);
 
 ALTER TABLE ONLY bde.crs_line
     ADD CONSTRAINT pkey_crs_line PRIMARY KEY (id);
@@ -1025,7 +1023,7 @@ CREATE TABLE bde.crs_locality (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_locality', 'shape', 4167, 'GEOMETRY', 2);
+PERFORM AddGeometryColumn('bde', 'crs_locality', 'shape', 4167, 'GEOMETRY', 2);
 
 ALTER TABLE ONLY bde.crs_locality
     ADD CONSTRAINT pkey_crs_locality PRIMARY KEY (id);
@@ -1075,7 +1073,7 @@ CREATE TABLE bde.crs_map_grid (
     audit_id INTEGER NOT NULL
 );
 
-PERFORM AddGeometryColumn('crs_map_grid', 'shape', 4167, 'POLYGON', 2);
+PERFORM AddGeometryColumn('bde', 'crs_map_grid', 'shape', 4167, 'POLYGON', 2);
 
 ALTER TABLE ONLY bde.crs_map_grid
     ADD CONSTRAINT pkey_crs_map_grid PRIMARY KEY (audit_id);
@@ -1249,7 +1247,7 @@ CREATE TABLE bde.crs_mesh_blk (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_mesh_blk', 'shape', 4167, 'GEOMETRY', 2);
+PERFORM AddGeometryColumn('bde', 'crs_mesh_blk', 'shape', 4167, 'GEOMETRY', 2);
 
 ALTER TABLE ONLY bde.crs_mesh_blk
     ADD CONSTRAINT pkey_crs_mesh_blk PRIMARY KEY (id);
@@ -1336,7 +1334,7 @@ CREATE TABLE bde.crs_mesh_blk_line (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_mesh_blk_line', 'shape', 4167, 'LINESTRING', 2);
+PERFORM AddGeometryColumn('bde', 'crs_mesh_blk_line', 'shape', 4167, 'LINESTRING', 2);
 
 ALTER TABLE ONLY bde.crs_mesh_blk_line
     ADD UNIQUE (audit_id);
@@ -1424,7 +1422,7 @@ CREATE TABLE bde.crs_node (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_node', 'shape', 4167, 'POINT', 2);
+PERFORM AddGeometryColumn('bde', 'crs_node', 'shape', 4167, 'POINT', 2);
 
 ALTER TABLE ONLY bde.crs_node
     ADD CONSTRAINT pkey_crs_node PRIMARY KEY (id);
@@ -1713,7 +1711,7 @@ CREATE TABLE bde.crs_off_cord_sys (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_off_cord_sys', 'shape', 4167, 'POLYGON', 2);
+PERFORM AddGeometryColumn('bde', 'crs_off_cord_sys', 'shape', 4167, 'POLYGON', 2);
 
 ALTER TABLE ONLY bde.crs_off_cord_sys
     ADD CONSTRAINT pkey_crs_off_cord_sys PRIMARY KEY (id);
@@ -1852,7 +1850,7 @@ CREATE TABLE bde.crs_parcel (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_parcel', 'shape', 4167, 'GEOMETRY', 2);
+PERFORM AddGeometryColumn('bde', 'crs_parcel', 'shape', 4167, 'GEOMETRY', 2);
 
 ALTER TABLE ONLY bde.crs_parcel
     ADD CONSTRAINT pkey_crs_parcel PRIMARY KEY (id);
@@ -1939,7 +1937,7 @@ CREATE TABLE bde.crs_parcel_label (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_parcel_label', 'shape', 4167, 'POINT', 2);
+PERFORM AddGeometryColumn('bde', 'crs_parcel_label', 'shape', 4167, 'POINT', 2);
 
 ALTER TABLE ONLY bde.crs_parcel_label
     ADD CONSTRAINT pkey_crs_parcel_label PRIMARY KEY (id);
@@ -2140,7 +2138,7 @@ CREATE TABLE bde.crs_road_ctr_line (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_road_ctr_line', 'shape', 4167, 'LINESTRING', 2);
+PERFORM AddGeometryColumn('bde', 'crs_road_ctr_line', 'shape', 4167, 'LINESTRING', 2);
 
 ALTER TABLE ONLY bde.crs_road_ctr_line
     ADD CONSTRAINT pkey_crs_road_ctr_line PRIMARY KEY (id);
@@ -2376,7 +2374,7 @@ CREATE TABLE bde.crs_statist_area (
     audit_id INTEGER NOT NULL
 );
 
-PERFORM AddGeometryColumn('crs_statist_area', 'shape', 4167, 'MULTIPOLYGON', 2);
+PERFORM AddGeometryColumn('bde', 'crs_statist_area', 'shape', 4167, 'MULTIPOLYGON', 2);
 
 ALTER TABLE ONLY bde.crs_statist_area
     ADD CONSTRAINT pkey_crs_statist_area PRIMARY KEY (id);
@@ -2475,7 +2473,7 @@ CREATE TABLE bde.crs_street_address (
     mbk_code VARCHAR(7)
 );
 
-PERFORM AddGeometryColumn('crs_street_address', 'shape', 4167, 'POINT', 2);
+PERFORM AddGeometryColumn('bde', 'crs_street_address', 'shape', 4167, 'POINT', 2);
 
 ALTER TABLE ONLY bde.crs_street_address
     ADD CONSTRAINT pkey_crs_street_address PRIMARY KEY (id);
@@ -2535,7 +2533,7 @@ CREATE TABLE bde.crs_sur_plan_ref (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_sur_plan_ref', 'shape', 4167, 'POINT', 2);
+PERFORM AddGeometryColumn('bde', 'crs_sur_plan_ref', 'shape', 4167, 'POINT', 2);
 
 ALTER TABLE ONLY bde.crs_sur_plan_ref
     ADD CONSTRAINT pkey_crs_sur_plan_ref PRIMARY KEY (id);
@@ -3249,7 +3247,7 @@ CREATE TABLE bde.crs_vector (
     se_row_id INTEGER
 );
 
-PERFORM AddGeometryColumn('crs_vector', 'shape', 4167, 'GEOMETRY', 2);
+PERFORM AddGeometryColumn('bde', 'crs_vector', 'shape', 4167, 'GEOMETRY', 2);
 
 ALTER TABLE ONLY bde.crs_vector
     ADD CONSTRAINT pkey_crs_vector PRIMARY KEY (id);
