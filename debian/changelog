@@ -1,3 +1,9 @@
+linz-bde-schema (1.2.1-1linz~trusty1) trusty; urgency=medium
+
+  * New upstream version
+
+ -- Ivan Mincik <imincik@linz.govt.nz>  Fri, 22 Jun 2018 13:53:06 +0200
+
 linz-bde-schema (1.2.0-1linz~trusty1) trusty; urgency=medium
 
   * New upstream version
