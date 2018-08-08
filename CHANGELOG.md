@@ -6,6 +6,12 @@ All notable changes for the LINZ BDE schema are documented in this file.
 ### Enhanced
 - Do not change session variables during load of enabling scripts (#104)
 
+## 1.2.1 - 2018-06-18
+### Fixed
+- Fix support for extension-less `table_version` usage (#94)
+### Enhanced
+- Add tests for upgrading with enabled versioning, both
+  in extension and non-extension flavors of `table_version`
 
 ## 1.2.0 - 2018-04-11
 ### Changed
