@@ -19,6 +19,7 @@ DECLARE
    v_table     NAME;
    v_msg       TEXT;
    v_rev_table TEXT;
+   v_needs_rev BOOLEAN;
 BEGIN
 
     IF NOT EXISTS (SELECT p.oid FROM pg_catalog.pg_proc p,
@@ -35,7 +36,7 @@ BEGIN
     -- See https://github.com/linz/linz-bde-schema/issues/70
     GRANT CREATE ON SCHEMA table_version TO bde_dba;
 
-    PERFORM table_version.ver_create_revision('Initial revisioning for BDE tables');
+    v_needs_rev := false;
 
     FOR v_schema, v_table IN
         SELECT
@@ -58,6 +59,17 @@ BEGIN
         v_msg := 'Versioning table ' ||  v_schema || '.' || v_table;
         RAISE NOTICE '%', v_msg;
 
+        -- Create a generic revision if any unversioned table has data
+        IF NOT v_needs_rev THEN
+            EXECUTE 'SELECT EXISTS ( SELECT * FROM '
+                || quote_ident(v_schema) || '.' || quote_ident(v_table)
+                || ')'
+            INTO v_needs_rev;
+            IF v_needs_rev THEN
+                PERFORM table_version.ver_create_revision('Initial revisioning for BDE tables');
+            END IF;
+        END IF;
+
         BEGIN
             PERFORM table_version.ver_enable_versioning(v_schema, v_table);
         EXCEPTION
@@ -72,7 +84,10 @@ BEGIN
         EXECUTE 'GRANT SELECT ON TABLE ' || v_rev_table || ' TO bde_user';
     END LOOP;
 
-    PERFORM table_version.ver_complete_revision();
+    IF v_needs_rev THEN
+        PERFORM table_version.ver_complete_revision();
+    END IF;
+
 END
 $$;
 
