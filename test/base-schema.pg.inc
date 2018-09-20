@@ -7,6 +7,8 @@ SELECT has_role('bde_user');
 -- Test schema existance {
 SELECT has_schema('bde'::name);
 SELECT schema_owner_is('bde'::name, 'bde_dba'::name);
+SELECT schema_privs_are('bde'::name, 'bde_admin'::name, ARRAY['USAGE']);
+SELECT schema_privs_are('bde'::name, 'bde_user'::name, ARRAY['USAGE']);
 -- }
 
 
