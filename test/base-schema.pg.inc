@@ -1749,27 +1749,50 @@ SELECT function_owner_is('bde', 'bde_write_appellation', ARRAY['character varyin
 
 -- Test indexes existance {
 SELECT has_index('bde'::name, 'crs_appellation'::name, 'fk_app_par'::name, ARRAY['par_id']);
+SELECT index_owner_is('bde'::name, 'crs_appellation'::name, 'fk_app_par'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_elect_place'::name, 'shx_epl_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_elect_place'::name, 'shx_epl_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_feature_name'::name, 'shx_fen_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_feature_name'::name, 'shx_fen_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_land_district'::name, 'shx_ldt_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_land_district'::name, 'shx_ldt_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_line'::name, 'shx_lin_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_line'::name, 'shx_lin_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_locality'::name, 'shx_loc_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_locality'::name, 'shx_loc_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_map_grid'::name, 'shx_map_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_map_grid'::name, 'shx_map_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_mark_name'::name, 'fk_mkn_mrk'::name, ARRAY['mrk_id']);
+SELECT index_owner_is('bde'::name, 'crs_mark_name'::name, 'fk_mkn_mrk'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_mesh_blk'::name, 'shx_mbk_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_mesh_blk'::name, 'shx_mbk_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_mesh_blk_line'::name, 'shx_mbl_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_mesh_blk_line'::name, 'shx_mbl_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_node'::name, 'shx_nod_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_node'::name, 'shx_nod_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_off_cord_sys'::name, 'shx_ocs_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_off_cord_sys'::name, 'shx_ocs_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_parcel'::name, 'shx_par_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_parcel'::name, 'shx_par_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_parcel_label'::name, 'shx_plb_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_parcel_label'::name, 'shx_plb_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_road_ctr_line'::name, 'shx_rcl_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_road_ctr_line'::name, 'shx_rcl_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_stat_act_parcl'::name, 'fk_sap_sta'::name, ARRAY['sta_id']);
+SELECT index_owner_is('bde'::name, 'crs_stat_act_parcl'::name, 'fk_sap_sta'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_stat_act_parcl'::name, 'fk_sap_par'::name, ARRAY['par_id']);
+SELECT index_owner_is('bde'::name, 'crs_stat_act_parcl'::name, 'fk_sap_par'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_statist_area'::name, 'shx_stt_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_statist_area'::name, 'shx_stt_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_street_address'::name, 'shx_sad_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_street_address'::name, 'shx_sad_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_sur_plan_ref'::name, 'shx_spf_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_sur_plan_ref'::name, 'shx_spf_shape'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_sys_code'::name, 'fk_sco_scg'::name, ARRAY['scg_code']);
+SELECT index_owner_is('bde'::name, 'crs_sys_code'::name, 'fk_sco_scg'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_sys_code'::name, 'fk_sco_scg_code'::name, ARRAY['scg_code', 'code']);
+SELECT index_owner_is('bde'::name, 'crs_sys_code'::name, 'fk_sco_scg_code'::name, 'bde_dba'::name);
 SELECT has_index('bde'::name, 'crs_vector'::name, 'shx_vct_shape'::name, ARRAY['shape']);
+SELECT index_owner_is('bde'::name, 'crs_vector'::name, 'shx_vct_shape'::name, 'bde_dba'::name);
 -- }
 

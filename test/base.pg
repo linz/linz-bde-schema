@@ -76,7 +76,7 @@ END $$;
 
 BEGIN;
 
-SELECT * FROM plan(418
+SELECT * FROM plan(441
 --VERSIONED-- + 210
 );
 
