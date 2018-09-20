@@ -1699,28 +1699,51 @@ ARRAY[
 -- Test functions existance {
 
 SELECT has_function('bde', 'bde_drop_idle_connections', ARRAY['integer']);
+SELECT function_owner_is('bde', 'bde_drop_idle_connections', ARRAY['integer'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_app_specific', ARRAY['bde.crs_appellation', 'character']);
+SELECT function_owner_is('bde', 'bde_get_app_specific', ARRAY['bde.crs_appellation', 'character'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_app_specific', ARRAY['integer', 'character varying', 'character']);
+SELECT function_owner_is('bde', 'bde_get_app_specific', ARRAY['integer', 'character varying', 'character'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_charcode', ARRAY['character varying', 'character varying']);
+SELECT function_owner_is('bde', 'bde_get_charcode', ARRAY['character varying', 'character varying'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_combined_appellation', ARRAY['integer', 'character']);
+SELECT function_owner_is('bde', 'bde_get_combined_appellation', ARRAY['integer', 'character'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_dataset', ARRAY['integer']);
+SELECT function_owner_is('bde', 'bde_get_dataset', ARRAY['integer'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_datasource', ARRAY['integer']);
+SELECT function_owner_is('bde', 'bde_get_datasource', ARRAY['integer'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_desccode', ARRAY['character varying', 'character varying']);
+SELECT function_owner_is('bde', 'bde_get_desccode', ARRAY['character varying', 'character varying'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_district', ARRAY['integer']);
+SELECT function_owner_is('bde', 'bde_get_district', ARRAY['integer'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_markname', ARRAY['integer']);
+SELECT function_owner_is('bde', 'bde_get_markname', ARRAY['integer'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_mrknodename', ARRAY['integer', 'character varying']);
+SELECT function_owner_is('bde', 'bde_get_mrknodename', ARRAY['integer', 'character varying'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_getnearnodes', ARRAY['double precision', 'double precision', 'double precision']);
+SELECT function_owner_is('bde', 'bde_getnearnodes', ARRAY['double precision', 'double precision', 'double precision'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_nodename', ARRAY['integer']);
+SELECT function_owner_is('bde', 'bde_get_nodename', ARRAY['integer'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_nodename', ARRAY['integer', 'character varying']);
+SELECT function_owner_is('bde', 'bde_get_nodename', ARRAY['integer', 'character varying'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_nodeorder', ARRAY['integer']);
+SELECT function_owner_is('bde', 'bde_get_nodeorder', ARRAY['integer'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_office', ARRAY['integer']);
+SELECT function_owner_is('bde', 'bde_get_office', ARRAY['integer'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_par_stat_act', ARRAY['integer', 'integer']);
+SELECT function_owner_is('bde', 'bde_get_par_stat_act', ARRAY['integer', 'integer'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_roadname', ARRAY['integer', 'double precision']);
+SELECT function_owner_is('bde', 'bde_get_roadname', ARRAY['integer', 'double precision'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_trtcode', ARRAY['character varying', 'character varying']);
+SELECT function_owner_is('bde', 'bde_get_trtcode', ARRAY['character varying', 'character varying'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_username', ARRAY['character varying']);
+SELECT function_owner_is('bde', 'bde_get_username', ARRAY['character varying'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_useroff', ARRAY['character varying']);
+SELECT function_owner_is('bde', 'bde_get_useroff', ARRAY['character varying'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_version', ARRAY['']);
+SELECT function_owner_is('bde', 'bde_version', ARRAY[''], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_write_appellation', ARRAY['character varying', 'character varying', 'character', 'character varying', 'text', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'text']);
+SELECT function_owner_is('bde', 'bde_write_appellation', ARRAY['character varying', 'character varying', 'character', 'character varying', 'text', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'text'], 'bde_dba'::name);
 
 -- }
 
