@@ -1,14 +1,19 @@
-SELECT has_schema('bde'::name);
-
 -- Test roles existance {
 SELECT has_role('bde_dba');
 SELECT has_role('bde_admin');
 SELECT has_role('bde_user');
 -- }
 
+-- Test schema existance {
+SELECT has_schema('bde'::name);
+SELECT schema_owner_is('bde'::name, 'bde_dba'::name);
+-- }
+
+
 -- Test tables existance and their composition {
 
 SELECT has_table('bde'::name, 'cbe_title_parcel_association'::name);
+SELECT table_owner_is('bde'::name, 'cbe_title_parcel_association'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'cbe_title_parcel_association'::name,
   ARRAY[
   'last_updated',
@@ -21,6 +26,7 @@ SELECT columns_are('bde'::name, 'cbe_title_parcel_association'::name,
   ]);
 
 SELECT has_table('bde'::name, 'crs_action'::name);
+SELECT table_owner_is('bde'::name, 'crs_action'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_action'::name,
 ARRAY[
   'act_tin_id_orig',
@@ -38,6 +44,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_action_type'::name);
+SELECT table_owner_is('bde'::name, 'crs_action_type'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_action_type'::name,
 ARRAY[
   'type',
@@ -49,6 +56,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_adj_obs_change'::name);
+SELECT table_owner_is('bde'::name, 'crs_adj_obs_change'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_adj_obs_change'::name,
 ARRAY[
   'redundancy_fctr_3',
@@ -78,6 +86,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_adj_user_coef'::name);
+SELECT table_owner_is('bde'::name, 'crs_adj_user_coef'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_adj_user_coef'::name,
 ARRAY[
   'adc_id',
@@ -87,6 +96,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_adjust_coef'::name);
+SELECT table_owner_is('bde'::name, 'crs_adjust_coef'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_adjust_coef'::name,
 ARRAY[
   'id',
@@ -99,6 +109,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_adjustment_run'::name);
+SELECT table_owner_is('bde'::name, 'crs_adjustment_run'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_adjust_method'::name,
 ARRAY[
   'type',
@@ -111,6 +122,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_adjust_method'::name);
+SELECT table_owner_is('bde'::name, 'crs_adjust_method'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_adjustment_run'::name,
 ARRAY[
   'id',
@@ -130,6 +142,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_adoption'::name);
+SELECT table_owner_is('bde'::name, 'crs_adoption'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_adoption'::name,
 ARRAY[
   'audit_id',
@@ -142,6 +155,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_affected_parcl'::name);
+SELECT table_owner_is('bde'::name, 'crs_affected_parcl'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_affected_parcl'::name,
 ARRAY[
   'action',
@@ -151,6 +165,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_alias'::name);
+SELECT table_owner_is('bde'::name, 'crs_alias'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_alias'::name,
 ARRAY[
   'prp_id',
@@ -160,6 +175,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_appellation'::name);
+SELECT table_owner_is('bde'::name, 'crs_appellation'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_appellation'::name,
 ARRAY[
   'second_prcl_value',
@@ -187,6 +203,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_comprised_in'::name);
+SELECT table_owner_is('bde'::name, 'crs_comprised_in'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_comprised_in'::name,
 ARRAY[
   'wrk_id',
@@ -197,6 +214,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_coordinate'::name);
+SELECT table_owner_is('bde'::name, 'crs_coordinate'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_coordinate'::name,
 ARRAY[
   'sdc_status',
@@ -217,6 +235,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_coordinate_sys'::name);
+SELECT table_owner_is('bde'::name, 'crs_coordinate_sys'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_coordinate_sys'::name,
 ARRAY[
   'cot_id',
@@ -230,6 +249,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_coordinate_tpe'::name);
+SELECT table_owner_is('bde'::name, 'crs_coordinate_tpe'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_coordinate_tpe'::name,
 ARRAY[
   'category',
@@ -251,6 +271,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_cord_order'::name);
+SELECT table_owner_is('bde'::name, 'crs_cord_order'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_cor_precision'::name,
 ARRAY[
   'cor_id',
@@ -260,6 +281,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_cor_precision'::name);
+SELECT table_owner_is('bde'::name, 'crs_cor_precision'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_cord_order'::name,
 ARRAY[
   'dtm_id',
@@ -272,6 +294,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_datum'::name);
+SELECT table_owner_is('bde'::name, 'crs_datum'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_datum'::name,
 ARRAY[
   'type',
@@ -287,6 +310,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_elect_place'::name);
+SELECT table_owner_is('bde'::name, 'crs_elect_place'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_elect_place'::name,
 ARRAY[
   'shape',
@@ -300,6 +324,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ellipsoid'::name);
+SELECT table_owner_is('bde'::name, 'crs_ellipsoid'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_ellipsoid'::name,
 ARRAY[
   'semi_major_axis',
@@ -310,6 +335,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_enc_share'::name);
+SELECT table_owner_is('bde'::name, 'crs_enc_share'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_enc_share'::name,
 ARRAY[
   'system_crt',
@@ -324,6 +350,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_encumbrancee'::name);
+SELECT table_owner_is('bde'::name, 'crs_encumbrancee'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_encumbrance'::name,
 ARRAY[
   'term',
@@ -337,6 +364,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_encumbrance'::name);
+SELECT table_owner_is('bde'::name, 'crs_encumbrance'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_encumbrancee'::name,
 ARRAY[
   'id',
@@ -348,6 +376,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_estate_share'::name);
+SELECT table_owner_is('bde'::name, 'crs_estate_share'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_estate_share'::name,
 ARRAY[
   'act_id_ext',
@@ -368,6 +397,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_feature_name'::name);
+SELECT table_owner_is('bde'::name, 'crs_feature_name'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_feature_name'::name,
 ARRAY[
   'shape',
@@ -381,6 +411,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_geodetic_network'::name);
+SELECT table_owner_is('bde'::name, 'crs_geodetic_network'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_geodetic_network'::name,
 ARRAY[
   'description',
@@ -389,6 +420,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_geodetic_node_network'::name);
+SELECT table_owner_is('bde'::name, 'crs_geodetic_node_network'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_geodetic_node_network'::name,
 ARRAY[
   'audit_id',
@@ -397,6 +429,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_image_history'::name);
+SELECT table_owner_is('bde'::name, 'crs_image_history'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_image'::name,
 ARRAY[
   'usr_id_created',
@@ -410,6 +443,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_image'::name);
+SELECT table_owner_is('bde'::name, 'crs_image'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_image_history'::name,
 ARRAY[
   'usr_id',
@@ -423,6 +457,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_land_district'::name);
+SELECT table_owner_is('bde'::name, 'crs_land_district'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_land_district'::name,
 ARRAY[
   'default',
@@ -435,6 +470,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_legal_desc'::name);
+SELECT table_owner_is('bde'::name, 'crs_legal_desc'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_legal_desc'::name,
 ARRAY[
   'legal_desc_text',
@@ -447,6 +483,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_legal_desc_prl'::name);
+SELECT table_owner_is('bde'::name, 'crs_legal_desc_prl'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_legal_desc_prl'::name,
 ARRAY[
   'audit_id',
@@ -459,6 +496,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_line'::name);
+SELECT table_owner_is('bde'::name, 'crs_line'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_line'::name,
 ARRAY[
   'arc_length',
@@ -478,6 +516,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_locality'::name);
+SELECT table_owner_is('bde'::name, 'crs_locality'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_locality'::name,
 ARRAY[
   'shape',
@@ -490,6 +529,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_maintenance'::name);
+SELECT table_owner_is('bde'::name, 'crs_maintenance'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_maintenance'::name,
 ARRAY[
   'type',
@@ -501,6 +541,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_map_grid'::name);
+SELECT table_owner_is('bde'::name, 'crs_map_grid'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_map_grid'::name,
 ARRAY[
   'major_grid',
@@ -511,6 +552,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mark'::name);
+SELECT table_owner_is('bde'::name, 'crs_mark'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_mark'::name,
 ARRAY[
   'id',
@@ -535,6 +577,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mark_name'::name);
+SELECT table_owner_is('bde'::name, 'crs_mark_name'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_mark_name'::name,
 ARRAY[
   'mrk_id',
@@ -544,6 +587,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mark_sup_doc'::name);
+SELECT table_owner_is('bde'::name, 'crs_mark_sup_doc'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_mark_sup_doc'::name,
 ARRAY[
   'sud_id',
@@ -552,6 +596,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mesh_blk_area'::name);
+SELECT table_owner_is('bde'::name, 'crs_mesh_blk_area'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_mesh_blk'::name,
 ARRAY[
   'shape',
@@ -565,6 +610,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mesh_blk_bdry'::name);
+SELECT table_owner_is('bde'::name, 'crs_mesh_blk_bdry'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_mesh_blk_area'::name,
 ARRAY[
   'mbk_id',
@@ -574,6 +620,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mesh_blk_line'::name);
+SELECT table_owner_is('bde'::name, 'crs_mesh_blk_line'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_mesh_blk_bdry'::name,
 ARRAY[
   'audit_id',
@@ -583,6 +630,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mesh_blk'::name);
+SELECT table_owner_is('bde'::name, 'crs_mesh_blk'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_mesh_blk_line'::name,
 ARRAY[
   'shape',
@@ -595,6 +643,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mesh_blk_place'::name);
+SELECT table_owner_is('bde'::name, 'crs_mesh_blk_place'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_mesh_blk_place'::name,
 ARRAY[
   'mbk_id',
@@ -604,6 +653,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_mrk_phys_state'::name);
+SELECT table_owner_is('bde'::name, 'crs_mrk_phys_state'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_mrk_phys_state'::name,
 ARRAY[
   'mrk_id',
@@ -636,6 +686,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_network_plan'::name);
+SELECT table_owner_is('bde'::name, 'crs_network_plan'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_network_plan'::name,
 ARRAY[
   'dtm_id',
@@ -647,6 +698,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_node'::name);
+SELECT table_owner_is('bde'::name, 'crs_node'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_node'::name,
 ARRAY[
   'order_group_off',
@@ -663,6 +715,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_node_prp_order'::name);
+SELECT table_owner_is('bde'::name, 'crs_node_prp_order'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_node_prp_order'::name,
 ARRAY[
   'cor_id',
@@ -672,6 +725,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_node_works'::name);
+SELECT table_owner_is('bde'::name, 'crs_node_works'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_node_works'::name,
 ARRAY[
   'adopted',
@@ -683,6 +737,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_nominal_index'::name);
+SELECT table_owner_is('bde'::name, 'crs_nominal_index'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_nominal_index'::name,
 ARRAY[
   'dlg_id_ext',
@@ -701,6 +756,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_obs_accuracy'::name);
+SELECT table_owner_is('bde'::name, 'crs_obs_accuracy'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_obs_accuracy'::name,
 ARRAY[
   'value_31',
@@ -719,6 +775,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_obs_elem_type'::name);
+SELECT table_owner_is('bde'::name, 'crs_obs_elem_type'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_obs_elem_type'::name,
 ARRAY[
   'type',
@@ -729,6 +786,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_observation'::name);
+SELECT table_owner_is('bde'::name, 'crs_observation'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_obs_set'::name,
 ARRAY[
   'audit_id',
@@ -738,6 +796,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_obs_set'::name);
+SELECT table_owner_is('bde'::name, 'crs_obs_set'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_obs_type'::name,
 ARRAY[
   'time_reqd',
@@ -754,6 +813,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_obs_type'::name);
+SELECT table_owner_is('bde'::name, 'crs_obs_type'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_observation'::name,
 ARRAY[
   'arc_direction',
@@ -782,6 +842,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_off_cord_sys'::name);
+SELECT table_owner_is('bde'::name, 'crs_off_cord_sys'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_off_cord_sys'::name,
 ARRAY[
   'cos_id',
@@ -793,6 +854,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_office'::name);
+SELECT table_owner_is('bde'::name, 'crs_office'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_office'::name,
 ARRAY[
   'fax',
@@ -817,6 +879,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ordinate_adj'::name);
+SELECT table_owner_is('bde'::name, 'crs_ordinate_adj'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_ordinate_adj'::name,
 ARRAY[
   'audit_id',
@@ -838,6 +901,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ordinate_type'::name);
+SELECT table_owner_is('bde'::name, 'crs_ordinate_type'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_ordinate_type'::name,
 ARRAY[
   'description',
@@ -849,6 +913,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_parcel_bndry'::name);
+SELECT table_owner_is('bde'::name, 'crs_parcel_bndry'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_parcel'::name,
 ARRAY[
   'nonsurvey_def',
@@ -870,6 +935,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_parcel_dimen'::name);
+SELECT table_owner_is('bde'::name, 'crs_parcel_dimen'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_parcel_bndry'::name,
 ARRAY[
   'pri_id',
@@ -880,6 +946,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_parcel_label'::name);
+SELECT table_owner_is('bde'::name, 'crs_parcel_label'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_parcel_dimen'::name,
 ARRAY[
   'audit_id',
@@ -888,6 +955,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_parcel'::name);
+SELECT table_owner_is('bde'::name, 'crs_parcel'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_parcel_label'::name,
 ARRAY[
   'se_row_id',
@@ -898,6 +966,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_parcel_ring'::name);
+SELECT table_owner_is('bde'::name, 'crs_parcel_ring'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_parcel_ring'::name,
 ARRAY[
   'id',
@@ -908,6 +977,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_programme'::name);
+SELECT table_owner_is('bde'::name, 'crs_programme'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_programme'::name,
 ARRAY[
   'id',
@@ -925,6 +995,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_proprietor'::name);
+SELECT table_owner_is('bde'::name, 'crs_proprietor'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_proprietor'::name,
 ARRAY[
   'minor',
@@ -943,6 +1014,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_reduct_meth'::name);
+SELECT table_owner_is('bde'::name, 'crs_reduct_meth'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_reduct_meth'::name,
 ARRAY[
   'id',
@@ -953,6 +1025,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_reduct_run'::name);
+SELECT table_owner_is('bde'::name, 'crs_reduct_run'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_reduct_run'::name,
 ARRAY[
   'id',
@@ -966,6 +1039,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ref_survey'::name);
+SELECT table_owner_is('bde'::name, 'crs_ref_survey'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_ref_survey'::name,
 ARRAY[
   'sur_wrk_id_new',
@@ -975,6 +1049,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_road_ctr_line'::name);
+SELECT table_owner_is('bde'::name, 'crs_road_ctr_line'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_road_ctr_line'::name,
 ARRAY[
   'status',
@@ -987,6 +1062,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_road_name_asc'::name);
+SELECT table_owner_is('bde'::name, 'crs_road_name_asc'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_road_name'::name,
 ARRAY[
   'sufi',
@@ -1001,6 +1077,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_road_name'::name);
+SELECT table_owner_is('bde'::name, 'crs_road_name'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_road_name_asc'::name,
 ARRAY[
   'rna_id',
@@ -1011,6 +1088,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_setup'::name);
+SELECT table_owner_is('bde'::name, 'crs_setup'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_setup'::name,
 ARRAY[
   'type',
@@ -1023,6 +1101,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_site_locality'::name);
+SELECT table_owner_is('bde'::name, 'crs_site_locality'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_site'::name,
 ARRAY[
   'id',
@@ -1034,6 +1113,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_site'::name);
+SELECT table_owner_is('bde'::name, 'crs_site'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_site_locality'::name,
 ARRAY[
   'loc_id',
@@ -1042,6 +1122,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_stat_act_parcl'::name);
+SELECT table_owner_is('bde'::name, 'crs_stat_act_parcl'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_stat_act_parcl'::name,
 ARRAY[
   'audit_id',
@@ -1057,6 +1138,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_statist_area'::name);
+SELECT table_owner_is('bde'::name, 'crs_statist_area'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_stat_version'::name,
 ARRAY[
   'version',
@@ -1069,6 +1151,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_statute_action'::name);
+SELECT table_owner_is('bde'::name, 'crs_statute_action'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_statist_area'::name,
 ARRAY[
   'name',
@@ -1086,6 +1169,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_statute'::name);
+SELECT table_owner_is('bde'::name, 'crs_statute'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_statute'::name,
 ARRAY[
   'in_force_date',
@@ -1100,6 +1184,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_stat_version'::name);
+SELECT table_owner_is('bde'::name, 'crs_stat_version'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_statute_action'::name,
 ARRAY[
   'status',
@@ -1117,6 +1202,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_street_address'::name);
+SELECT table_owner_is('bde'::name, 'crs_street_address'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_street_address'::name,
 ARRAY[
   'audit_id',
@@ -1137,6 +1223,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_sur_admin_area'::name);
+SELECT table_owner_is('bde'::name, 'crs_sur_admin_area'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_sur_admin_area'::name,
 ARRAY[
   'sur_wrk_id',
@@ -1147,6 +1234,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_sur_plan_ref'::name);
+SELECT table_owner_is('bde'::name, 'crs_sur_plan_ref'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_sur_plan_ref'::name,
 ARRAY[
   'shape',
@@ -1156,6 +1244,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_survey_image'::name);
+SELECT table_owner_is('bde'::name, 'crs_survey_image'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_survey'::name,
 ARRAY[
   'dlr_amnd_date',
@@ -1188,6 +1277,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_survey'::name);
+SELECT table_owner_is('bde'::name, 'crs_survey'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_survey_image'::name,
 ARRAY[
   'type',
@@ -1197,6 +1287,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_sys_code_group'::name);
+SELECT table_owner_is('bde'::name, 'crs_sys_code_group'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_sys_code'::name,
 ARRAY[
   'start_date',
@@ -1212,6 +1303,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_sys_code'::name);
+SELECT table_owner_is('bde'::name, 'crs_sys_code'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_sys_code_group'::name,
 ARRAY[
   'code',
@@ -1226,6 +1318,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_title_action'::name);
+SELECT table_owner_is('bde'::name, 'crs_title_action'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_title'::name,
 ARRAY[
   'ttl_title_no_head_srs',
@@ -1257,6 +1350,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_title_doc_ref'::name);
+SELECT table_owner_is('bde'::name, 'crs_title_doc_ref'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_title_action'::name,
 ARRAY[
   'audit_id',
@@ -1266,6 +1360,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_title_estate'::name);
+SELECT table_owner_is('bde'::name, 'crs_title_estate'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_title_doc_ref'::name,
 ARRAY[
   'type',
@@ -1275,6 +1370,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_title_memorial'::name);
+SELECT table_owner_is('bde'::name, 'crs_title_memorial'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_title_estate'::name,
 ARRAY[
   'type',
@@ -1295,6 +1391,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_title_mem_text'::name);
+SELECT table_owner_is('bde'::name, 'crs_title_mem_text'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_title_mem_text'::name,
 ARRAY[
   'audit_id',
@@ -1312,6 +1409,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_title'::name);
+SELECT table_owner_is('bde'::name, 'crs_title'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_title_memorial'::name,
 ARRAY[
   'col_6_size',
@@ -1341,6 +1439,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_topology_class'::name);
+SELECT table_owner_is('bde'::name, 'crs_topology_class'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_topology_class'::name,
 ARRAY[
   'audit_id',
@@ -1350,6 +1449,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_transact_type'::name);
+SELECT table_owner_is('bde'::name, 'crs_transact_type'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_transact_type'::name,
 ARRAY[
   'partial_discharge',
@@ -1399,6 +1499,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ttl_enc'::name);
+SELECT table_owner_is('bde'::name, 'crs_ttl_enc'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_ttl_enc'::name,
 ARRAY[
   'act_tin_id_ext',
@@ -1412,6 +1513,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ttl_hierarchy'::name);
+SELECT table_owner_is('bde'::name, 'crs_ttl_hierarchy'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_ttl_hierarchy'::name,
 ARRAY[
   'act_id_ext',
@@ -1426,6 +1528,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ttl_inst'::name);
+SELECT table_owner_is('bde'::name, 'crs_ttl_inst'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_ttl_inst'::name,
 ARRAY[
   'dlg_id',
@@ -1458,6 +1561,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_ttl_inst_title'::name);
+SELECT table_owner_is('bde'::name, 'crs_ttl_inst_title'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_ttl_inst_title'::name,
 ARRAY[
   'tin_id',
@@ -1467,6 +1571,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_unit_of_meas'::name);
+SELECT table_owner_is('bde'::name, 'crs_unit_of_meas'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_unit_of_meas'::name,
 ARRAY[
   'code',
@@ -1475,6 +1580,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_user'::name);
+SELECT table_owner_is('bde'::name, 'crs_user'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_user'::name,
 ARRAY[
   'usr_id_coordinator',
@@ -1530,6 +1636,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_vector'::name);
+SELECT table_owner_is('bde'::name, 'crs_vector'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_vector'::name,
 ARRAY[
   'nod_id_end',
@@ -1544,6 +1651,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_vertx_sequence'::name);
+SELECT table_owner_is('bde'::name, 'crs_vertx_sequence'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_vertx_sequence'::name,
 ARRAY[
   'value2',
@@ -1554,6 +1662,7 @@ ARRAY[
   ]);
 
 SELECT has_table('bde'::name, 'crs_work'::name);
+SELECT table_owner_is('bde'::name, 'crs_work'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_work'::name,
 ARRAY[
   'usr_id_principal',
