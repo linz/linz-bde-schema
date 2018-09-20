@@ -17,4 +17,5 @@ CREATE OR REPLACE FUNCTION bde.bde_version()
 RETURNS text AS $$
   SELECT '@@VERSION@@'::text;
 $$ language 'sql' IMMUTABLE STRICT;
+ALTER FUNCTION bde.bde_version() OWNER TO bde_dba;
 
