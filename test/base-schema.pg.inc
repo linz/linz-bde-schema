@@ -1698,28 +1698,29 @@ ARRAY[
 
 -- Test functions existance {
 
-SELECT has_function('bde'::name, 'bde_get_app_specific'::name);
-SELECT has_function('bde'::name, 'bde_get_charcode'::name);
-SELECT has_function('bde'::name, 'bde_get_dataset'::name);
-SELECT has_function('bde'::name, 'bde_get_datasource'::name);
-SELECT has_function('bde'::name, 'bde_get_desccode'::name);
-SELECT has_function('bde'::name, 'bde_get_district'::name);
-SELECT has_function('bde'::name, 'bde_get_mrknodename'::name);
-SELECT has_function('bde'::name, 'bde_get_markname'::name);
-SELECT has_function('bde'::name, 'bde_get_nodename'::name);
-SELECT has_function('bde'::name, 'bde_get_nodename'::name);
-SELECT has_function('bde'::name, 'bde_get_nodeorder'::name);
-SELECT has_function('bde'::name, 'bde_get_office'::name);
-SELECT has_function('bde'::name, 'bde_get_roadname'::name);
-SELECT has_function('bde'::name, 'bde_get_trtcode'::name);
-SELECT has_function('bde'::name, 'bde_get_username'::name);
-SELECT has_function('bde'::name, 'bde_get_useroff'::name);
-SELECT has_function('bde'::name, 'bde_write_appellation'::name);
-SELECT has_function('bde'::name, 'bde_get_combined_appellation'::name);
-SELECT has_function('bde'::name, 'bde_get_par_stat_act'::name);
-SELECT has_function('bde'::name, 'bde_getnearnodes'::name);
-SELECT has_function('bde'::name, 'bde_drop_idle_connections'::name);
-SELECT has_function('bde'::name, 'bde_version'::name);
+SELECT has_function('bde', 'bde_drop_idle_connections', ARRAY['integer']);
+SELECT has_function('bde', 'bde_get_app_specific', ARRAY['bde.crs_appellation', 'character']);
+SELECT has_function('bde', 'bde_get_app_specific', ARRAY['integer', 'character varying', 'character']);
+SELECT has_function('bde', 'bde_get_charcode', ARRAY['character varying', 'character varying']);
+SELECT has_function('bde', 'bde_get_combined_appellation', ARRAY['integer', 'character']);
+SELECT has_function('bde', 'bde_get_dataset', ARRAY['integer']);
+SELECT has_function('bde', 'bde_get_datasource', ARRAY['integer']);
+SELECT has_function('bde', 'bde_get_desccode', ARRAY['character varying', 'character varying']);
+SELECT has_function('bde', 'bde_get_district', ARRAY['integer']);
+SELECT has_function('bde', 'bde_get_markname', ARRAY['integer']);
+SELECT has_function('bde', 'bde_get_mrknodename', ARRAY['integer', 'character varying']);
+SELECT has_function('bde', 'bde_getnearnodes', ARRAY['double precision', 'double precision', 'double precision']);
+SELECT has_function('bde', 'bde_get_nodename', ARRAY['integer']);
+SELECT has_function('bde', 'bde_get_nodename', ARRAY['integer', 'character varying']);
+SELECT has_function('bde', 'bde_get_nodeorder', ARRAY['integer']);
+SELECT has_function('bde', 'bde_get_office', ARRAY['integer']);
+SELECT has_function('bde', 'bde_get_par_stat_act', ARRAY['integer', 'integer']);
+SELECT has_function('bde', 'bde_get_roadname', ARRAY['integer', 'double precision']);
+SELECT has_function('bde', 'bde_get_trtcode', ARRAY['character varying', 'character varying']);
+SELECT has_function('bde', 'bde_get_username', ARRAY['character varying']);
+SELECT has_function('bde', 'bde_get_useroff', ARRAY['character varying']);
+SELECT has_function('bde', 'bde_version', ARRAY['']);
+SELECT has_function('bde', 'bde_write_appellation', ARRAY['character varying', 'character varying', 'character', 'character varying', 'text', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'text']);
 
 -- }
 
