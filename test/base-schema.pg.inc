@@ -1912,8 +1912,10 @@ ARRAY[
 
 SELECT has_function('bde', 'bde_drop_idle_connections', ARRAY['integer']);
 SELECT function_owner_is('bde', 'bde_drop_idle_connections', ARRAY['integer'], 'bde_dba'::name);
-SELECT has_function('bde', 'bde_get_app_specific', ARRAY['bde.crs_appellation', 'character']);
-SELECT function_owner_is('bde', 'bde_get_app_specific', ARRAY['bde.crs_appellation', 'character'], 'bde_dba'::name);
+-- NOTE: the ::regtype::text cast is to workaround a pgtap limitation
+--       documented in https://github.com/theory/pgtap/issues/179
+SELECT has_function('bde', 'bde_get_app_specific', ARRAY['bde.crs_appellation'::regtype::text, 'character']);
+SELECT function_owner_is('bde', 'bde_get_app_specific', ARRAY['bde.crs_appellation'::regtype::text, 'character'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_app_specific', ARRAY['integer', 'character varying', 'character']);
 SELECT function_owner_is('bde', 'bde_get_app_specific', ARRAY['integer', 'character varying', 'character'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_charcode', ARRAY['character varying', 'character varying']);
