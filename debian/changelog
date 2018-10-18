@@ -1,3 +1,9 @@
+linz-bde-schema (1.2.1-3linz~trusty1) trusty; urgency=medium
+
+  * Really Reordering of PostgreSQL dependencies alternatives
+
+ -- Ivan Mincik <imincik@linz.govt.nz>  Thu, 18 Oct 2018 13:01:57 +0200
+
 linz-bde-schema (1.2.1-2linz~trusty1) trusty; urgency=medium
 
   * Reordering of PostgreSQL dependencies alternatives
