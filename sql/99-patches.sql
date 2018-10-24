@@ -140,5 +140,63 @@ $$
 $P$
 );
 
+-------------------------------------------------------------------------------
+-- LOL 3.19: Add user_type_list and user_type_list_flag columns
+--           to bde.crs_transact_type
+-------------------------------------------------------------------------------
+
+PERFORM _patches.apply_patch(
+    'LOL 3.19: Add user_type_list and user_type_list_flag columns to bde.crs_transact_type',
+    $P$
+DO $$
+DECLARE
+  v_isversioned BOOL;
+BEGIN
+
+  v_isversioned := false;
+
+  IF EXISTS (SELECT p.oid
+             FROM pg_catalog.pg_proc p, pg_catalog.pg_namespace n
+             WHERE p.proname = 'ver_is_table_versioned'
+             AND n.oid = p.pronamespace
+             AND n.nspname = 'table_version')
+  THEN
+    IF table_version.ver_is_table_versioned('bde', 'crs_transact_type')
+    THEN
+      v_isversioned := true;
+    END IF;
+  END IF;
+
+  -- If table is versioned, use table_version API to add columns
+  IF v_isversioned
+  THEN
+      PERFORM table_version.ver_versioned_table_add_column(
+          'bde',
+          'crs_transact_type',
+          'user_type_list_flag',
+          'CHAR(1)'
+      );
+      PERFORM table_version.ver_versioned_table_add_column(
+          'bde',
+          'crs_transact_type',
+          'user_type_list',
+          'VARCHAR(200)'
+      );
+  ELSE
+    -- Otherwise use direct ALTER TABLE
+    ALTER TABLE bde.crs_transact_type ADD COLUMN user_type_list_flag  CHAR(1);
+    ALTER TABLE bde.crs_transact_type ADD COLUMN user_type_list VARCHAR(200);
+  END IF;
+
+	-- Add the new constraints
+  ALTER TABLE bde.crs_transact_type
+  ADD CONSTRAINT ckc_trt_user_type_list_flag
+  CHECK (user_type_list_flag in ('Y','N'));
+
+END;
+$$
+$P$
+);
+
 END;
 $PATCHES$;

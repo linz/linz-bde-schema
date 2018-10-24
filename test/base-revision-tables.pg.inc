@@ -1678,7 +1678,9 @@ ARRAY[
   'request_workflow_assignment',
   'short_name',
   'submitting_firm_only',
-  'view_in_search_tree'
+  'view_in_search_tree',
+  'user_type_list',
+  'user_type_list_flag'
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_ttl_enc_revision'::name);
