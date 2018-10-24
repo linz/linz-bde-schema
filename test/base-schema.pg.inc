@@ -1689,7 +1689,9 @@ ARRAY[
   'request_workflow_assignment',
   'short_name',
   'submitting_firm_only',
-  'view_in_search_tree'
+  'view_in_search_tree',
+  'user_type_list',
+  'user_type_list_flag'
   ]);
 
 SELECT has_table('bde'::name, 'crs_ttl_enc'::name);
