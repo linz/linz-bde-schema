@@ -2,7 +2,7 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
-## 1.3.0 - 2018-MM-DD
+## 1.3.0 - 2018-10-25
 ### Changed
 - Landonline 3.19 support (#115):
  - Add `user_type_list_flag` and `user_type_list` cols to `bde.crs_transact_type`
