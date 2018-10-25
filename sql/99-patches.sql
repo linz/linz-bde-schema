@@ -188,11 +188,6 @@ BEGIN
     ALTER TABLE bde.crs_transact_type ADD COLUMN user_type_list VARCHAR(200);
   END IF;
 
-	-- Add the new constraints
-  ALTER TABLE bde.crs_transact_type
-  ADD CONSTRAINT ckc_trt_user_type_list_flag
-  CHECK (user_type_list_flag in ('Y','N'));
-
 END;
 $$
 $P$
