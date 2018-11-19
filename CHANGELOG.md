@@ -8,7 +8,7 @@ All notable changes for the LINZ BDE schema are documented in this file.
 ### Added
 - ...
 ### Enhanced
-- ...
+- Add stdout support in `linz-bde-schema-load` (#122)
 
 ## 1.3.0 - 2018-10-25
 ### Changed
