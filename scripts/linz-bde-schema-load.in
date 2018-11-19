@@ -40,7 +40,7 @@ while test -n "$1"; do
 done
 
 if test -z "$DB_NAME"; then
-    echo "Usage: $0 [--noindexes] [--revision] [--noextension] <database>" >&2
+    echo "Usage: $0 [--noindexes] [--revision] [--noextension] { <database> | - }" >&2
     echo "       $0 --version" >&2
     exit 1
 fi
@@ -61,18 +61,27 @@ else
     done
 fi
 
+die()
+{
+    echo "ROLLBACK;"
+    exit 1
+}
+
+{
+
+
 LOADER=dbpatch-loader
 which $LOADER > /dev/null || {
     echo "$0 depends on $LOADER, which cannot be found in current PATH." >&2
     echo "Did you install dbpatch ? (1.2.0 or later needed)" >&2
-    exit 1
+    die
 }
 
 OPTS=
 if test "${EXTENSION_MODE}" = "off"; then
     OPTS="--no-extension"
 fi
-${LOADER} ${OPTS} $PGDATABASE _patches || exit 1
+${LOADER} ${OPTS} $PGDATABASE _patches || die
 
 # Enable table_version if needed
 if test "${ADD_REVISIONS}" = "yes"; then
@@ -80,16 +89,15 @@ if test "${ADD_REVISIONS}" = "yes"; then
     which $LOADER > /dev/null || {
         echo "$0 depends on $LOADER, which cannot be found in current PATH." >&2
         echo "Did you install table_version ? (1.4.0 or later needed)" >&2
-        exit 1
+        die
     }
     OPTS=
     if test "${EXTENSION_MODE}" = "off"; then
         OPTS="--no-extension"
     fi
-    ${LOADER} ${OPTS} $PGDATABASE || exit 1
+    ${LOADER} ${OPTS} $PGDATABASE || die
 fi
 
-(
 cat << EOF
 SET client_min_messages TO WARNING;
 CREATE EXTENSION IF NOT EXISTS postgis SCHEMA public;
@@ -101,12 +109,21 @@ for file in ${SCRIPTSDIR}/*.sql; do
     then
         continue
     fi
-    cat ${file}
+    cat ${file} || die
 done
 
 if test "${ADD_REVISIONS}" = "yes"; then
     file=${SCRIPTSDIR}/versioning/01-version_tables.sql
-    cat ${file} || exit 1
+    cat ${file} || die
 fi
 
-) | $PSQL -tA --set ON_ERROR_STOP=1 > /dev/null
+echo "COMMIT;"
+
+} |
+grep -v "^\(BEGIN\|COMMIT\);" |
+( echo "BEGIN;"; cat; echo "COMMIT;"; ) |
+if test $PGDATABASE = "-"; then
+    cat
+else
+    $PSQL -XtA --set ON_ERROR_STOP=1 -o /dev/null
+fi
