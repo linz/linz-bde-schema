@@ -62,14 +62,17 @@ installcheck: check-loader
 # Check an already prepared database
 # It is expected that the prepared database
 # is set via PGDATABASE
+#
+# TODO: run the full set of test
+#
 check-prepared:
 	V=`psql -XtAc 'select bde.bde_version()'` && \
-	echo $$V && test "$$V" = "$(VERSION)" && \
+	echo $$V && test "$$V" = "$(VERSION)"
+
+check-loader:
+
 	V=`linz-bde-schema-load --version` && \
 	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
-
-# TODO: run the full test after preparing the db ?
-check-loader:
 
 	dropdb --if-exists linz-bde-schema-test-db
 
@@ -94,7 +97,6 @@ check-loader:
 	$(MAKE) check-prepared
 	dropdb linz-bde-schema-test-db
 
-# TODO: run the full test after preparing the db ?
 check-loader-stdout:
 
 	dropdb --if-exists linz-bde-schema-test-db
