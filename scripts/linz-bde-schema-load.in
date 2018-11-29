@@ -75,7 +75,7 @@ which $DBPATCH_LOADER > /dev/null || {
 }
 
 # Check if dbpatch-loader supports stdout
-dbpatch-loader - public > /dev/null &&
+dbpatch-loader - public > /dev/null 2>&2 &&
     DBPATCH_SUPPORTS_STDOUT=yes ||
     DBPATCH_SUPPORTS_STDOUT=no
 
@@ -106,7 +106,7 @@ which $TABLEVERSION_LOADER > /dev/null || {
 }
 
 # Check if table_version-loader supports stdout
-table_version-loader -  > /dev/null &&
+table_version-loader -  > /dev/null 2>&1 &&
     TABLEVERSION_SUPPORTS_STDOUT=yes ||
     TABLEVERSION_SUPPORTS_STDOUT=no
 
