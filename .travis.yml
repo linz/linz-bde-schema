@@ -98,3 +98,5 @@ script:
   # Test build and installation of debian package
   - make deb
   - sudo dpkg -i ../linz-bde-schema*.deb
+  # Test upgrades
+  - test/test-upgrades.sh
