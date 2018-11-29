@@ -18,11 +18,11 @@
 
 SET client_min_messages TO WARNING;
 
-CREATE EXTENSION postgis;
-CREATE EXTENSION pgtap;
+CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS pgtap;
 
-CREATE SCHEMA _patches;
-CREATE EXTENSION dbpatch SCHEMA _patches;
+CREATE SCHEMA IF NOT EXISTS _patches;
+CREATE EXTENSION IF NOT EXISTS dbpatch SCHEMA _patches;
 
 -- Switch to unprivileged role
 DO $$
