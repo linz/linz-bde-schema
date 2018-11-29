@@ -59,6 +59,15 @@ install: $(SQLSCRIPTS) $(SCRIPTS_built)
 
 installcheck: check-loader
 
+# Check an already prepared database
+# It is expected that the prepared database
+# is set via PGDATABASE
+check-prepared:
+	V=`psql -XtAc 'select bde.bde_version()'` && \
+	echo $$V && test "$$V" = "$(VERSION)" && \
+	V=`linz-bde-schema-load --version` && \
+	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
+
 # TODO: run the full test after preparing the db ?
 check-loader:
 
@@ -68,30 +77,21 @@ check-loader:
 	linz-bde-schema-load linz-bde-schema-test-db
 	linz-bde-schema-load linz-bde-schema-test-db
 	export PGDATABASE=linz-bde-schema-test-db; \
-	V=`psql -XtAc 'select bde.bde_version()'` && \
-	echo $$V && test "$$V" = "$(VERSION)" && \
-	V=`linz-bde-schema-load --version` && \
-	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
+	$(MAKE) check-prepared
 	dropdb linz-bde-schema-test-db
 
 	createdb linz-bde-schema-test-db
 	linz-bde-schema-load --noextension linz-bde-schema-test-db
 	linz-bde-schema-load --noextension linz-bde-schema-test-db
 	export PGDATABASE=linz-bde-schema-test-db; \
-	V=`psql -XtAc 'select bde.bde_version()'` && \
-	echo $$V && test "$$V" = "$(VERSION)" && \
-	V=`linz-bde-schema-load --version` && \
-	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
+	$(MAKE) check-prepared
 	dropdb linz-bde-schema-test-db
 
 	createdb linz-bde-schema-test-db
 	linz-bde-schema-load --revision linz-bde-schema-test-db
 	linz-bde-schema-load --revision linz-bde-schema-test-db
 	export PGDATABASE=linz-bde-schema-test-db; \
-	V=`psql -XtAc 'select bde.bde_version()'` && \
-	echo $$V && test "$$V" = "$(VERSION)" && \
-	V=`linz-bde-schema-load --version` && \
-	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
+	$(MAKE) check-prepared
 	dropdb linz-bde-schema-test-db
 
 # TODO: run the full test after preparing the db ?
@@ -105,10 +105,7 @@ check-loader-stdout:
 	linz-bde-schema-load - | \
         psql -Xo /dev/null linz-bde-schema-test-db
 	export PGDATABASE=linz-bde-schema-test-db; \
-	V=`psql -XtAc 'select bde.bde_version()'` && \
-	echo $$V && test "$$V" = "$(VERSION)" && \
-	V=`linz-bde-schema-load --version` && \
-	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
+	$(MAKE) check-prepared
 	dropdb linz-bde-schema-test-db
 
 	createdb linz-bde-schema-test-db
@@ -117,10 +114,7 @@ check-loader-stdout:
 	linz-bde-schema-load --noextension - | \
         psql -Xo /dev/null linz-bde-schema-test-db
 	export PGDATABASE=linz-bde-schema-test-db; \
-	V=`psql -XtAc 'select bde.bde_version()'` && \
-	echo $$V && test "$$V" = "$(VERSION)" && \
-	V=`linz-bde-schema-load --version` && \
-	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
+	$(MAKE) check-prepared
 	dropdb linz-bde-schema-test-db
 
 	createdb linz-bde-schema-test-db
@@ -129,10 +123,7 @@ check-loader-stdout:
 	linz-bde-schema-load --revision - | \
         psql -Xo /dev/null linz-bde-schema-test-db
 	export PGDATABASE=linz-bde-schema-test-db; \
-	V=`psql -XtAc 'select bde.bde_version()'` && \
-	echo $$V && test "$$V" = "$(VERSION)" && \
-	V=`linz-bde-schema-load --version` && \
-	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
+	$(MAKE) check-prepared
 	dropdb linz-bde-schema-test-db
 
 uninstall:
