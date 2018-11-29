@@ -100,8 +100,10 @@ check-loader-stdout:
 	dropdb --if-exists linz-bde-schema-test-db
 
 	createdb linz-bde-schema-test-db
-	linz-bde-schema-load - | psql linz-bde-schema-test-db
-	linz-bde-schema-load - | psql linz-bde-schema-test-db
+	linz-bde-schema-load - | \
+        psql -Xo /dev/null linz-bde-schema-test-db
+	linz-bde-schema-load - | \
+        psql -Xo /dev/null linz-bde-schema-test-db
 	export PGDATABASE=linz-bde-schema-test-db; \
 	V=`psql -XtAc 'select bde.bde_version()'` && \
 	echo $$V && test "$$V" = "$(VERSION)" && \
@@ -110,8 +112,10 @@ check-loader-stdout:
 	dropdb linz-bde-schema-test-db
 
 	createdb linz-bde-schema-test-db
-	linz-bde-schema-load --noextension - | psql linz-bde-schema-test-db
-	linz-bde-schema-load --noextension - | psql linz-bde-schema-test-db
+	linz-bde-schema-load --noextension - | \
+        psql -Xo /dev/null linz-bde-schema-test-db
+	linz-bde-schema-load --noextension - | \
+        psql -Xo /dev/null linz-bde-schema-test-db
 	export PGDATABASE=linz-bde-schema-test-db; \
 	V=`psql -XtAc 'select bde.bde_version()'` && \
 	echo $$V && test "$$V" = "$(VERSION)" && \
@@ -120,8 +124,10 @@ check-loader-stdout:
 	dropdb linz-bde-schema-test-db
 
 	createdb linz-bde-schema-test-db
-	linz-bde-schema-load --revision - | psql linz-bde-schema-test-db
-	linz-bde-schema-load --revision - | psql linz-bde-schema-test-db
+	linz-bde-schema-load --revision - | \
+        psql -Xo /dev/null linz-bde-schema-test-db
+	linz-bde-schema-load --revision - | \
+        psql -Xo /dev/null linz-bde-schema-test-db
 	export PGDATABASE=linz-bde-schema-test-db; \
 	V=`psql -XtAc 'select bde.bde_version()'` && \
 	echo $$V && test "$$V" = "$(VERSION)" && \
