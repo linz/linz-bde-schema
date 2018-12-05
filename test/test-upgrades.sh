@@ -8,6 +8,8 @@ UPGRADEABLE_VERSIONS="
 
 TEST_DATABASE=linz-bde-schema-upgrade-test-db
 
+git fetch --unshallow --tags # to get all commits/tags
+
 TMPDIR=/tmp/linz-bde-schema-test-$$
 mkdir -p ${TMPDIR}
 
