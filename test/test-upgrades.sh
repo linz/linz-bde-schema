@@ -8,6 +8,9 @@ UPGRADEABLE_VERSIONS="
 
 TEST_DATABASE=linz-bde-schema-upgrade-test-db
 
+TMPDIR=/tmp/linz-bde-schema-test-$$
+mkdir -p ${TMPDIR}
+
 export PGDATABASE=${TEST_DATABASE}
 
 for ver in ${UPGRADEABLE_VERSIONS}; do
@@ -22,10 +25,13 @@ CREATE SCHEMA IF NOT EXISTS _patches;
 CREATE EXTENSION IF NOT EXISTS dbpatch SCHEMA _patches;
 EOF
 
-    cd /tmp
-    wget -q -O - \
-        https://github.com/linz/linz-bde-schema/archive/${ver}.tar.gz \
-        | tar xzf - && cd linz-bde-schema-${ver} || exit 1
+    cd ${TMPDIR}
+    test -d linz-bde-schema || {
+        git clone --quiet --reference $OWD \
+            https://github.com/linz/linz-bde-schema || exit 1
+    }
+    cd linz-bde-schema || exit 1
+    git checkout ${ver} || exit 1
     sudo env "PATH=$PATH" make install DESTDIR=$PWD/inst || exit 1
 
     # Install the just-installed linz-bde-schema first !
