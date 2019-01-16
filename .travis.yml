@@ -1,12 +1,6 @@
 sudo: required
-dist: trusty
+dist: xenial
 language: C++
-
-addons:
-  apt:
-    sources:
-    - sourceline: "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main"
-      key_url: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
 
 matrix:
 
