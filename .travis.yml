@@ -58,6 +58,8 @@ before_install:
     postgresql-server-dev-all
     debhelper fakeroot
     libtap-parser-sourcehandler-pgtap-perl
+  # Set PATH as postgresql-server-dev-all pretends version is 11
+  - export PATH=/usr/lib/postgresql/${PG}/bin:${PATH}
   # Set default branches for tbale version and dbpatch
   - if test -z "${TABLEVERSION_BRANCH}"; then
       export TABLEVERSION_BRANCH=release-1.5;
@@ -70,14 +72,14 @@ before_install:
   - wget -q -O -
     https://github.com/linz/postgresql-dbpatch/archive/${DBPATCH_BRANCH}.tar.gz
     | tar xzf - && cd postgresql-dbpatch-${DBPATCH_BRANCH}
-  - sudo make install
+  - sudo env "PATH=$PATH" make install
   - popd
   # Install table_version PostgreSQL extension
   - pushd /tmp
   - wget -q -O -
     https://github.com/linz/postgresql-tableversion/archive/${TABLEVERSION_BRANCH}.tar.gz
     | tar vxzf - && cd postgresql-tableversion-${TABLEVERSION_BRANCH}
-  - sudo make install
+  - sudo env "PATH=$PATH" make install
   - popd
 
 before_script:
@@ -87,7 +89,7 @@ before_script:
 script:
   - make
   - make check || { cat regression.diffs; false; }
-  - sudo make install
+  - sudo env "PATH=$PATH" make install
   - make installcheck
   - if test -n "${STDOUT_SCHEMA_LOADING_SUPPORTED}"; then
       make check-loader-stdout;
