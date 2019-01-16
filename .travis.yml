@@ -8,38 +8,14 @@ matrix:
   - env:
     - PG=9.3
     - PGIS=2.3
-    addons:
-      postgresql: 9.3
-      apt:
-        packages:
-        - postgresql-9.3
-        - postgresql-9.3-pgtap
-        - postgresql-server-dev-9.3
-        - postgresql-9.3-postgis-2.3
 
   - env:
     - PG=9.4
     - PGIS=2.3
-    addons:
-      postgresql: 9.4
-      apt:
-        packages:
-        - postgresql-9.4
-        - postgresql-9.4-pgtap
-        - postgresql-server-dev-9.4
-        - postgresql-9.4-postgis-2.3
 
   - env:
     - PG=9.5
     - PGIS=2.3
-    addons:
-      postgresql: 9.5
-      apt:
-        packages:
-        - postgresql-9.5
-        - postgresql-9.5-pgtap
-        - postgresql-server-dev-9.5
-        - postgresql-9.5-postgis-2.3
 
   - env:
     - PG=9.6
@@ -47,67 +23,41 @@ matrix:
     - TABLEVERSION_BRANCH=master
     - DBPATCH_BRANCH=master
     - STDOUT_SCHEMA_LOADING_SUPPORTED=1
-    addons:
-      postgresql: 9.6
-      apt:
-        packages:
-        - postgresql-9.6
-        - postgresql-9.6-pgtap
-        - postgresql-server-dev-9.6
-        - postgresql-9.6-postgis-2.3
 
   - env:
-    - PG=10/2.4
+    - PG=10
+    - PGIS=2.4
     - TABLEVERSION_BRANCH=master
     - DBPATCH_BRANCH=master
     - STDOUT_SCHEMA_LOADING_SUPPORTED=1
-    addons:
-      postgresql: 10
-      apt:
-        packages:
-        - postgresql-10
-        - postgresql-10-pgtap
-        - postgresql-server-dev-10
-        - postgresql-10-postgis-2.4
-        - postgresql-10-postgis-2.4-scripts
 
   - env:
-    - PG=11/2.4
+    - PG=11
+    - PGIS=2.4
     - TABLEVERSION_BRANCH=master
     - DBPATCH_BRANCH=master
     - STDOUT_SCHEMA_LOADING_SUPPORTED=1
-    addons:
-      postgresql: 11
-      apt:
-        packages:
-        - postgresql-11
-        - postgresql-11-pgtap
-        - postgresql-server-dev-11
-        - postgresql-11-postgis-2.5
-        - postgresql-11-postgis-2.5-scripts
 
 before_install:
-  # Install common packages
-  - sudo apt-get -qq update
-  - sudo apt-get install -y pgtap
-    debhelper fakeroot
-  # Set PGPORT
-  - export PGPORT=`pg_lsclusters  | grep ' online ' | tail -1 | awk '{print $3}'`
-  # Show some build info
-  - apt-cache search postgis
-  - echo $PATH
-  - which pg_config
-  - pg_config --version
-  - which pg_lsclusters
-  - pg_lsclusters
-  - psql --version
-  - psql -c 'select version()'
-  - find `pg_config --pkglibdir`| grep postgis
-  - find `pg_config --sharedir`/extension | grep postgis
+  # Purge PostgreSQL packages
+  - sudo apt-get -y --purge remove postgresql libpq-dev libpq5
+    postgresql-client-common postgresql-common
+  - sudo rm -rf /var/lib/postgresql
   # Enable fetching packages from packagecloud
   # test and production repositories
   - curl -s https://packagecloud.io/install/repositories/linz/test/script.deb.sh | sudo bash
   - curl -s https://packagecloud.io/install/repositories/linz/prod/script.deb.sh | sudo bash
+  - sudo apt-get update -qq
+  # Install packages
+  - sudo apt-get install -y
+    postgresql-${PG}
+    postgresql-client-${PG}
+    postgresql-${PG}-pgtap
+    postgresql-${PG}-postgis-${PGIS}
+    postgresql-${PG}-postgis-${PGIS}-scripts
+    postgresql-server-dev-all
+    debhelper fakeroot
+    libtap-parser-sourcehandler-pgtap-perl
   # Set default branches for tbale version and dbpatch
   - if test -z "${TABLEVERSION_BRANCH}"; then
       export TABLEVERSION_BRANCH=release-1.5;
@@ -120,19 +70,24 @@ before_install:
   - wget -q -O -
     https://github.com/linz/postgresql-dbpatch/archive/${DBPATCH_BRANCH}.tar.gz
     | tar xzf - && cd postgresql-dbpatch-${DBPATCH_BRANCH}
-  - sudo env "PATH=$PATH" make install
+  - sudo make install
   - popd
   # Install table_version PostgreSQL extension
   - pushd /tmp
   - wget -q -O -
     https://github.com/linz/postgresql-tableversion/archive/${TABLEVERSION_BRANCH}.tar.gz
     | tar vxzf - && cd postgresql-tableversion-${TABLEVERSION_BRANCH}
-  - sudo env "PATH=$PATH" make install
+  - sudo make install
   - popd
+
+before_script:
+  - sudo -u postgres createuser -s "$USER"
+  - sudo -u postgres createuser -s root
+
 script:
   - make
   - make check || { cat regression.diffs; false; }
-  - sudo env "PATH=$PATH" make install
+  - sudo make install
   - make installcheck
   - if test -n "${STDOUT_SCHEMA_LOADING_SUPPORTED}"; then
       make check-loader-stdout;
