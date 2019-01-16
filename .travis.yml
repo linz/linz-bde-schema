@@ -5,7 +5,9 @@ matrix:
 
   include:
 
-  - env: PG=9.3/2.3
+  - env:
+    - PG=9.3
+    - PGIS=2.3
     addons:
       postgresql: 9.3
       apt:
@@ -15,7 +17,9 @@ matrix:
         - postgresql-server-dev-9.3
         - postgresql-9.3-postgis-2.3
 
-  - env: PG=9.4/2.3
+  - env:
+    - PG=9.4
+    - PGIS=2.3
     addons:
       postgresql: 9.4
       apt:
@@ -25,7 +29,9 @@ matrix:
         - postgresql-server-dev-9.4
         - postgresql-9.4-postgis-2.3
 
-  - env: PG=9.5/2.3
+  - env:
+    - PG=9.5
+    - PGIS=2.3
     addons:
       postgresql: 9.5
       apt:
@@ -36,7 +42,8 @@ matrix:
         - postgresql-9.5-postgis-2.3
 
   - env:
-    - PG=9.6/2.3
+    - PG=9.6
+    - PGIS=2.3
     - TABLEVERSION_BRANCH=master
     - DBPATCH_BRANCH=master
     - STDOUT_SCHEMA_LOADING_SUPPORTED=1
@@ -63,6 +70,21 @@ matrix:
         - postgresql-server-dev-10
         - postgresql-10-postgis-2.4
         - postgresql-10-postgis-2.4-scripts
+
+  - env:
+    - PG=11/2.4
+    - TABLEVERSION_BRANCH=master
+    - DBPATCH_BRANCH=master
+    - STDOUT_SCHEMA_LOADING_SUPPORTED=1
+    addons:
+      postgresql: 11
+      apt:
+        packages:
+        - postgresql-11
+        - postgresql-11-pgtap
+        - postgresql-server-dev-11
+        - postgresql-11-postgis-2.5
+        - postgresql-11-postgis-2.5-scripts
 
 before_install:
   # Install common packages
