@@ -33,7 +33,7 @@ matrix:
 
   - env:
     - PG=11
-    - PGIS=2.4
+    - PGIS=2.5
     - TABLEVERSION_BRANCH=master
     - DBPATCH_BRANCH=master
     - STDOUT_SCHEMA_LOADING_SUPPORTED=1
