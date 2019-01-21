@@ -13,20 +13,21 @@
 
 BEGIN;
 
-DO $$
+CREATE FUNCTION pg_temp.bless_bde_function(p_pcid regprocedure)
+RETURNS VOID LANGUAGE plpgsql VOLATILE AS $$
 DECLARE
-   v_pcid    TEXT;
-   v_schema  TEXT = 'bde';
+    v_comment TEXT;
 BEGIN
-    FOR v_pcid IN
-        SELECT v_schema || '.' || proname || '(' || pg_get_function_identity_arguments(oid) || ')'
-        FROM pg_proc
-        WHERE pronamespace=(SELECT oid FROM pg_namespace WHERE nspname = v_schema)
-          AND proname like 'bde_%'
-    LOOP
-        EXECUTE 'DROP FUNCTION ' || v_pcid;
-    END LOOP;
-END;
+   v_comment := 'Version: @@VERSION@@ @@REVISION@@'
+                || E'\n' || 'Installed: ' ||
+                to_char(current_timestamp,'YYYY-MM-DD HH:MI');
+
+  EXECUTE format('ALTER FUNCTION %s OWNER TO bde_dba', p_pcid);
+  EXECUTE format('REVOKE ALL ON FUNCTION %s FROM PUBLIC', p_pcid);
+  EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO bde_admin', p_pcid);
+  EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO bde_user', p_pcid);
+  EXECUTE format('COMMENT ON FUNCTION %s IS %L', p_pcid, v_comment);
+END
 $$;
 
 --
@@ -160,10 +161,7 @@ END;
     $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 --}
 
-ALTER FUNCTION bde.bde_get_app_specific(bde.crs_appellation, CHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_app_specific(bde.crs_appellation, CHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_app_specific(bde.crs_appellation, CHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_app_specific(bde.crs_appellation, CHAR) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_app_specific(bde.crs_appellation, char)');
 
 /**
 * Retrieve the title or survey appellation for a specific parcel and format it.
@@ -196,10 +194,10 @@ RETURNS text AS $$
     $$ LANGUAGE sql STABLE STRICT;
 --}
 
-ALTER FUNCTION bde.bde_get_app_specific(INTEGER, VARCHAR, CHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_app_specific(INTEGER, VARCHAR, CHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_app_specific(INTEGER, VARCHAR, CHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_app_specific(INTEGER, VARCHAR, CHAR) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_app_specific(INTEGER, VARCHAR, CHAR)');
+
+
+
 
 
 --
@@ -217,10 +215,10 @@ CREATE OR REPLACE FUNCTION bde.bde_get_charcode(p_code_group VARCHAR, p_code VAR
 $$ LANGUAGE sql STABLE STRICT;
 
 
-ALTER FUNCTION bde.bde_get_charcode(VARCHAR, VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_charcode(VARCHAR, VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_charcode(VARCHAR, VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_charcode(VARCHAR, VARCHAR) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_charcode(VARCHAR, VARCHAR)');
+
+
+
 
 --
 -- Name: bde.bde_get_dataset(INTEGER)
@@ -258,10 +256,10 @@ END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
 
-ALTER FUNCTION bde.bde_get_dataset(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_dataset(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_dataset(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_dataset(INTEGER) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_dataset(INTEGER)');
+
+
+
 
 --
 -- Name: bde.bde_get_datasource(INTEGER)
@@ -273,10 +271,10 @@ CREATE OR REPLACE FUNCTION bde.bde_get_datasource(p_wrk_id INTEGER) RETURNS CHAR
     WHERE  wrk_id = $1;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde.bde_get_datasource(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_datasource(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_datasource(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_datasource(INTEGER) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_datasource(INTEGER)');
+
+
+
 
 --
 -- Name: bde.bde_get_desccode(VARCHAR, VARCHAR)
@@ -289,10 +287,10 @@ CREATE OR REPLACE FUNCTION bde.bde_get_desccode(p_code_group VARCHAR, p_code VAR
     AND    SCO.code     = $2;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde.bde_get_desccode(VARCHAR, VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_desccode(VARCHAR, VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_desccode(VARCHAR, VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_desccode(VARCHAR, VARCHAR) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_desccode(VARCHAR, VARCHAR)');
+
+
+
 
 --
 -- Name: bde.bde_get_district(INTEGER)
@@ -304,10 +302,10 @@ CREATE OR REPLACE FUNCTION bde.bde_get_district(p_loc_id INTEGER) RETURNS VARCHA
     WHERE  id = $1;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde.bde_get_district(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_district(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_district(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_district(INTEGER) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_district(INTEGER)');
+
+
+
 
 --
 -- Name: bde.bde_get_mrknodename(INTEGER, VARCHAR)
@@ -385,10 +383,10 @@ BEGIN
 END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
-ALTER FUNCTION bde.bde_get_mrknodename(INTEGER, VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_mrknodename(INTEGER, VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_mrknodename(INTEGER, VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_mrknodename(INTEGER, VARCHAR) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_mrknodename(INTEGER, VARCHAR)');
+
+
+
 
 --
 -- Name: bde.bde_get_markname(INTEGER)
@@ -399,10 +397,10 @@ CREATE OR REPLACE FUNCTION bde.bde_get_markname(p_mrk_id INTEGER) RETURNS VARCHA
 $$ LANGUAGE sql STABLE STRICT;
 
 
-ALTER FUNCTION bde.bde_get_markname(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_markname(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_markname(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_markname(INTEGER) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_markname(INTEGER)');
+
+
+
 
 --
 -- Name: bde.bde_get_nodename(INTEGER)
@@ -413,10 +411,10 @@ CREATE OR REPLACE FUNCTION bde.bde_get_nodename(p_nod_id INTEGER) RETURNS VARCHA
 $$ LANGUAGE sql STABLE STRICT;
 
 
-ALTER FUNCTION bde.bde_get_nodename(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_nodename(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_nodename(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_nodename(INTEGER) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_nodename(INTEGER)');
+
+
+
 
 --
 -- Name: bde.bde_get_nodename(INTEGER, VARCHAR)
@@ -445,10 +443,10 @@ END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
 
-ALTER FUNCTION bde.bde_get_nodename(INTEGER, VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_nodename(INTEGER, VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_nodename(INTEGER, VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_nodename(INTEGER, VARCHAR) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_nodename(INTEGER, VARCHAR)');
+
+
+
 
 --
 -- Name: bde.bde_get_nodeorder(INTEGER)
@@ -466,10 +464,10 @@ CREATE OR REPLACE FUNCTION bde.bde_get_nodeorder(p_node_id INTEGER) RETURNS VARC
     AND     COS.dtm_id = DTM.id;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde.bde_get_nodeorder(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_nodeorder(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_nodeorder(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_nodeorder(INTEGER) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_nodeorder(INTEGER)');
+
+
+
 
 --
 -- Name: bde.bde_get_office(INTEGER)
@@ -484,10 +482,10 @@ CREATE OR REPLACE FUNCTION bde.bde_get_office(p_loc_id INTEGER) RETURNS VARCHAR 
 $$ LANGUAGE sql STABLE STRICT;
 
 
-ALTER FUNCTION bde.bde_get_office(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_office(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_office(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_office(INTEGER) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_office(INTEGER)');
+
+
+
 
 --
 -- Name: bde.bde_get_roadname(INTEGER, DOUBLE PRECISION);
@@ -565,10 +563,10 @@ END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
 
-ALTER FUNCTION bde.bde_get_roadname(INTEGER, DOUBLE PRECISION) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_roadname(INTEGER, DOUBLE PRECISION) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_roadname(INTEGER, DOUBLE PRECISION) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_roadname(INTEGER, DOUBLE PRECISION) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_roadname(INTEGER, DOUBLE PRECISION)');
+
+
+
 
 --
 -- Name: bde.bde_get_trtcode(VARCHAR, VARCHAR)
@@ -581,10 +579,10 @@ CREATE OR REPLACE FUNCTION bde.bde_get_trtcode(p_code_group VARCHAR, p_type VARC
    AND    type = $2;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde.bde_get_trtcode(VARCHAR, VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_trtcode(VARCHAR, VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_trtcode(VARCHAR, VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_trtcode(VARCHAR, VARCHAR) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_trtcode(VARCHAR, VARCHAR)');
+
+
+
 
 --
 -- Name: bde.bde_get_username(VARCHAR)
@@ -596,10 +594,10 @@ CREATE OR REPLACE FUNCTION bde.bde_get_username(p_user_id VARCHAR) RETURNS VARCH
     WHERE  id = $1;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde.bde_get_username(VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_username(VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_username(VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_username(VARCHAR) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_username(VARCHAR)');
+
+
+
 
 --
 -- Name: bde.bde_get_useroff(VARCHAR)
@@ -612,10 +610,10 @@ CREATE OR REPLACE FUNCTION bde.bde_get_useroff(p_user_id VARCHAR) RETURNS VARCHA
 $$ LANGUAGE sql STABLE STRICT;
 
 
-ALTER FUNCTION bde.bde_get_useroff(VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_useroff(VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_useroff(VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_useroff(VARCHAR) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_useroff(VARCHAR)');
+
+
+
 
 --
 -- Name: bde.bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT);
@@ -725,10 +723,10 @@ BEGIN
 END;
     $$ LANGUAGE plpgsql IMMUTABLE;
 
-ALTER FUNCTION bde.bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT)');
+
+
+
 
 
 CREATE OR REPLACE FUNCTION bde.bde_get_combined_appellation(p_par_id INTEGER, p_long CHAR)
@@ -744,10 +742,10 @@ RETURNS TEXT AS $$
     LIMIT 1;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde.bde_get_combined_appellation(INTEGER, CHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_combined_appellation(INTEGER, CHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_combined_appellation(INTEGER, CHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_combined_appellation(INTEGER, CHAR) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_combined_appellation(INTEGER, CHAR)');
+
+
+
 
 CREATE OR REPLACE FUNCTION bde.bde_get_par_stat_act(p_sta_id INTEGER, p_par_id INTEGER)
     RETURNS TEXT AS $$
@@ -876,10 +874,10 @@ BEGIN
 END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
-ALTER FUNCTION bde.bde_get_par_stat_act(INTEGER, INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_get_par_stat_act(INTEGER, INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_get_par_stat_act(INTEGER, INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_get_par_stat_act(INTEGER, INTEGER) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_get_par_stat_act(INTEGER, INTEGER)');
+
+
+
 
 CREATE OR REPLACE FUNCTION bde.bde_getnearnodes (
     p_latitude  DOUBLE PRECISION,
@@ -933,10 +931,10 @@ BEGIN
     END;
 $body$ LANGUAGE plpgsql STABLE;
 
-ALTER FUNCTION bde.bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde.bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde.bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION) TO bde_user;
+SELECT pg_temp.bless_bde_function('bde.bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION)');
+
+
+
 
 --  Drop connnections to the database more than a specific age
 --
@@ -976,40 +974,8 @@ BEGIN
 END
 $$ LANGUAGE plpgsql VOLATILE SECURITY DEFINER;
 
-ALTER FUNCTION bde.bde_drop_idle_connections(INTEGER) OWNER TO bde_dba;
-REVOKE ALL PRIVILEGES ON FUNCTION bde.bde_drop_idle_connections(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde.bde_drop_idle_connections(INTEGER) TO bde_admin;
+SELECT pg_temp.bless_bde_function('bde.bde_drop_idle_connections(INTEGER)');
 
-DO $$
-DECLARE
-    v_comment TEXT;
-    v_pcid    TEXT;
-    v_schema  TEXT = 'bde';
-BEGIN
-    FOR v_comment, v_pcid IN
-        SELECT
-            obj_description(oid, 'pg_proc'),
-            proname || '(' || pg_get_function_identity_arguments(oid) || ')'
-        FROM
-            pg_proc
-        WHERE
-            pronamespace=(SELECT oid FROM pg_namespace WHERE nspname = v_schema)  AND
-            proname NOT ILIKE '_createVersionComment'
-    LOOP
-        IF v_comment IS NULL THEN
-            v_comment := '';
-        ELSE
-            v_comment := E'\n\n' || v_comment;
-        END IF;
 
-        v_comment := 'Version: @@VERSION@@ @@REVISION@@'
-                    || E'\n' || 'Installed: ' ||
-                    to_char(current_timestamp,'YYYY-MM-DD HH:MI') || v_comment;
-
-        EXECUTE 'COMMENT ON FUNCTION ' || v_schema || '.' || v_pcid || ' IS '
-            || quote_literal( v_comment );
-    END LOOP;
-END
-$$;
 
 COMMIT;

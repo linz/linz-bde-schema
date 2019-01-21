@@ -55,13 +55,9 @@ before_install:
   - sudo apt-get install -y pgtap
     debhelper fakeroot
   # Show some build info
-  - apt-cache search postgis
-  - echo $PATH
-  - which pg_config
   - pg_config --version
   - psql --version
   - psql -c 'select version()'
-  - find `pg_config --pkglibdir`| grep postgis
   # Enable fetching packages from packagecloud
   # test and production repositories
   - curl -s https://packagecloud.io/install/repositories/linz/test/script.deb.sh | sudo bash
