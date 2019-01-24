@@ -4,6 +4,8 @@ UPGRADEABLE_VERSIONS="
     1.3.0
     1.2.1
     1.2.0
+    1.0.1
+    1.0.0
 "
 
 TEST_DATABASE=linz-bde-schema-upgrade-test-db
