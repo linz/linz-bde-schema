@@ -54,6 +54,12 @@ You can upgrade the schema in an existing database by following
 the install procedure. The `linz-bde-schema-load` script is able
 to both install or upgrade databases.
 
+WARNING: upgrades from version 1.0.2 to 1.1.2 will leave database
+         in an inconsistent state due to a broken schema patch
+         found in such release. The patch was absent in previous
+         releases and fixed in later releases so upgrades from
+         them will be ok.
+
 Testing
 -------
 
