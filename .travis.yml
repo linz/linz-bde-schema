@@ -48,15 +48,15 @@ before_install:
   # test and production repositories
   - curl -s https://packagecloud.io/install/repositories/linz/test/script.deb.sh | sudo bash
   - curl -s https://packagecloud.io/install/repositories/linz/prod/script.deb.sh | sudo bash
-  - sudo apt-get update -qq
   # Install packages
+  - sudo apt-get -qq update
   - sudo apt-get install -y
     postgresql-${PG}
+    postgresql-server-dev-${PG}
+    postgresql-${PG}-postgis-${PGIS}
     postgresql-client-${PG}
     postgresql-${PG}-pgtap
-    postgresql-${PG}-postgis-${PGIS}
     postgresql-${PG}-postgis-${PGIS}-scripts
-    postgresql-server-dev-all
     debhelper fakeroot
     libtap-parser-sourcehandler-pgtap-perl
   # Set PATH as postgresql-server-dev-all pretends version is 11
