@@ -1,67 +1,66 @@
 sudo: required
+dist: xenial
 language: C++
 
 matrix:
 
   include:
 
-  - env: PG=9.3/2.3
-    addons:
-      postgresql: 9.3
-      apt:
-        packages:
-        - postgresql-9.3
-        - postgresql-9.3-pgtap
-        - postgresql-server-dev-9.3
-        - postgresql-9.3-postgis-2.3
-
-  - env: PG=9.4/2.3
-    addons:
-      postgresql: 9.4
-      apt:
-        packages:
-        - postgresql-9.4
-        - postgresql-9.4-pgtap
-        - postgresql-server-dev-9.4
-        - postgresql-9.4-postgis-2.3
-
-  - env: PG=9.5/2.3
-    addons:
-      postgresql: 9.5
-      apt:
-        packages:
-        - postgresql-9.5
-        - postgresql-9.5-pgtap
-        - postgresql-server-dev-9.5
-        - postgresql-9.5-postgis-2.3
+  - env:
+    - PG=9.3
+    - PGIS=2.3
 
   - env:
-    - PG=9.6/2.3
+    - PG=9.4
+    - PGIS=2.3
+
+  - env:
+    - PG=9.5
+    - PGIS=2.3
+
+  - env:
+    - PG=9.6
+    - PGIS=2.3
     - TABLEVERSION_BRANCH=master
     - DBPATCH_BRANCH=master
     - STDOUT_SCHEMA_LOADING_SUPPORTED=1
-    addons:
-      postgresql: 9.6
-      apt:
-        packages:
-        - postgresql-9.6
-        - postgresql-9.6-pgtap
-        - postgresql-server-dev-9.6
-        - postgresql-9.6-postgis-2.3
+
+  - env:
+    - PG=10
+    - PGIS=2.4
+    - TABLEVERSION_BRANCH=master
+    - DBPATCH_BRANCH=master
+    - STDOUT_SCHEMA_LOADING_SUPPORTED=1
+
+  - env:
+    - PG=11
+    - PGIS=2.5
+    - TABLEVERSION_BRANCH=master
+    - DBPATCH_BRANCH=master
+    - STDOUT_SCHEMA_LOADING_SUPPORTED=1
 
 before_install:
-  # Install common packages
-  - sudo apt-get -qq update
-  - sudo apt-get install -y pgtap
-    debhelper fakeroot
-  # Show some build info
-  - pg_config --version
-  - psql --version
-  - psql -c 'select version()'
+  # Purge PostgreSQL packages
+  - sudo apt-get -y --purge remove postgresql libpq-dev libpq5
+    postgresql-client-common postgresql-common
+  - sudo rm -rf /var/lib/postgresql
   # Enable fetching packages from packagecloud
   # test and production repositories
   - curl -s https://packagecloud.io/install/repositories/linz/test/script.deb.sh | sudo bash
   - curl -s https://packagecloud.io/install/repositories/linz/prod/script.deb.sh | sudo bash
+  # Install packages
+  - sudo apt-get -qq update
+  - sudo apt-get install -y
+    postgresql-${PG}
+    postgresql-server-dev-${PG}
+    postgresql-${PG}-postgis-${PGIS}
+    postgresql-client-${PG}
+    postgresql-${PG}-pgtap
+    postgresql-${PG}-postgis-${PGIS}-scripts
+    debhelper fakeroot
+    libtap-parser-sourcehandler-pgtap-perl
+  # Set PATH as postgresql-server-dev-all pretends version is 11
+  - export PATH=/usr/lib/postgresql/${PG}/bin:${PATH}
   # Set default branches for tbale version and dbpatch
   - if test -z "${TABLEVERSION_BRANCH}"; then
       export TABLEVERSION_BRANCH=release-1.5;
@@ -83,6 +82,11 @@ before_install:
     | tar vxzf - && cd postgresql-tableversion-${TABLEVERSION_BRANCH}
   - sudo env "PATH=$PATH" make install
   - popd
+
+before_script:
+  - sudo -u postgres createuser -s "$USER"
+  - sudo -u postgres createuser -s root
+
 script:
   - make
   - make check || { cat regression.diffs; false; }

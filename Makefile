@@ -103,27 +103,27 @@ check-loader-stdout:
 
 	createdb linz-bde-schema-test-db
 	linz-bde-schema-load - | \
-        psql -Xo /dev/null linz-bde-schema-test-db
+        psql --set ON_ERROR_STOP=1 -Xo /dev/null linz-bde-schema-test-db
 	linz-bde-schema-load - | \
-        psql -Xo /dev/null linz-bde-schema-test-db
+        psql --set ON_ERROR_STOP=1 -Xo /dev/null linz-bde-schema-test-db
 	export PGDATABASE=linz-bde-schema-test-db; \
 	$(MAKE) check-prepared
 	dropdb linz-bde-schema-test-db
 
 	createdb linz-bde-schema-test-db
 	linz-bde-schema-load --noextension - | \
-        psql -Xo /dev/null linz-bde-schema-test-db
+        psql --set ON_ERROR_STOP=1 -Xo /dev/null linz-bde-schema-test-db
 	linz-bde-schema-load --noextension - | \
-        psql -Xo /dev/null linz-bde-schema-test-db
+        psql --set ON_ERROR_STOP=1 -Xo /dev/null linz-bde-schema-test-db
 	export PGDATABASE=linz-bde-schema-test-db; \
 	$(MAKE) check-prepared
 	dropdb linz-bde-schema-test-db
 
 	createdb linz-bde-schema-test-db
 	linz-bde-schema-load --revision - | \
-        psql -Xo /dev/null linz-bde-schema-test-db
+        psql --set ON_ERROR_STOP=1 -Xo /dev/null linz-bde-schema-test-db
 	linz-bde-schema-load --revision - | \
-        psql -Xo /dev/null linz-bde-schema-test-db
+        psql --set ON_ERROR_STOP=1 -Xo /dev/null linz-bde-schema-test-db
 	export PGDATABASE=linz-bde-schema-test-db; \
 	$(MAKE) check-prepared
 	dropdb linz-bde-schema-test-db
