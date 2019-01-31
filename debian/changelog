@@ -1,3 +1,9 @@
+linz-bde-schema (1.3.0-1linz~trusty2) trusty; urgency=medium
+
+  * Adding dependency on PostgreSQL 10, 11 and 12 packages
+
+ -- Ivan Mincik <imincik@linz.govt.nz>  Thu, 31 Jan 2019 11:00:39 +0100
+
 linz-bde-schema (1.3.0-1linz~trusty1) trusty; urgency=medium
 
   * New upstream version
