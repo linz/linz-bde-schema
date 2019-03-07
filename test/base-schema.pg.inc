@@ -1956,8 +1956,8 @@ SELECT has_function('bde', 'bde_get_username', ARRAY['character varying']);
 SELECT function_owner_is('bde', 'bde_get_username', ARRAY['character varying'], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_get_useroff', ARRAY['character varying']);
 SELECT function_owner_is('bde', 'bde_get_useroff', ARRAY['character varying'], 'bde_dba'::name);
-SELECT has_function('bde', 'bde_version', ARRAY['']);
-SELECT function_owner_is('bde', 'bde_version', ARRAY[''], 'bde_dba'::name);
+SELECT has_function('bde', 'bde_version', ARRAY[]::text[]);
+SELECT function_owner_is('bde', 'bde_version', ARRAY[]::text[], 'bde_dba'::name);
 SELECT has_function('bde', 'bde_write_appellation', ARRAY['character varying', 'character varying', 'character', 'character varying', 'text', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'text']);
 SELECT function_owner_is('bde', 'bde_write_appellation', ARRAY['character varying', 'character varying', 'character', 'character varying', 'text', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'character varying', 'text'], 'bde_dba'::name);
 
