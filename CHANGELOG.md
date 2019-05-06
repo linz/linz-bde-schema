@@ -2,13 +2,11 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
-## 1.4.0dev - YYYY-MM-DD
+## 1.4.0 - 2019-05-08
 ### Changed
 - Do not mass-drop functions during upgades (#123)
 ### Added
-- ...
-### Enhanced
-- Add stdout support in `linz-bde-schema-load` (#122)
+- Standard output support in `linz-bde-schema-load` (#122)
 
 ## 1.3.0 - 2018-10-25
 ### Changed
