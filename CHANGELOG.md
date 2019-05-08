@@ -2,6 +2,10 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.5.0dev - YYYY-MM-DD
+### Added
+...
+
 ## 1.4.0 - 2019-05-08
 ### Changed
 - Do not mass-drop functions during upgades (#123)
