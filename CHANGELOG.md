@@ -5,6 +5,8 @@ All notable changes for the LINZ BDE schema are documented in this file.
 ## 1.5.0dev - YYYY-MM-DD
 ### Added
 ...
+### Enhanced
+- Do not change session verbosity during load of enabling scripts (#138)
 
 ## 1.4.0 - 2019-05-08
 ### Changed
