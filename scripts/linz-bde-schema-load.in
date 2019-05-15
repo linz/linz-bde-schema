@@ -142,8 +142,11 @@ if test "${ADD_REVISIONS}" = "yes" -a $TABLEVERSION_SUPPORTS_STDOUT = yes; then
     ${TABLEVERSION_LOADER} ${TABLEVERSION_OPTS} - || rollback
 fi
 
+if test $PGDATABASE != "-"; then
+    echo 'SET client_min_messages TO WARNING;'
+fi
+
 cat << EOF
-SET client_min_messages TO WARNING;
 CREATE EXTENSION IF NOT EXISTS postgis SCHEMA public;
 EOF
 
