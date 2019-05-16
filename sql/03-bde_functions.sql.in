@@ -28,7 +28,11 @@ BEGIN
   EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO bde_user', p_pcid);
   EXECUTE format('COMMENT ON FUNCTION %s IS %L', p_pcid, v_comment);
 END
-$$;
+$$
+-- make sure regprocedure::text is fully-qualified
+-- to work around an RDS bug
+SET search_path = ''
+;
 
 --
 -- Function: bde.bde_get_app_specific
