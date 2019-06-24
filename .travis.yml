@@ -1,6 +1,12 @@
 sudo: required
-dist: xenial
+dist: bionic
 language: C++
+
+global:
+
+  - STDOUT_SCHEMA_LOADING_SUPPORTED=1
+  - TABLEVERSION_BRANCH=master
+  - DBPATCH_BRANCH=master
 
 matrix:
 
@@ -8,36 +14,35 @@ matrix:
 
   - env:
     - PG=9.3
-    - PGIS=2.3
+    - PGIS=2.4
 
   - env:
     - PG=9.4
-    - PGIS=2.3
+    - PGIS=2.4
 
   - env:
-    - PG=9.5
-    - PGIS=2.3
+    - PG=9.4
+    - PGIS=2.5
 
   - env:
     - PG=9.6
-    - PGIS=2.3
-    - TABLEVERSION_BRANCH=master
-    - DBPATCH_BRANCH=master
-    - STDOUT_SCHEMA_LOADING_SUPPORTED=1
+    - PGIS=2.4
+
+  - env:
+    - PG=9.6
+    - PGIS=2.5
 
   - env:
     - PG=10
     - PGIS=2.4
-    - TABLEVERSION_BRANCH=master
-    - DBPATCH_BRANCH=master
-    - STDOUT_SCHEMA_LOADING_SUPPORTED=1
+
+  - env:
+    - PG=10
+    - PGIS=2.5
 
   - env:
     - PG=11
     - PGIS=2.5
-    - TABLEVERSION_BRANCH=master
-    - DBPATCH_BRANCH=master
-    - STDOUT_SCHEMA_LOADING_SUPPORTED=1
 
 before_install:
   # Purge PostgreSQL packages
@@ -61,7 +66,7 @@ before_install:
     libtap-parser-sourcehandler-pgtap-perl
   # Set PATH as postgresql-server-dev-all pretends version is 11
   - export PATH=/usr/lib/postgresql/${PG}/bin:${PATH}
-  # Set default branches for tbale version and dbpatch
+  # Set default branches for table_version and dbpatch
   - if test -z "${TABLEVERSION_BRANCH}"; then
       export TABLEVERSION_BRANCH=release-1.5;
     fi
