@@ -75,7 +75,7 @@ which $DBPATCH_LOADER > /dev/null || {
 }
 
 # Check if dbpatch-loader supports stdout
-dbpatch-loader - public > /dev/null 2>&2 &&
+dbpatch-loader - fake > /dev/null 2>&1 &&
     DBPATCH_SUPPORTS_STDOUT=yes ||
     DBPATCH_SUPPORTS_STDOUT=no
 

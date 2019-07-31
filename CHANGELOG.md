@@ -4,6 +4,7 @@ All notable changes for the LINZ BDE schema are documented in this file.
 
 ## 1.7.0dev - 2019-MM-DD
 ### Enhanced
+- Drop confusing output from dbpatch loader preflight call (#146)
 
 ## 1.6.0 - 2019-07-29
 ### Enhanced
