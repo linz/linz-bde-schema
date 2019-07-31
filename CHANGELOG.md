@@ -2,6 +2,10 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.6.1 - 2019-09-09
+### Enhanced
+- Drop confusing output from dbpatch loader preflight call (#146)
+
 ## 1.6.0 - 2019-07-29
 ### Enhanced
 - Use a DO block to bless functions, reducing verbosity of scripts loading
