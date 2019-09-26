@@ -1,0 +1,79 @@
+#!/bin/sh
+
+DB_NAME=
+export PSQL=psql
+
+if test "$1" = "--version"; then
+    echo "@@VERSION@@ @@REVISION@@"
+    exit 0
+fi
+
+if test -n "${BDESCHEMA_SQLDIR}"; then
+    SCRIPTSDIR=${BDESCHEMA_SQLDIR}
+fi
+
+while test -n "$1"; do
+    DB_NAME=$1; shift
+done
+
+if test -z "$DB_NAME"; then
+    echo "Usage: $0 { <database> | - }" >&2
+    echo "       $0 --version" >&2
+    exit 1
+fi
+
+export PGDATABASE=$DB_NAME
+
+# Configure environment for dbpatch-loader
+PGBIN=`pg_config --bindir 2> /dev/null`
+if test -n "$PGBIN"; then
+    PATH=$PATH:$PGBIN
+else
+    # Wild guess where table_version-loader and dbpatch-loader
+    # will be found (as of versions 1.4.0 and 1.2.0 they were
+    # installed in PostgreSQL bin dir)
+    for f in /usr/lib/postgresql/*/bin/; do
+      PATH="$PATH:$f";
+    done
+fi
+
+rollback()
+{
+    echo "ROLLBACK;"
+    exit 1
+}
+
+if test $PGDATABASE != "-"; then
+    echo 'SET client_min_messages TO WARNING;'
+fi
+
+{
+cat << EOF
+DO \$PUBLICATION\$
+DECLARE
+    rec RECORD;
+BEGIN
+
+DROP PUBLICATION IF EXISTS bde;
+CREATE PUBLICATION bde;
+ALTER PUBLICATION bde OWNER TO bde_dba;
+
+    FOR rec IN select c.relname from pg_class c, pg_namespace n
+        WHERE n.nspname = 'bde' and c.relnamespace = n.oid
+        AND c.relkind = 'r'
+    LOOP
+        EXECUTE format('ALTER PUBLICATION bde ADD TABLE bde.%I', rec.relname);
+    END LOOP;
+
+END;
+\$PUBLICATION\$;
+
+EOF
+} |
+grep -v "^\(BEGIN\|COMMIT\);" |
+( echo "BEGIN;"; cat; echo "COMMIT;"; ) |
+if test $PGDATABASE = "-"; then
+    cat
+else
+    $PSQL -XtA --set ON_ERROR_STOP=1 -o /dev/null
+fi

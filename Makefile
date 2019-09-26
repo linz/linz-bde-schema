@@ -26,6 +26,7 @@ SQLSCRIPTS = \
 
 SCRIPTS_built = \
     scripts/linz-bde-schema-load \
+    scripts/linz-bde-schema-publish \
     $(END)
 
 TEST_SCRIPTS = \
@@ -46,6 +47,10 @@ all: $(SQLSCRIPTS) $(SCRIPTS_built)
 	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 
 scripts/linz-bde-schema-load: scripts/linz-bde-schema-load.in
+	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
+	chmod +x $@
+
+scripts/linz-bde-schema-publish: scripts/linz-bde-schema-publish.in
 	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 	chmod +x $@
 
