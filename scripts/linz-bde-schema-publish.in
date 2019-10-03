@@ -34,9 +34,16 @@ rollback()
 cat << EOF
 DO \$PUBLICATION\$
 DECLARE
-    rec RECORD;
+    v_table NAME;
 BEGIN
 
+    IF NOT EXISTS ( SELECT 1 FROM pg_catalog.pg_namespace
+                    WHERE nspname = 'bde' )
+    THEN
+        RAISE EXCEPTION
+            'Schema bde does not exist, '
+            'forgot run linz-bde-schema-load ?';
+    END IF;
     IF NOT EXISTS ( SELECT 1 FROM pg_catalog.pg_publication
                     WHERE pubname = 'bde' )
     THEN
@@ -44,14 +51,15 @@ BEGIN
     END IF;
     ALTER PUBLICATION bde OWNER TO bde_dba;
 
-    FOR rec IN select c.relname from pg_class c, pg_namespace n
+    FOR v_table IN SELECT c.relname from pg_class c, pg_namespace n
         WHERE n.nspname = 'bde' and c.relnamespace = n.oid
         AND c.relkind = 'r' AND c.relname NOT IN (
             SELECT tablename FROM pg_catalog.pg_publication_tables
             WHERE pubname = 'bde' AND schemaname = 'bde'
         )
     LOOP
-        EXECUTE format('ALTER PUBLICATION bde ADD TABLE bde.%I', rec.relname);
+        EXECUTE format('ALTER PUBLICATION bde ADD TABLE bde.%I',
+                       v_table);
     END LOOP;
 
 END;
