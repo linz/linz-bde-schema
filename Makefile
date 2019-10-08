@@ -74,6 +74,12 @@ check-prepared:
 	V=`psql -XtAc 'select bde.bde_version()'` && \
 	echo $$V && test "$$V" = "$(VERSION)"
 
+check-publisher:
+	V=`linz-bde-schema-publish --version` && \
+	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
+
+	test/test-publication.sh
+
 check-loader:
 
 	V=`linz-bde-schema-load --version` && \
