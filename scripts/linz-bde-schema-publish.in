@@ -62,6 +62,9 @@ BEGIN
                        v_table);
     END LOOP;
 
+    RAISE NOTICE
+        'Publication "all_bde" setup to contain all tables in schema "bde"';
+
 END;
 \$PUBLICATION\$;
 
