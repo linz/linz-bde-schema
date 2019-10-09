@@ -1,6 +1,6 @@
 # Minimal script to install the SQL creation scripts ready for postinst script.
 
-VERSION=1.7.0dev
+VERSION=1.7.0
 REVISION = $(shell test -d .git && git describe --always || echo $(VERSION))
 
 TEST_DATABASE = regress_linz_bde_schema
