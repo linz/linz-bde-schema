@@ -3,7 +3,8 @@
 DB_NAME=
 export SKIP_INDEXES=no
 export ADD_REVISIONS=no
-export EXTENSION_MODE=on
+export EXTENSION_MODE=on # NOTE: "on" is not a typo, it's "on"/"off"
+export READ_ONLY=no
 export PSQL=psql
 export SCRIPTSDIR=/usr/share/linz-bde-schema/sql/
 
@@ -11,6 +12,19 @@ if test "$1" = "--version"; then
     echo "@@VERSION@@ @@REVISION@@"
     exit 0
 fi
+
+usage() {
+    cat <<EOF
+Usage: $0 [options] { <database> | - }
+       $0 { --version | --help }
+Options:
+    --noindexes     skips creation of indexes
+    --revision      enable versioning on tables
+    --noextension   avoid using extension version of dbpatch and tableversion
+    --readonly      revoke write permission on schema from all bde roles
+EOF
+}
+
 
 if test -n "${BDESCHEMA_SQLDIR}"; then
     SCRIPTSDIR=${BDESCHEMA_SQLDIR}
@@ -31,6 +45,11 @@ while test -n "$1"; do
     elif test $1 = "--revision"; then
         ADD_REVISIONS=yes
         shift; continue
+    elif test $1 = "--readonly"; then
+        READ_ONLY=yes
+        shift; continue
+    elif test $1 = "--help"; then
+        usage && exit
     elif test $1 = "--noextension"; then
         EXTENSION_MODE=off
         shift; continue
@@ -40,8 +59,7 @@ while test -n "$1"; do
 done
 
 if test -z "$DB_NAME"; then
-    echo "Usage: $0 [--noindexes] [--revision] [--noextension] { <database> | - }" >&2
-    echo "       $0 --version" >&2
+    usage >&2
     exit 1
 fi
 
@@ -162,6 +180,14 @@ done
 if test "${ADD_REVISIONS}" = "yes"; then
     file=${SCRIPTSDIR}/versioning/01-version_tables.sql
     cat ${file} || rollback
+fi
+
+if test "${READ_ONLY}" = "yes"; then
+    cat <<EOF
+REVOKE UPDATE, INSERT, DELETE, TRUNCATE
+    ON ALL TABLES IN SCHEMA bde
+    FROM bde_dba, bde_admin, bde_user;
+EOF
 fi
 
 echo "COMMIT;"
