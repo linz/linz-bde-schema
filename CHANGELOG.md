@@ -2,6 +2,9 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.8.0dev - 2019-MM-DD
+### Added
+
 ## 1.7.0 - 2019-10-09
 ### Added
 - linz-bde-schema-publish script (#149)
