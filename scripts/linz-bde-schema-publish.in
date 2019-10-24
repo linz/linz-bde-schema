@@ -42,7 +42,7 @@ BEGIN
     THEN
         RAISE EXCEPTION
             'Schema bde does not exist, '
-            'forgot run linz-bde-schema-load ?';
+            'run linz-bde-schema-load ?';
     END IF;
     IF NOT EXISTS ( SELECT 1 FROM pg_catalog.pg_publication
                     WHERE pubname = 'all_bde' )
@@ -62,7 +62,7 @@ BEGIN
                        v_table);
     END LOOP;
 
-    RAISE NOTICE
+    RAISE INFO
         'Publication "all_bde" setup to contain all tables in schema "bde"';
 
 END;
