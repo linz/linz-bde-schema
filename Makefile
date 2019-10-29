@@ -68,11 +68,12 @@ installcheck: check-loader
 # It is expected that the prepared database
 # is set via PGDATABASE
 #
-# TODO: run the full set of test
-#
 check-prepared:
 	V=`psql -XtAc 'select bde.bde_version()'` && \
 	echo $$V && test "$$V" = "$(VERSION)"
+	mkdir -p test-prepared/ && \
+	sed '/\\i/d' test/base.pg > test-prepared/base.pg && \
+	pg_prove test-prepared/
 
 check-publisher:
 	V=`linz-bde-schema-publish --version` && \
