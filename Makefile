@@ -72,7 +72,10 @@ check-prepared:
 	V=`psql -XtAc 'select bde.bde_version()'` && \
 	echo $$V && test "$$V" = "$(VERSION)"
 	mkdir -p test-prepared/ && \
-	sed '/\\i/d' test/base.pg > test-prepared/base.pg && \
+	sed '/\\i sql/d' test/base.pg | \
+	sed '/-- Switch to unprivileged role/,/^END /d' | \
+	sed '/-- Cleanup/,/^END /d' \
+	> test-prepared/base.pg && \
 	pg_prove test-prepared/
 
 check-publisher:
