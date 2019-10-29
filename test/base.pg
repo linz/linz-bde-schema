@@ -22,7 +22,13 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 
 CREATE SCHEMA IF NOT EXISTS _patches;
-CREATE EXTENSION IF NOT EXISTS dbpatch SCHEMA _patches;
+DO $$
+BEGIN
+    IF NOT EXISTS ( SELECT * FROM pg_proc WHERE proname = 'apply_patch' )
+    THEN
+        CREATE EXTENSION dbpatch SCHEMA _patches;
+    END IF;
+END; $$;
 
 -- Switch to unprivileged role
 DO $$
