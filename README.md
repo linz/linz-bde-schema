@@ -1,4 +1,5 @@
 [![Build Status](https://secure.travis-ci.org/linz/linz-bde-schema.svg)](http://travis-ci.org/linz/linz-bde-schema)
+[![Actions Status](https://github.com/linz/linz-bde-schema/workflows/test/badge.svg?branch=master)](https://github.com/linz/linz-bde-schema/actions)
 
 LINZ BDE SCHEMAS
 ================
