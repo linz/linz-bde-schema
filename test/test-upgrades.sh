@@ -53,6 +53,13 @@ EOF
 
     cd ${OWD}
 
+# Turn DB to read-only mode, as it would be done
+# by linz-bde-schema-load --readonly
+    cat <<EOF | psql -Xat ${TEST_DATABASE}
+REVOKE UPDATE, INSERT, DELETE, TRUNCATE
+    ON ALL TABLES IN SCHEMA bde
+    FROM bde_dba, bde_admin, bde_user;
+EOF
     pg_prove test/ || exit 1
 
 done
