@@ -24,10 +24,6 @@ END IF;
 CREATE SCHEMA IF NOT EXISTS bde;
 ALTER SCHEMA bde OWNER TO bde_dba;
 
-GRANT ALL ON SCHEMA bde TO bde_dba;
-GRANT USAGE ON SCHEMA bde TO bde_admin;
-GRANT USAGE ON SCHEMA bde TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_action
 --------------------------------------------------------------------------------
@@ -56,10 +52,6 @@ ALTER TABLE bde.crs_action ALTER COLUMN audit_id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_action OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_action FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_action TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_action TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_action_type
 --------------------------------------------------------------------------------
@@ -74,12 +66,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_action_type (
     CONSTRAINT pkey_crs_action_type PRIMARY KEY (audit_id)
 );
 
-
 ALTER TABLE bde.crs_action_type OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_action_type FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_action_type TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_action_type TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adj_obs_change
@@ -120,10 +107,6 @@ ALTER TABLE bde.crs_adj_obs_change ALTER COLUMN audit_id SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_adj_obs_change OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_adj_obs_change FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_adj_obs_change TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_adj_obs_change TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_adj_user_coef
 --------------------------------------------------------------------------------
@@ -137,12 +120,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_adj_user_coef (
     UNIQUE (adc_id, adj_id)
 );
 
-
 ALTER TABLE bde.crs_adj_user_coef OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_adj_user_coef FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_adj_user_coef TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_adj_user_coef TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adjust_coef
@@ -162,10 +140,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_adjust_coef (
 
 ALTER TABLE bde.crs_adjust_coef OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_adjust_coef FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_adjust_coef TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_adjust_coef TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_adjust_method
 --------------------------------------------------------------------------------
@@ -183,10 +157,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_adjust_method (
 );
 
 ALTER TABLE bde.crs_adjust_method OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_adjust_method FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_adjust_method TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_adjust_method TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adjustment_run
@@ -221,10 +191,6 @@ ALTER TABLE bde.crs_adjustment_run ALTER COLUMN wrk_id SET STATISTICS 250;
 
 ALTER TABLE bde.crs_adjustment_run OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_adjustment_run FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_adjustment_run TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_adjustment_run TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_adoption
 --------------------------------------------------------------------------------
@@ -248,10 +214,6 @@ ALTER TABLE bde.crs_adoption ALTER COLUMN sur_wrk_id_orig SET STATISTICS 500;
 
 ALTER TABLE bde.crs_adoption OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_adoption FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_adoption TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_adoption TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_affected_parcl
 --------------------------------------------------------------------------------
@@ -271,10 +233,6 @@ ALTER TABLE bde.crs_affected_parcl ALTER COLUMN sur_wrk_id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_affected_parcl OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_affected_parcl FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_affected_parcl TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_affected_parcl TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_alias
 --------------------------------------------------------------------------------
@@ -288,10 +246,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_alias (
 );
 
 ALTER TABLE bde.crs_alias OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_alias FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_alias TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_alias TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_appellation
@@ -338,10 +292,6 @@ ALTER TABLE bde.crs_appellation ALTER COLUMN par_id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_appellation OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_appellation FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_appellation TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_appellation TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_comprised_in
 --------------------------------------------------------------------------------
@@ -355,12 +305,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_comprised_in (
     CONSTRAINT pkey_crs_comprised_in PRIMARY KEY (id)
 );
 
-
 ALTER TABLE bde.crs_comprised_in OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_comprised_in FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_comprised_in TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_comprised_in TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_coordinate
@@ -401,10 +346,6 @@ ALTER TABLE bde.crs_coordinate ALTER COLUMN wrk_id_created SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_coordinate OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_coordinate FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_coordinate TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_coordinate TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_coordinate_sys
 --------------------------------------------------------------------------------
@@ -423,10 +364,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_coordinate_sys (
 );
 
 ALTER TABLE bde.crs_coordinate_sys OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_coordinate_sys FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_coordinate_sys TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_coordinate_sys TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_coordinate_tpe
@@ -455,10 +392,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_coordinate_tpe (
 
 ALTER TABLE bde.crs_coordinate_tpe OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_coordinate_tpe FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_coordinate_tpe TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_coordinate_tpe TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_cor_precision
 --------------------------------------------------------------------------------
@@ -473,10 +406,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_cor_precision (
 );
 
 ALTER TABLE bde.crs_cor_precision OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_cor_precision FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_cor_precision TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_cor_precision TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_cord_order
@@ -495,10 +424,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_cord_order (
 );
 
 ALTER TABLE bde.crs_cord_order OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_cord_order FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_cord_order TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_cord_order TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_datum
@@ -521,10 +446,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_datum (
 
 ALTER TABLE bde.crs_datum OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_datum FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_datum TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_datum TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_elect_place
 --------------------------------------------------------------------------------
@@ -544,10 +465,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_elect_place (
 
 ALTER TABLE bde.crs_elect_place OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_elect_place FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_elect_place TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_elect_place TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_ellipsoid
 --------------------------------------------------------------------------------
@@ -563,10 +480,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_ellipsoid (
 );
 
 ALTER TABLE bde.crs_ellipsoid OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_ellipsoid FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ellipsoid TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_ellipsoid TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_enc_share
@@ -591,10 +504,6 @@ ALTER TABLE bde.crs_enc_share ALTER COLUMN id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_enc_share OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_enc_share FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_enc_share TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_enc_share TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_encumbrance
 --------------------------------------------------------------------------------
@@ -617,10 +526,6 @@ ALTER TABLE bde.crs_encumbrance ALTER COLUMN id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_encumbrance OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_encumbrance FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_encumbrance TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_encumbrance TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_encumbrancee
 --------------------------------------------------------------------------------
@@ -639,10 +544,6 @@ ALTER TABLE bde.crs_encumbrancee ALTER COLUMN ens_id SET STATISTICS 500;
 ALTER TABLE bde.crs_encumbrancee ALTER COLUMN id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_encumbrancee OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_encumbrancee FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_encumbrancee TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_encumbrancee TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_estate_share
@@ -673,10 +574,6 @@ ALTER TABLE bde.crs_estate_share ALTER COLUMN id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_estate_share OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_estate_share FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_estate_share TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_estate_share TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_feature_name
 --------------------------------------------------------------------------------
@@ -696,10 +593,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_feature_name (
 
 ALTER TABLE bde.crs_feature_name OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_feature_name FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_feature_name TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_feature_name TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_geodetic_network
 --------------------------------------------------------------------------------
@@ -712,10 +605,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_geodetic_network  (
 );
 
 ALTER TABLE bde.crs_geodetic_network OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_geodetic_network FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_geodetic_network TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_geodetic_network TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_geodetic_node_network
@@ -730,10 +619,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_geodetic_node_network  (
 );
 
 ALTER TABLE bde.crs_geodetic_node_network OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_geodetic_node_network FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_geodetic_node_network TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_geodetic_node_network TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_image
@@ -753,10 +638,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_image (
 
 ALTER TABLE bde.crs_image OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_image FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_image TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_image TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_image
 --------------------------------------------------------------------------------
@@ -775,10 +656,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_image_history (
 
 ALTER TABLE bde.crs_image_history OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_image_history FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_image_history TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_image_history TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_land_district
 --------------------------------------------------------------------------------
@@ -796,10 +673,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_land_district (
 );
 
 ALTER TABLE bde.crs_land_district OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_land_district FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_land_district TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_land_district TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_legal_desc
@@ -822,10 +695,6 @@ ALTER TABLE bde.crs_legal_desc ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.crs_legal_desc ALTER COLUMN ttl_title_no SET STATISTICS 500;
 
 ALTER TABLE bde.crs_legal_desc OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_legal_desc FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_legal_desc TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_legal_desc TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_legal_desc_prl
@@ -850,10 +719,6 @@ ALTER TABLE bde.crs_legal_desc_prl ALTER COLUMN sur_wrk_id_crt SET STATISTICS 50
 
 ALTER TABLE bde.crs_legal_desc_prl OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_legal_desc_prl FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_legal_desc_prl TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_legal_desc_prl TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_line
 --------------------------------------------------------------------------------
@@ -877,7 +742,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_line (
     UNIQUE (audit_id)
 );
 
-
 ALTER TABLE bde.crs_line ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_line ALTER COLUMN id SET STATISTICS 1000;
 ALTER TABLE bde.crs_line ALTER COLUMN nod_id_end SET STATISTICS 1000;
@@ -885,10 +749,6 @@ ALTER TABLE bde.crs_line ALTER COLUMN nod_id_start SET STATISTICS 1000;
 ALTER TABLE bde.crs_line ALTER COLUMN pnx_id_created SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_line OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_line FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_line TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_line TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_locality
@@ -908,10 +768,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_locality (
 
 ALTER TABLE bde.crs_locality OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_locality FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_locality TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_locality TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_maintenance
 --------------------------------------------------------------------------------
@@ -929,10 +785,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_maintenance (
 
 ALTER TABLE bde.crs_maintenance OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_maintenance FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_maintenance TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_maintenance TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_map_grid
 --------------------------------------------------------------------------------
@@ -948,10 +800,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_map_grid (
 );
 
 ALTER TABLE bde.crs_map_grid OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_map_grid FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_map_grid TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_map_grid TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mark
@@ -990,10 +838,6 @@ ALTER TABLE bde.crs_mark ALTER COLUMN wrk_id_created SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_mark OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_mark FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mark TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_mark TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_mark_name
 --------------------------------------------------------------------------------
@@ -1013,10 +857,6 @@ ALTER TABLE bde.crs_mark_name ALTER COLUMN name SET STATISTICS 500;
 
 ALTER TABLE bde.crs_mark_name OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_mark_name FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mark_name TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_mark_name TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_mark_sup_doc
 --------------------------------------------------------------------------------
@@ -1033,10 +873,6 @@ ALTER TABLE bde.crs_mark_sup_doc ALTER COLUMN mrk_id SET STATISTICS 250;
 ALTER TABLE bde.crs_mark_sup_doc ALTER COLUMN sud_id SET STATISTICS 250;
 
 ALTER TABLE bde.crs_mark_sup_doc OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_mark_sup_doc FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mark_sup_doc TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_mark_sup_doc TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mrk_phys_state
@@ -1079,10 +915,6 @@ ALTER TABLE bde.crs_mrk_phys_state ALTER COLUMN wrk_id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_mrk_phys_state OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_mrk_phys_state FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mrk_phys_state TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_mrk_phys_state TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk
 --------------------------------------------------------------------------------
@@ -1106,10 +938,6 @@ ALTER TABLE bde.crs_mesh_blk ALTER COLUMN id SET STATISTICS 250;
 
 ALTER TABLE bde.crs_mesh_blk OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_mesh_blk FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mesh_blk TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_mesh_blk TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk_area
 --------------------------------------------------------------------------------
@@ -1130,10 +958,6 @@ ALTER TABLE bde.crs_mesh_blk_area ALTER COLUMN stt_id SET STATISTICS 250;
 
 ALTER TABLE bde.crs_mesh_blk_area OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_mesh_blk_area FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mesh_blk_area TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_mesh_blk_area TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk_bdry
 --------------------------------------------------------------------------------
@@ -1153,10 +977,6 @@ ALTER TABLE bde.crs_mesh_blk_bdry ALTER COLUMN mbk_id SET STATISTICS 500;
 ALTER TABLE bde.crs_mesh_blk_bdry ALTER COLUMN mbl_id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_mesh_blk_bdry OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_mesh_blk_bdry FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mesh_blk_bdry TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_mesh_blk_bdry TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk_line
@@ -1180,10 +1000,6 @@ ALTER TABLE bde.crs_mesh_blk_line ALTER COLUMN id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_mesh_blk_line OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_mesh_blk_line FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mesh_blk_line TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_mesh_blk_line TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk_place
 --------------------------------------------------------------------------------
@@ -1204,10 +1020,6 @@ ALTER TABLE bde.crs_mesh_blk_place ALTER COLUMN mbk_id SET STATISTICS 250;
 
 ALTER TABLE bde.crs_mesh_blk_place OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_mesh_blk_place FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_mesh_blk_place TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_mesh_blk_place TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_network_plan
 --------------------------------------------------------------------------------
@@ -1224,10 +1036,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_network_plan (
 );
 
 ALTER TABLE bde.crs_network_plan OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_network_plan FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_network_plan TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_network_plan TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_node
@@ -1258,10 +1066,6 @@ ALTER TABLE bde.crs_node ALTER COLUMN wrk_id_created SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_node OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_node FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_node TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_node TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_node_prp_order
 --------------------------------------------------------------------------------
@@ -1276,10 +1080,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_node_prp_order (
 );
 
 ALTER TABLE bde.crs_node_prp_order OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_node_prp_order FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_node_prp_order TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_node_prp_order TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_node_works
@@ -1301,10 +1101,6 @@ ALTER TABLE bde.crs_node_works ALTER COLUMN nod_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_node_works ALTER COLUMN wrk_id SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_node_works OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_node_works FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_node_works TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_node_works TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_nominal_index
@@ -1336,10 +1132,6 @@ ALTER TABLE bde.crs_nominal_index ALTER COLUMN ttl_title_no SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_nominal_index OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_nominal_index FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_nominal_index TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_nominal_index TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_obs_accuracy
 --------------------------------------------------------------------------------
@@ -1369,10 +1161,6 @@ ALTER TABLE bde.crs_obs_accuracy ALTER COLUMN obn_id2 SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_obs_accuracy OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_obs_accuracy FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_obs_accuracy TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_obs_accuracy TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_obs_elem_type
 --------------------------------------------------------------------------------
@@ -1389,10 +1177,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_obs_elem_type (
 
 ALTER TABLE bde.crs_obs_elem_type OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_obs_elem_type FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_obs_elem_type TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_obs_elem_type TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_obs_set
 --------------------------------------------------------------------------------
@@ -1407,10 +1191,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_obs_set (
 );
 
 ALTER TABLE bde.crs_obs_set OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_obs_set FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_obs_set TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_obs_set TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_obs_type
@@ -1433,10 +1213,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_obs_type (
 );
 
 ALTER TABLE bde.crs_obs_type OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_obs_type FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_obs_type TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_obs_type TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_observation
@@ -1484,10 +1260,6 @@ ALTER TABLE bde.crs_observation ALTER COLUMN vct_id SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_observation OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_observation FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_observation TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_observation TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_off_cord_sys
 --------------------------------------------------------------------------------
@@ -1504,10 +1276,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_off_cord_sys (
 );
 
 ALTER TABLE bde.crs_off_cord_sys OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_off_cord_sys FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_off_cord_sys TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_off_cord_sys TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_office
@@ -1538,10 +1306,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_office (
 );
 
 ALTER TABLE bde.crs_office OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_office FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_office TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_office TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ordinate_adj
@@ -1575,10 +1339,6 @@ ALTER TABLE bde.crs_ordinate_adj ALTER COLUMN cor_id_prop SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_ordinate_adj OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_ordinate_adj FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ordinate_adj TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_ordinate_adj TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_ordinate_type
 --------------------------------------------------------------------------------
@@ -1595,10 +1355,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_ordinate_type (
 );
 
 ALTER TABLE bde.crs_ordinate_type OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_ordinate_type FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ordinate_type TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_ordinate_type TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel
@@ -1635,10 +1391,6 @@ ALTER TABLE bde.crs_parcel ALTER COLUMN toc_code SET STATISTICS 500;
 
 ALTER TABLE bde.crs_parcel OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_parcel FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_parcel TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_parcel TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel_bndry
 --------------------------------------------------------------------------------
@@ -1659,10 +1411,6 @@ ALTER TABLE bde.crs_parcel_bndry ALTER COLUMN pri_id SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_parcel_bndry OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_parcel_bndry FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_parcel_bndry TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_parcel_bndry TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel_dimen
 --------------------------------------------------------------------------------
@@ -1680,10 +1428,6 @@ ALTER TABLE bde.crs_parcel_dimen ALTER COLUMN obn_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_parcel_dimen ALTER COLUMN par_id SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_parcel_dimen OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_parcel_dimen FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_parcel_dimen TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_parcel_dimen TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel_label
@@ -1705,10 +1449,6 @@ ALTER TABLE bde.crs_parcel_label ALTER COLUMN par_id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_parcel_label OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_parcel_label FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_parcel_label TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_parcel_label TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel_ring
 --------------------------------------------------------------------------------
@@ -1729,10 +1469,6 @@ ALTER TABLE bde.crs_parcel_ring ALTER COLUMN par_id SET STATISTICS 500;
 ALTER TABLE bde.crs_parcel_ring ALTER COLUMN pri_id_parent_ring SET STATISTICS 500;
 
 ALTER TABLE bde.crs_parcel_ring OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_parcel_ring FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_parcel_ring TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_parcel_ring TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_programme
@@ -1756,10 +1492,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_programme (
 );
 
 ALTER TABLE bde.crs_programme OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_programme FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_programme TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_programme TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_proprietor
@@ -1787,10 +1519,6 @@ ALTER TABLE bde.crs_proprietor ALTER COLUMN id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_proprietor OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_proprietor FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_proprietor TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_proprietor TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_reduct_meth
 --------------------------------------------------------------------------------
@@ -1806,10 +1534,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_reduct_meth (
 );
 
 ALTER TABLE bde.crs_reduct_meth OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_reduct_meth FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_reduct_meth TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_reduct_meth TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_reduct_run
@@ -1830,10 +1554,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_reduct_run (
 
 ALTER TABLE bde.crs_reduct_run OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_reduct_run FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_reduct_run TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_reduct_run TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_ref_survey
 --------------------------------------------------------------------------------
@@ -1852,10 +1572,6 @@ ALTER TABLE bde.crs_ref_survey ALTER COLUMN sur_wrk_id_exist SET STATISTICS 250;
 ALTER TABLE bde.crs_ref_survey ALTER COLUMN sur_wrk_id_new SET STATISTICS 250;
 
 ALTER TABLE bde.crs_ref_survey OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_ref_survey FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ref_survey TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_ref_survey TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_road_ctr_line
@@ -1879,10 +1595,6 @@ ALTER TABLE bde.crs_road_ctr_line ALTER COLUMN id SET STATISTICS 250;
 
 ALTER TABLE bde.crs_road_ctr_line OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_road_ctr_line FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_road_ctr_line TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_road_ctr_line TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_road_name
 --------------------------------------------------------------------------------
@@ -1902,10 +1614,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_road_name (
 );
 
 ALTER TABLE bde.crs_road_name OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_road_name FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_road_name TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_road_name TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_road_name_asc
@@ -1927,10 +1635,6 @@ ALTER TABLE bde.crs_road_name_asc ALTER COLUMN rcl_id SET STATISTICS 250;
 ALTER TABLE bde.crs_road_name_asc ALTER COLUMN rna_id SET STATISTICS 250;
 
 ALTER TABLE bde.crs_road_name_asc OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_road_name_asc FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_road_name_asc TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_road_name_asc TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_setup
@@ -1956,10 +1660,6 @@ ALTER TABLE bde.crs_setup ALTER COLUMN wrk_id SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_setup OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_setup FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_setup TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_setup TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_site
 --------------------------------------------------------------------------------
@@ -1981,10 +1681,6 @@ ALTER TABLE bde.crs_site ALTER COLUMN wrk_id_created SET STATISTICS 250;
 
 ALTER TABLE bde.crs_site OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_site FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_site TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_site TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_site_locality
 --------------------------------------------------------------------------------
@@ -2002,10 +1698,6 @@ ALTER TABLE bde.crs_site_locality ALTER COLUMN loc_id SET STATISTICS 250;
 ALTER TABLE bde.crs_site_locality ALTER COLUMN sit_id SET STATISTICS 250;
 
 ALTER TABLE bde.crs_site_locality OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_site_locality FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_site_locality TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_site_locality TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_stat_act_parcl
@@ -2029,10 +1721,6 @@ ALTER TABLE bde.crs_stat_act_parcl ALTER COLUMN sta_id SET STATISTICS 250;
 
 ALTER TABLE bde.crs_stat_act_parcl OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_stat_act_parcl FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_stat_act_parcl TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_stat_act_parcl TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_stat_version
 --------------------------------------------------------------------------------
@@ -2050,10 +1738,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_stat_version (
 );
 
 ALTER TABLE bde.crs_stat_version OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_stat_version FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_stat_version TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_stat_version TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_statist_area
@@ -2078,10 +1762,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_statist_area (
 
 ALTER TABLE bde.crs_statist_area OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_statist_area FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_statist_area TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_statist_area TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_statute
 --------------------------------------------------------------------------------
@@ -2101,10 +1781,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_statute  (
 );
 
 ALTER TABLE bde.crs_statute OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_statute FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_statute TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_statute TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_statute_action
@@ -2133,10 +1809,6 @@ ALTER TABLE bde.crs_statute_action ALTER COLUMN ste_id SET STATISTICS 250;
 ALTER TABLE bde.crs_statute_action ALTER COLUMN sur_wrk_id_vesting SET STATISTICS 250;
 
 ALTER TABLE bde.crs_statute_action OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_statute_action FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_statute_action TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_statute_action TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_street_address
@@ -2170,10 +1842,6 @@ ALTER TABLE bde.crs_street_address ALTER COLUMN rna_id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_street_address OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_street_address FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_street_address TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_street_address TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_sur_admin_area
 --------------------------------------------------------------------------------
@@ -2196,10 +1864,6 @@ ALTER TABLE bde.crs_sur_admin_area ALTER COLUMN xstt_id SET STATISTICS 250;
 
 ALTER TABLE bde.crs_sur_admin_area OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_sur_admin_area FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_sur_admin_area TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_sur_admin_area TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_sur_plan_ref
 --------------------------------------------------------------------------------
@@ -2216,10 +1880,6 @@ ALTER TABLE bde.crs_sur_plan_ref ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.crs_sur_plan_ref ALTER COLUMN wrk_id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_sur_plan_ref OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_sur_plan_ref FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_sur_plan_ref TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_sur_plan_ref TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_survey
@@ -2271,10 +1931,6 @@ ALTER TABLE bde.crs_survey ALTER COLUMN wrk_id SET STATISTICS 500;
 
 ALTER TABLE bde.crs_survey OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_survey FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_survey TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_survey TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_survey_image
 --------------------------------------------------------------------------------
@@ -2289,10 +1945,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_survey_image (
 );
 
 ALTER TABLE bde.crs_survey_image OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_survey_image FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_survey_image TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_survey_image TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_sys_code
@@ -2315,10 +1967,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_sys_code (
 
 ALTER TABLE bde.crs_sys_code OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_sys_code FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_sys_code TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_sys_code TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_sys_code_group
 --------------------------------------------------------------------------------
@@ -2338,10 +1986,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_sys_code_group (
 );
 
 ALTER TABLE bde.crs_sys_code_group OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_sys_code_group FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_sys_code_group TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_sys_code_group TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title
@@ -2391,10 +2035,6 @@ ALTER TABLE bde.crs_title ALTER COLUMN ttl_title_no_srs SET STATISTICS 500;
 
 ALTER TABLE bde.crs_title OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_title FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_title TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_title TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_title_action
 --------------------------------------------------------------------------------
@@ -2415,10 +2055,6 @@ ALTER TABLE bde.crs_title_action ALTER COLUMN audit_id SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_title_action OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_title_action FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_title_action TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_title_action TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_title_doc_ref
 --------------------------------------------------------------------------------
@@ -2434,10 +2070,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_title_doc_ref (
 ALTER TABLE bde.crs_title_doc_ref ALTER COLUMN id SET STATISTICS 250;
 
 ALTER TABLE bde.crs_title_doc_ref OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_title_doc_ref FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_title_doc_ref TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_title_doc_ref TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title_estate
@@ -2469,10 +2101,6 @@ ALTER TABLE bde.crs_title_estate ALTER COLUMN ttl_title_no SET STATISTICS 500;
 
 ALTER TABLE bde.crs_title_estate OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_title_estate FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_title_estate TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_title_estate TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_title_mem_text
 --------------------------------------------------------------------------------
@@ -2499,10 +2127,6 @@ ALTER TABLE bde.crs_title_mem_text ALTER COLUMN sequence_no SET STATISTICS 1000;
 ALTER TABLE bde.crs_title_mem_text ALTER COLUMN audit_id SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_title_mem_text OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_title_mem_text FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_title_mem_text TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_title_mem_text TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title_memorial
@@ -2548,10 +2172,6 @@ ALTER TABLE bde.crs_title_memorial ALTER COLUMN act_id_ext SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_title_memorial OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_title_memorial FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_title_memorial TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_title_memorial TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_topology_class
 --------------------------------------------------------------------------------
@@ -2566,10 +2186,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_topology_class  (
 );
 
 ALTER TABLE bde.crs_topology_class OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_topology_class FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_topology_class TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_topology_class TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_transact_type
@@ -2628,10 +2244,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_transact_type (
 
 ALTER TABLE bde.crs_transact_type OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_transact_type FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_transact_type TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_transact_type TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_ttl_enc
 --------------------------------------------------------------------------------
@@ -2654,10 +2266,6 @@ ALTER TABLE bde.crs_ttl_enc ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.crs_ttl_enc ALTER COLUMN ttl_title_no SET STATISTICS 500;
 
 ALTER TABLE bde.crs_ttl_enc OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_ttl_enc FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ttl_enc TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_ttl_enc TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ttl_hierarchy
@@ -2683,10 +2291,6 @@ ALTER TABLE bde.crs_ttl_hierarchy ALTER COLUMN ttl_title_no_flw SET STATISTICS 5
 ALTER TABLE bde.crs_ttl_hierarchy ALTER COLUMN ttl_title_no_prior SET STATISTICS 500;
 
 ALTER TABLE bde.crs_ttl_hierarchy OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_ttl_hierarchy FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ttl_hierarchy TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_ttl_hierarchy TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ttl_inst
@@ -2737,10 +2341,6 @@ ALTER TABLE bde.crs_ttl_inst ALTER COLUMN usr_id_approve SET STATISTICS 500;
 
 ALTER TABLE bde.crs_ttl_inst OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_ttl_inst FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ttl_inst TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_ttl_inst TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_ttl_inst_title
 --------------------------------------------------------------------------------
@@ -2759,10 +2359,6 @@ ALTER TABLE bde.crs_ttl_inst_title ALTER COLUMN ttl_title_no SET STATISTICS 1000
 
 ALTER TABLE bde.crs_ttl_inst_title OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_ttl_inst_title FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_ttl_inst_title TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_ttl_inst_title TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_unit_of_meas
 --------------------------------------------------------------------------------
@@ -2776,10 +2372,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_unit_of_meas (
 );
 
 ALTER TABLE bde.crs_unit_of_meas OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_unit_of_meas FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_unit_of_meas TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_unit_of_meas TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_user
@@ -2842,10 +2434,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_user (
 
 ALTER TABLE bde.crs_user OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_user FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_user TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_user TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_vector
 --------------------------------------------------------------------------------
@@ -2871,10 +2459,6 @@ ALTER TABLE bde.crs_vector ALTER COLUMN nod_id_start SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_vector OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.crs_vector FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_vector TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_vector TO bde_user;
-
 --------------------------------------------------------------------------------
 -- BDE table crs_vertx_sequence
 --------------------------------------------------------------------------------
@@ -2892,10 +2476,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_vertx_sequence (
 ALTER TABLE bde.crs_vertx_sequence ALTER COLUMN lin_id SET STATISTICS 1000;
 
 ALTER TABLE bde.crs_vertx_sequence OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_vertx_sequence FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_vertx_sequence TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_vertx_sequence TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table crs_work
@@ -2934,7 +2514,6 @@ CREATE TABLE IF NOT EXISTS bde.crs_work (
     UNIQUE (audit_id)
 );
 
-
 ALTER TABLE bde.crs_work ALTER COLUMN alt_id SET STATISTICS 500;
 ALTER TABLE bde.crs_work ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_work ALTER COLUMN authorised_date SET STATISTICS 500;
@@ -2954,10 +2533,6 @@ ALTER TABLE bde.crs_work ALTER COLUMN usr_id_validated SET STATISTICS 500;
 ALTER TABLE bde.crs_work ALTER COLUMN validated_date SET STATISTICS 500;
 
 ALTER TABLE bde.crs_work OWNER TO bde_dba;
-
-REVOKE ALL ON TABLE bde.crs_work FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.crs_work TO bde_admin;
-GRANT SELECT ON TABLE bde.crs_work TO bde_user;
 
 --------------------------------------------------------------------------------
 -- BDE table cbe_title_parcel_association
@@ -2980,9 +2555,29 @@ ALTER TABLE bde.cbe_title_parcel_association ALTER COLUMN par_id SET STATISTICS 
 
 ALTER TABLE bde.cbe_title_parcel_association OWNER TO bde_dba;
 
-REVOKE ALL ON TABLE bde.cbe_title_parcel_association FROM PUBLIC;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE bde.cbe_title_parcel_association TO bde_admin;
-GRANT SELECT ON TABLE bde.cbe_title_parcel_association TO bde_user;
+-- Fix up permissions on schema
+
+GRANT ALL ON SCHEMA bde TO bde_dba;
+GRANT USAGE ON SCHEMA bde TO bde_admin;
+GRANT USAGE ON SCHEMA bde TO bde_user;
+
+-- Fix up permissions on schema tables
+
+REVOKE ALL
+    ON ALL TABLES IN SCHEMA bde
+    FROM public;
+
+GRANT ALL
+    ON ALL TABLES IN SCHEMA bde
+    TO bde_dba;
+
+GRANT SELECT, UPDATE, INSERT, DELETE
+    ON ALL TABLES IN SCHEMA bde
+    TO bde_admin;
+
+GRANT SELECT
+    ON ALL TABLES IN SCHEMA bde
+    TO bde_user;
 
 END;
 $SCHEMA$;
