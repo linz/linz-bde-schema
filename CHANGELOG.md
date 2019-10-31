@@ -4,7 +4,7 @@ All notable changes for the LINZ BDE schema are documented in this file.
 
 ## 1.8.0dev - 2019-MM-DD
 ### Enhanced
-- Schema loaders will now recover permissions (#165)
+- Lost tables and permissions now recovered upon schema loading (#165)
 
 ## 1.7.0 - 2019-10-09
 ### Added
