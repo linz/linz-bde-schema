@@ -17,17 +17,12 @@
 DO $SCHEMA$
 BEGIN
 
-IF EXISTS (SELECT * FROM pg_namespace where LOWER(nspname) = 'bde') THEN
-	  RAISE NOTICE 'bde schema already exists';
-    RETURN;
-END IF;
-
-
 IF NOT EXISTS (SELECT * FROM pg_extension  WHERE extname = 'postgis') THEN
 	RAISE EXCEPTION 'postgis extension is not installed';
 END IF;
 
-CREATE SCHEMA bde AUTHORIZATION bde_dba;
+CREATE SCHEMA IF NOT EXISTS bde;
+ALTER SCHEMA bde OWNER TO bde_dba;
 
 GRANT ALL ON SCHEMA bde TO bde_dba;
 GRANT USAGE ON SCHEMA bde TO bde_admin;
@@ -37,7 +32,7 @@ GRANT USAGE ON SCHEMA bde TO bde_user;
 -- BDE table crs_action
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_action (
+CREATE TABLE IF NOT EXISTS bde.crs_action (
     tin_id INTEGER NOT NULL,
     id INTEGER NOT NULL,
     sequence INTEGER NOT NULL,
@@ -49,14 +44,10 @@ CREATE TABLE bde.crs_action (
     mode VARCHAR(4),
     flags VARCHAR(4),
     source INTEGER,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (tin_id, id),
+    CONSTRAINT pkey_crs_action PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_action
-    ADD UNIQUE (tin_id, id);
-
-ALTER TABLE ONLY bde.crs_action
-    ADD CONSTRAINT pkey_crs_action PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_action ALTER COLUMN tin_id SET STATISTICS 500;
 ALTER TABLE bde.crs_action ALTER COLUMN att_type SET STATISTICS 500;
@@ -73,20 +64,16 @@ GRANT SELECT ON TABLE bde.crs_action TO bde_user;
 -- BDE table crs_action_type
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_action_type (
-    type VARCHAR(4) NOT NULL,
+CREATE TABLE IF NOT EXISTS bde.crs_action_type (
+    type VARCHAR(4) NOT NULL UNIQUE,
     description VARCHAR(200) NOT NULL,
     system_action CHAR(1) NOT NULL,
     sob_name VARCHAR(50),
     existing_inst CHAR(1) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_action_type PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE ONLY bde.crs_action_type
-    ADD CONSTRAINT pkey_crs_action_type PRIMARY KEY (audit_id);
-
-ALTER TABLE ONLY bde.crs_action_type
-    ADD UNIQUE (type);
 
 ALTER TABLE bde.crs_action_type OWNER TO bde_dba;
 
@@ -98,7 +85,7 @@ GRANT SELECT ON TABLE bde.crs_action_type TO bde_user;
 -- BDE table crs_adj_obs_change
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_adj_obs_change (
+CREATE TABLE IF NOT EXISTS bde.crs_adj_obs_change (
     adj_id INTEGER NOT NULL,
     obn_id INTEGER NOT NULL,
     orig_status VARCHAR(4) NOT NULL,
@@ -122,14 +109,10 @@ CREATE TABLE bde.crs_adj_obs_change (
     h_min_accuracy NUMERIC(22,12),
     h_max_azimuth NUMERIC(22,12),
     v_accuracy NUMERIC(22,12),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_adj_obs_change PRIMARY KEY (audit_id),
+    UNIQUE (adj_id, obn_id)
 );
-
-ALTER TABLE ONLY bde.crs_adj_obs_change
-    ADD UNIQUE (adj_id, obn_id);
-
-ALTER TABLE ONLY bde.crs_adj_obs_change
-    ADD CONSTRAINT pkey_crs_adj_obs_change PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_adj_obs_change ALTER COLUMN adj_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_adj_obs_change ALTER COLUMN obn_id SET STATISTICS 1000;
@@ -145,18 +128,15 @@ GRANT SELECT ON TABLE bde.crs_adj_obs_change TO bde_user;
 -- BDE table crs_adj_user_coef
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_adj_user_coef (
+CREATE TABLE IF NOT EXISTS bde.crs_adj_user_coef (
     adc_id INTEGER NOT NULL,
     adj_id INTEGER NOT NULL,
     value VARCHAR(255),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_adj_user_coef PRIMARY KEY (audit_id),
+    UNIQUE (adc_id, adj_id)
 );
 
-ALTER TABLE ONLY bde.crs_adj_user_coef
-    ADD CONSTRAINT pkey_crs_adj_user_coef PRIMARY KEY (audit_id);
-
-ALTER TABLE ONLY bde.crs_adj_user_coef
-    ADD UNIQUE (adc_id, adj_id);
 
 ALTER TABLE bde.crs_adj_user_coef OWNER TO bde_dba;
 
@@ -168,21 +148,17 @@ GRANT SELECT ON TABLE bde.crs_adj_user_coef TO bde_user;
 -- BDE table crs_adjust_coef
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_adjust_coef (
+CREATE TABLE IF NOT EXISTS bde.crs_adjust_coef (
     id INTEGER NOT NULL,
     adm_id INTEGER NOT NULL,
     default_value VARCHAR(255),
     description VARCHAR(100) NOT NULL,
     sequence INTEGER NOT NULL,
     coef_code VARCHAR(4) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_adjust_coef PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_adjust_coef
-    ADD CONSTRAINT pkey_crs_adjust_coef PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_adjust_coef
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_adjust_coef OWNER TO bde_dba;
 
@@ -194,21 +170,17 @@ GRANT SELECT ON TABLE bde.crs_adjust_coef TO bde_user;
 -- BDE table crs_adjust_method
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_adjust_method (
+CREATE TABLE IF NOT EXISTS bde.crs_adjust_method (
     id INTEGER NOT NULL,
     status VARCHAR(4) NOT NULL,
     software_used VARCHAR(4) NOT NULL,
     type VARCHAR(4) NOT NULL,
     name VARCHAR(30) NOT NULL,
     audit_id INTEGER NOT NULL,
-    description VARCHAR(100)
+    description VARCHAR(100),
+    CONSTRAINT pkey_crs_adjust_method PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_adjust_method
-    ADD CONSTRAINT pkey_crs_adjust_method PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_adjust_method
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_adjust_method OWNER TO bde_dba;
 
@@ -220,7 +192,7 @@ GRANT SELECT ON TABLE bde.crs_adjust_method TO bde_user;
 -- BDE table crs_adjustment_run
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_adjustment_run (
+CREATE TABLE IF NOT EXISTS bde.crs_adjustment_run (
     id INTEGER NOT NULL,
     adm_id INTEGER NOT NULL,
     cos_id INTEGER NOT NULL,
@@ -234,14 +206,10 @@ CREATE TABLE bde.crs_adjustment_run (
     adj_nod_status_decom CHAR(1) NOT NULL,
     adj_obn_status_decom CHAR(1) NOT NULL,
     preview_datetime TIMESTAMP,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_adjustment_run PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_adjustment_run
-    ADD CONSTRAINT pkey_crs_adjustment_run PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_adjustment_run
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_adjustment_run ALTER COLUMN adm_id SET STATISTICS 250;
 ALTER TABLE bde.crs_adjustment_run ALTER COLUMN audit_id SET STATISTICS 250;
@@ -261,21 +229,17 @@ GRANT SELECT ON TABLE bde.crs_adjustment_run TO bde_user;
 -- BDE table crs_adoption
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_adoption (
+CREATE TABLE IF NOT EXISTS bde.crs_adoption (
     obn_id_new INTEGER NOT NULL,
     obn_id_orig INTEGER,
     sur_wrk_id_orig INTEGER NOT NULL,
     factor_1 NUMERIC(22,12) NOT NULL,
     factor_2 NUMERIC(22,12),
     factor_3 NUMERIC(22,12),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_adoption PRIMARY KEY (obn_id_new),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_adoption
-    ADD CONSTRAINT pkey_crs_adoption PRIMARY KEY (obn_id_new);
-
-ALTER TABLE ONLY bde.crs_adoption
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_adoption ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_adoption ALTER COLUMN obn_id_new SET STATISTICS 500;
@@ -292,18 +256,14 @@ GRANT SELECT ON TABLE bde.crs_adoption TO bde_user;
 -- BDE table crs_affected_parcl
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_affected_parcl (
+CREATE TABLE IF NOT EXISTS bde.crs_affected_parcl (
     sur_wrk_id INTEGER NOT NULL,
     par_id INTEGER NOT NULL,
     action VARCHAR(4) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (sur_wrk_id, par_id),
+    CONSTRAINT pkey_crs_affected_parcl PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_affected_parcl
-    ADD UNIQUE (sur_wrk_id, par_id);
-
-ALTER TABLE ONLY bde.crs_affected_parcl
-    ADD CONSTRAINT pkey_crs_affected_parcl PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_affected_parcl ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_affected_parcl ALTER COLUMN par_id SET STATISTICS 500;
@@ -319,15 +279,13 @@ GRANT SELECT ON TABLE bde.crs_affected_parcl TO bde_user;
 -- BDE table crs_alias
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_alias (
+CREATE TABLE IF NOT EXISTS bde.crs_alias (
     id INTEGER NOT NULL,
     prp_id INTEGER NOT NULL,
     surname VARCHAR(100) NOT NULL,
-    other_names VARCHAR(100)
+    other_names VARCHAR(100),
+    CONSTRAINT pkey_crs_alias PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_alias
-    ADD CONSTRAINT pkey_crs_alias PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_alias OWNER TO bde_dba;
 
@@ -339,7 +297,7 @@ GRANT SELECT ON TABLE bde.crs_alias TO bde_user;
 -- BDE table crs_appellation
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_appellation (
+CREATE TABLE IF NOT EXISTS bde.crs_appellation (
     par_id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     title CHAR(1) NOT NULL,
@@ -361,14 +319,10 @@ CREATE TABLE bde.crs_appellation (
     act_id_ext INTEGER,
     act_tin_id_ext INTEGER,
     id INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_appellation PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_appellation
-    ADD CONSTRAINT pkey_crs_appellation PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_appellation
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_appellation ALTER COLUMN act_id_crt SET STATISTICS 500;
 ALTER TABLE bde.crs_appellation ALTER COLUMN act_id_ext SET STATISTICS 500;
@@ -392,16 +346,15 @@ GRANT SELECT ON TABLE bde.crs_appellation TO bde_user;
 -- BDE table crs_comprised_in
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_comprised_in (
+CREATE TABLE IF NOT EXISTS bde.crs_comprised_in (
     id INTEGER NOT NULL,
     wrk_id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     reference VARCHAR(20) NOT NULL,
-    limited CHAR(1)
+    limited CHAR(1),
+    CONSTRAINT pkey_crs_comprised_in PRIMARY KEY (id)
 );
 
-ALTER TABLE ONLY bde.crs_comprised_in
-    ADD CONSTRAINT pkey_crs_comprised_in PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_comprised_in OWNER TO bde_dba;
 
@@ -413,7 +366,7 @@ GRANT SELECT ON TABLE bde.crs_comprised_in TO bde_user;
 -- BDE table crs_coordinate
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_coordinate (
+CREATE TABLE IF NOT EXISTS bde.crs_coordinate (
     id INTEGER NOT NULL,
     cos_id INTEGER NOT NULL,
     nod_id INTEGER NOT NULL,
@@ -428,14 +381,10 @@ CREATE TABLE bde.crs_coordinate (
     value3 NUMERIC(22,12),
     wrk_id_created INTEGER,
     cor_id INTEGER,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_coordinate PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_coordinate
-    ADD CONSTRAINT pkey_crs_coordinate PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_coordinate
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_coordinate ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_coordinate ALTER COLUMN cor_id SET STATISTICS 1000;
@@ -460,7 +409,7 @@ GRANT SELECT ON TABLE bde.crs_coordinate TO bde_user;
 -- BDE table crs_coordinate_sys
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_coordinate_sys (
+CREATE TABLE IF NOT EXISTS bde.crs_coordinate_sys (
     id INTEGER NOT NULL,
     cot_id INTEGER NOT NULL,
     dtm_id INTEGER NOT NULL,
@@ -468,14 +417,10 @@ CREATE TABLE bde.crs_coordinate_sys (
     name VARCHAR(100) NOT NULL,
     initial_sta_name VARCHAR(100),
     code VARCHAR(10) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_coordinate_sys PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_coordinate_sys
-    ADD CONSTRAINT pkey_crs_coordinate_sys PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_coordinate_sys
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_coordinate_sys OWNER TO bde_dba;
 
@@ -487,7 +432,7 @@ GRANT SELECT ON TABLE bde.crs_coordinate_sys TO bde_user;
 -- BDE table crs_coordinate_tpe
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_coordinate_tpe (
+CREATE TABLE IF NOT EXISTS bde.crs_coordinate_tpe (
     id INTEGER NOT NULL,
     name VARCHAR(100) NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -503,14 +448,10 @@ CREATE TABLE bde.crs_coordinate_tpe (
     ord_3_min NUMERIC(22,12),
     ord_3_max NUMERIC(22,12),
     data VARCHAR(4),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_coordinate_tpe PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_coordinate_tpe
-    ADD CONSTRAINT pkey_crs_coordinate_tpe PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_coordinate_tpe
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_coordinate_tpe OWNER TO bde_dba;
 
@@ -522,18 +463,14 @@ GRANT SELECT ON TABLE bde.crs_coordinate_tpe TO bde_user;
 -- BDE table crs_cor_precision
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_cor_precision (
+CREATE TABLE IF NOT EXISTS bde.crs_cor_precision (
     cor_id INTEGER NOT NULL,
     ort_type VARCHAR(4) NOT NULL,
     decimal_places INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (cor_id, ort_type),
+    CONSTRAINT pkey_crs_cor_precision PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_cor_precision
-    ADD UNIQUE (cor_id, ort_type);
-
-ALTER TABLE ONLY bde.crs_cor_precision
-    ADD CONSTRAINT pkey_crs_cor_precision PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_cor_precision OWNER TO bde_dba;
 
@@ -545,21 +482,17 @@ GRANT SELECT ON TABLE bde.crs_cor_precision TO bde_user;
 -- BDE table crs_cord_order
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_cord_order (
+CREATE TABLE IF NOT EXISTS bde.crs_cord_order (
     id INTEGER NOT NULL,
     display VARCHAR(4) NOT NULL,
     description VARCHAR(100) NOT NULL,
     dtm_id INTEGER NOT NULL,
     order_group INTEGER,
     error NUMERIC(12,4) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_cord_order PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_cord_order
-    ADD CONSTRAINT pkey_crs_cord_order PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_cord_order
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_cord_order OWNER TO bde_dba;
 
@@ -571,7 +504,7 @@ GRANT SELECT ON TABLE bde.crs_cord_order TO bde_user;
 -- BDE table crs_datum
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_datum (
+CREATE TABLE IF NOT EXISTS bde.crs_datum (
     id INTEGER NOT NULL,
     name VARCHAR(100) NOT NULL,
     type VARCHAR(4) NOT NULL,
@@ -581,14 +514,10 @@ CREATE TABLE bde.crs_datum (
     elp_id INTEGER,
     ref_datum_code VARCHAR(4) NOT NULL,
     code VARCHAR(10) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_datum PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_datum
-    ADD CONSTRAINT pkey_crs_datum PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_datum
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_datum OWNER TO bde_dba;
 
@@ -600,23 +529,18 @@ GRANT SELECT ON TABLE bde.crs_datum TO bde_user;
 -- BDE table crs_elect_place
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_elect_place (
+CREATE TABLE IF NOT EXISTS bde.crs_elect_place (
     id INTEGER NOT NULL,
     alt_id INTEGER,
     name VARCHAR(100) NOT NULL,
     location VARCHAR(100),
     status VARCHAR(4) NOT NULL,
     audit_id INTEGER NOT NULL,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(point, 4167),
+    CONSTRAINT pkey_crs_elect_place PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_elect_place', 'shape', 4167, 'POINT', 2);
-
-ALTER TABLE ONLY bde.crs_elect_place
-    ADD CONSTRAINT pkey_crs_elect_place PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_elect_place
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_elect_place OWNER TO bde_dba;
 
@@ -628,19 +552,15 @@ GRANT SELECT ON TABLE bde.crs_elect_place TO bde_user;
 -- BDE table crs_ellipsoid
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_ellipsoid (
+CREATE TABLE IF NOT EXISTS bde.crs_ellipsoid (
     id INTEGER NOT NULL,
     name VARCHAR(100) NOT NULL,
     semi_major_axis NUMERIC(22,12) NOT NULL,
     flattening NUMERIC(22,12) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_ellipsoid PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_ellipsoid
-    ADD CONSTRAINT pkey_crs_ellipsoid PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_ellipsoid
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_ellipsoid OWNER TO bde_dba;
 
@@ -652,7 +572,7 @@ GRANT SELECT ON TABLE bde.crs_ellipsoid TO bde_user;
 -- BDE table crs_enc_share
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_enc_share (
+CREATE TABLE IF NOT EXISTS bde.crs_enc_share (
     id INTEGER NOT NULL,
     enc_id INTEGER,
     status VARCHAR(4),
@@ -661,11 +581,9 @@ CREATE TABLE bde.crs_enc_share (
     act_id_ext INTEGER,
     act_tin_id_ext INTEGER,
     system_crt CHAR(1) NOT NULL,
-    system_ext CHAR(1)
+    system_ext CHAR(1),
+    CONSTRAINT pkey_crs_enc_share PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_enc_share
-    ADD CONSTRAINT pkey_crs_enc_share PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_enc_share ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
 ALTER TABLE bde.crs_enc_share ALTER COLUMN enc_id SET STATISTICS 500;
@@ -681,7 +599,7 @@ GRANT SELECT ON TABLE bde.crs_enc_share TO bde_user;
 -- BDE table crs_encumbrance
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_encumbrance (
+CREATE TABLE IF NOT EXISTS bde.crs_encumbrance (
     id INTEGER NOT NULL,
     status VARCHAR(4),
     act_tin_id_orig INTEGER,
@@ -689,11 +607,9 @@ CREATE TABLE bde.crs_encumbrance (
     act_id_crt INTEGER NOT NULL,
     act_id_orig INTEGER NOT NULL,
     ind_tan_holder CHAR(1),
-    term VARCHAR(250)
+    term VARCHAR(250),
+    CONSTRAINT pkey_crs_encumbrance PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_encumbrance
-    ADD CONSTRAINT pkey_crs_encumbrance PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_encumbrance ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
 ALTER TABLE bde.crs_encumbrance ALTER COLUMN act_tin_id_orig SET STATISTICS 500;
@@ -709,17 +625,15 @@ GRANT SELECT ON TABLE bde.crs_encumbrance TO bde_user;
 -- BDE table crs_encumbrancee
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_encumbrancee (
+CREATE TABLE IF NOT EXISTS bde.crs_encumbrancee (
     id INTEGER NOT NULL,
     ens_id INTEGER,
     status VARCHAR(4),
     name VARCHAR(255),
     system_ext CHAR(1),
-    usr_id VARCHAR(20)
+    usr_id VARCHAR(20),
+    CONSTRAINT pkey_crs_encumbrancee PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_encumbrancee
-    ADD CONSTRAINT pkey_crs_encumbrancee PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_encumbrancee ALTER COLUMN ens_id SET STATISTICS 500;
 ALTER TABLE bde.crs_encumbrancee ALTER COLUMN id SET STATISTICS 500;
@@ -734,7 +648,7 @@ GRANT SELECT ON TABLE bde.crs_encumbrancee TO bde_user;
 -- BDE table crs_estate_share
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_estate_share (
+CREATE TABLE IF NOT EXISTS bde.crs_estate_share (
     id INTEGER NOT NULL,
     ett_id INTEGER NOT NULL,
     share VARCHAR(100) NOT NULL,
@@ -749,11 +663,9 @@ CREATE TABLE bde.crs_estate_share (
     sort_order INTEGER,
     system_crt CHAR(1) NOT NULL,
     system_ext CHAR(1),
-    transferee_group SMALLINT
+    transferee_group SMALLINT,
+    CONSTRAINT pkey_crs_estate_share PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_estate_share
-    ADD CONSTRAINT pkey_crs_estate_share PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_estate_share ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
 ALTER TABLE bde.crs_estate_share ALTER COLUMN ett_id SET STATISTICS 500;
@@ -769,23 +681,18 @@ GRANT SELECT ON TABLE bde.crs_estate_share TO bde_user;
 -- BDE table crs_feature_name
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_feature_name (
+CREATE TABLE IF NOT EXISTS bde.crs_feature_name (
     id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     name VARCHAR(100) NOT NULL,
     status VARCHAR(4) NOT NULL,
     other_details VARCHAR(100),
     audit_id INTEGER NOT NULL,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(geometry, 4167),
+    CONSTRAINT pkey_crs_feature_name PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_feature_name', 'shape', 4167, 'GEOMETRY', 2);
-
-ALTER TABLE ONLY bde.crs_feature_name
-    ADD CONSTRAINT pkey_crs_feature_name PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_feature_name
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_feature_name OWNER TO bde_dba;
 
@@ -797,14 +704,12 @@ GRANT SELECT ON TABLE bde.crs_feature_name TO bde_user;
 -- BDE table crs_geodetic_network
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_geodetic_network  (
+CREATE TABLE IF NOT EXISTS bde.crs_geodetic_network  (
     id  INTEGER  NOT NULL,
     code VARCHAR(4),
-    description VARCHAR(100)
+    description VARCHAR(100),
+    CONSTRAINT pkey_crs_geodetic_network PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_geodetic_network
-    ADD CONSTRAINT pkey_crs_geodetic_network PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_geodetic_network OWNER TO bde_dba;
 
@@ -816,17 +721,13 @@ GRANT SELECT ON TABLE bde.crs_geodetic_network TO bde_user;
 -- BDE table crs_geodetic_node_network
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_geodetic_node_network  (
+CREATE TABLE IF NOT EXISTS bde.crs_geodetic_node_network  (
     nod_id INTEGER NOT NULL,
     gdn_id INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (nod_id, gdn_id),
+    CONSTRAINT pkey_crs_geodetic_node_network PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_geodetic_node_network
-    ADD UNIQUE (nod_id, gdn_id);
-
-ALTER TABLE ONLY bde.crs_geodetic_node_network
-    ADD CONSTRAINT pkey_crs_geodetic_node_network PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_geodetic_node_network OWNER TO bde_dba;
 
@@ -838,7 +739,7 @@ GRANT SELECT ON TABLE bde.crs_geodetic_node_network TO bde_user;
 -- BDE table crs_image
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_image (
+CREATE TABLE IF NOT EXISTS bde.crs_image (
   id INTEGER NOT NULL,
   barcode_datetime TIMESTAMP,
   ims_id NUMERIC(32),
@@ -846,11 +747,9 @@ CREATE TABLE bde.crs_image (
   pages INTEGER NOT NULL,
   centera_id VARCHAR(65),
   location CHAR(1),
-  usr_id_created VARCHAR(20)
+  usr_id_created VARCHAR(20),
+  CONSTRAINT pkey_crs_image PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_image
-    ADD CONSTRAINT pkey_crs_image PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_image OWNER TO bde_dba;
 
@@ -862,7 +761,7 @@ GRANT SELECT ON TABLE bde.crs_image TO bde_user;
 -- BDE table crs_image
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_image_history (
+CREATE TABLE IF NOT EXISTS bde.crs_image_history (
     id INTEGER NOT NULL,
     img_id INTEGER NOT NULL,
     ims_id DECIMAL(32),
@@ -870,11 +769,9 @@ CREATE TABLE bde.crs_image_history (
     pages INTEGER,
     centera_id VARCHAR(65),
     centera_datetime TIMESTAMP,
-    usr_id VARCHAR(20)
+    usr_id VARCHAR(20),
+    CONSTRAINT pkey_crs_image_history PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_image_history
-    ADD CONSTRAINT pkey_crs_image_history PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_image_history OWNER TO bde_dba;
 
@@ -886,22 +783,17 @@ GRANT SELECT ON TABLE bde.crs_image_history TO bde_user;
 -- BDE table crs_land_district
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_land_district (
+CREATE TABLE IF NOT EXISTS bde.crs_land_district (
     loc_id INTEGER NOT NULL,
     off_code VARCHAR(4) NOT NULL,
     "default" CHAR(1) NOT NULL,
     audit_id INTEGER NOT NULL,
     se_row_id INTEGER,
-    usr_tm_id VARCHAR(20)
+    usr_tm_id VARCHAR(20),
+    shape geometry(geometry, 4167),
+    CONSTRAINT pkey_crs_land_district PRIMARY KEY (loc_id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_land_district', 'shape', 4167, 'GEOMETRY', 2);
-
-ALTER TABLE ONLY bde.crs_land_district
-    ADD CONSTRAINT pkey_crs_land_district PRIMARY KEY (loc_id);
-
-ALTER TABLE ONLY bde.crs_land_district
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_land_district OWNER TO bde_dba;
 
@@ -913,21 +805,17 @@ GRANT SELECT ON TABLE bde.crs_land_district TO bde_user;
 -- BDE table crs_legal_desc
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_legal_desc (
+CREATE TABLE IF NOT EXISTS bde.crs_legal_desc (
     id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     status VARCHAR(4) NOT NULL,
     total_area NUMERIC(22,12),
     ttl_title_no VARCHAR(20),
     legal_desc_text VARCHAR(2048),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_legal_desc PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_legal_desc
-    ADD CONSTRAINT pkey_crs_legal_desc PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_legal_desc
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_legal_desc ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_legal_desc ALTER COLUMN id SET STATISTICS 500;
@@ -943,21 +831,17 @@ GRANT SELECT ON TABLE bde.crs_legal_desc TO bde_user;
 -- BDE table crs_legal_desc_prl
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_legal_desc_prl (
+CREATE TABLE IF NOT EXISTS bde.crs_legal_desc_prl (
     lgd_id INTEGER NOT NULL,
     par_id INTEGER NOT NULL,
     sequence INTEGER NOT NULL,
     part_affected VARCHAR(4) NOT NULL,
     share VARCHAR(100) NOT NULL,
     audit_id INTEGER NOT NULL,
-    sur_wrk_id_crt INTEGER
+    sur_wrk_id_crt INTEGER,
+    UNIQUE (lgd_id, par_id),
+    CONSTRAINT pkey_crs_legal_desc_prl PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_legal_desc_prl
-    ADD UNIQUE (lgd_id, par_id);
-
-ALTER TABLE ONLY bde.crs_legal_desc_prl
-    ADD CONSTRAINT pkey_crs_legal_desc_prl PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_legal_desc_prl ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_legal_desc_prl ALTER COLUMN lgd_id SET STATISTICS 500;
@@ -974,7 +858,7 @@ GRANT SELECT ON TABLE bde.crs_legal_desc_prl TO bde_user;
 -- BDE table crs_line
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_line (
+CREATE TABLE IF NOT EXISTS bde.crs_line (
     boundary CHAR(1) NOT NULL,
     type VARCHAR(4) NOT NULL,
     description VARCHAR(2048),
@@ -987,16 +871,12 @@ CREATE TABLE bde.crs_line (
     dcdb_feature VARCHAR(12),
     id INTEGER NOT NULL,
     audit_id INTEGER NOT NULL,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(linestring, 4167),
+    CONSTRAINT pkey_crs_line PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
 
-PERFORM AddGeometryColumn('bde', 'crs_line', 'shape', 4167, 'LINESTRING', 2);
-
-ALTER TABLE ONLY bde.crs_line
-    ADD CONSTRAINT pkey_crs_line PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_line
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_line ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_line ALTER COLUMN id SET STATISTICS 1000;
@@ -1014,22 +894,17 @@ GRANT SELECT ON TABLE bde.crs_line TO bde_user;
 -- BDE table crs_locality
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_locality (
+CREATE TABLE IF NOT EXISTS bde.crs_locality (
     id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     name VARCHAR(100) NOT NULL,
     loc_id_parent INTEGER,
     audit_id INTEGER NOT NULL,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(geometry, 4167),
+    CONSTRAINT pkey_crs_locality PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_locality', 'shape', 4167, 'GEOMETRY', 2);
-
-ALTER TABLE ONLY bde.crs_locality
-    ADD CONSTRAINT pkey_crs_locality PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_locality
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_locality OWNER TO bde_dba;
 
@@ -1041,20 +916,16 @@ GRANT SELECT ON TABLE bde.crs_locality TO bde_user;
 -- BDE table crs_maintenance
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_maintenance (
+CREATE TABLE IF NOT EXISTS bde.crs_maintenance (
     mrk_id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     status VARCHAR(4) NOT NULL,
     "desc" VARCHAR(2048),
     complete_date DATE,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (mrk_id, type),
+    CONSTRAINT pkey_crs_maintenance PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_maintenance
-    ADD UNIQUE (mrk_id, type);
-
-ALTER TABLE ONLY bde.crs_maintenance
-    ADD CONSTRAINT pkey_crs_maintenance PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_maintenance OWNER TO bde_dba;
 
@@ -1066,20 +937,15 @@ GRANT SELECT ON TABLE bde.crs_maintenance TO bde_user;
 -- BDE table crs_map_grid
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_map_grid (
+CREATE TABLE IF NOT EXISTS bde.crs_map_grid (
     major_grid VARCHAR(4) NOT NULL,
     minor_grid VARCHAR(4) NOT NULL,
     se_row_id INTEGER,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    shape geometry(polygon, 4167),
+    CONSTRAINT pkey_crs_map_grid PRIMARY KEY (audit_id),
+    UNIQUE (major_grid, minor_grid)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_map_grid', 'shape', 4167, 'POLYGON', 2);
-
-ALTER TABLE ONLY bde.crs_map_grid
-    ADD CONSTRAINT pkey_crs_map_grid PRIMARY KEY (audit_id);
-
-ALTER TABLE ONLY bde.crs_map_grid
-    ADD UNIQUE (major_grid, minor_grid);
 
 ALTER TABLE bde.crs_map_grid OWNER TO bde_dba;
 
@@ -1091,7 +957,7 @@ GRANT SELECT ON TABLE bde.crs_map_grid TO bde_user;
 -- BDE table crs_mark
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_mark (
+CREATE TABLE IF NOT EXISTS bde.crs_mark (
     id INTEGER NOT NULL,
     nod_id INTEGER NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -1110,14 +976,10 @@ CREATE TABLE bde.crs_mark (
     replaced CHAR(1) NOT NULL,
     replaced_date TIMESTAMP,
     mark_annotation VARCHAR(50),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_mark PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_mark
-    ADD CONSTRAINT pkey_crs_mark PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_mark
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_mark ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_mark ALTER COLUMN id SET STATISTICS 1000;
@@ -1136,18 +998,14 @@ GRANT SELECT ON TABLE bde.crs_mark TO bde_user;
 -- BDE table crs_mark_name
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_mark_name (
+CREATE TABLE IF NOT EXISTS bde.crs_mark_name (
     mrk_id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     name VARCHAR(100) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (mrk_id, "type"),
+    CONSTRAINT pkey_crs_mark_name PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_mark_name
-    ADD UNIQUE (mrk_id, type);
-
-ALTER TABLE ONLY bde.crs_mark_name
-    ADD CONSTRAINT pkey_crs_mark_name PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_mark_name ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_mark_name ALTER COLUMN mrk_id SET STATISTICS 500;
@@ -1163,17 +1021,13 @@ GRANT SELECT ON TABLE bde.crs_mark_name TO bde_user;
 -- BDE table crs_mark_sup_doc
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_mark_sup_doc (
+CREATE TABLE IF NOT EXISTS bde.crs_mark_sup_doc (
     mrk_id INTEGER NOT NULL,
     sud_id INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (mrk_id, sud_id),
+    CONSTRAINT pkey_crs_mark_sup_doc PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_mark_sup_doc
-    ADD UNIQUE (mrk_id, sud_id);
-
-ALTER TABLE ONLY bde.crs_mark_sup_doc
-    ADD CONSTRAINT pkey_crs_mark_sup_doc PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_mark_sup_doc ALTER COLUMN mrk_id SET STATISTICS 250;
 ALTER TABLE bde.crs_mark_sup_doc ALTER COLUMN sud_id SET STATISTICS 250;
@@ -1188,7 +1042,7 @@ GRANT SELECT ON TABLE bde.crs_mark_sup_doc TO bde_user;
 -- BDE table crs_mrk_phys_state
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_mrk_phys_state (
+CREATE TABLE IF NOT EXISTS bde.crs_mrk_phys_state (
     mrk_id INTEGER NOT NULL,
     wrk_id INTEGER NOT NULL,
     "type" VARCHAR(4) NOT NULL,
@@ -1215,14 +1069,10 @@ CREATE TABLE bde.crs_mrk_phys_state (
     pend_mrk_desc VARCHAR(2048),
     pend_othr_name VARCHAR(100),
     pend_prot_type VARCHAR(4),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (wrk_id, "type", mrk_id),
+    CONSTRAINT pkey_crs_mrk_phys_state PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_mrk_phys_state
-    ADD UNIQUE (wrk_id, "type", mrk_id);
-
-ALTER TABLE ONLY bde.crs_mrk_phys_state
-    ADD CONSTRAINT pkey_crs_mrk_phys_state PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_mrk_phys_state ALTER COLUMN mrk_id SET STATISTICS 500;
 ALTER TABLE bde.crs_mrk_phys_state ALTER COLUMN wrk_id SET STATISTICS 500;
@@ -1237,23 +1087,18 @@ GRANT SELECT ON TABLE bde.crs_mrk_phys_state TO bde_user;
 -- BDE table crs_mesh_blk
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_mesh_blk (
+CREATE TABLE IF NOT EXISTS bde.crs_mesh_blk (
     id INTEGER NOT NULL,
     alt_id INTEGER,
     code VARCHAR(7) NOT NULL,
     start_datetime TIMESTAMP NOT NULL,
     end_datetime TIMESTAMP,
     audit_id INTEGER NOT NULL,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(geometry, 4167),
+    CONSTRAINT pkey_crs_mesh_blk PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_mesh_blk', 'shape', 4167, 'GEOMETRY', 2);
-
-ALTER TABLE ONLY bde.crs_mesh_blk
-    ADD CONSTRAINT pkey_crs_mesh_blk PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_mesh_blk
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_mesh_blk ALTER COLUMN alt_id SET STATISTICS 250;
 ALTER TABLE bde.crs_mesh_blk ALTER COLUMN audit_id SET STATISTICS 250;
@@ -1269,18 +1114,14 @@ GRANT SELECT ON TABLE bde.crs_mesh_blk TO bde_user;
 -- BDE table crs_mesh_blk_area
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_mesh_blk_area (
+CREATE TABLE IF NOT EXISTS bde.crs_mesh_blk_area (
     mbk_id INTEGER NOT NULL,
     stt_id INTEGER NOT NULL,
     alt_id INTEGER,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (mbk_id, stt_id),
+    CONSTRAINT pkey_crs_mesh_blk_area PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_mesh_blk_area
-    ADD UNIQUE (mbk_id, stt_id);
-
-ALTER TABLE ONLY bde.crs_mesh_blk_area
-    ADD CONSTRAINT pkey_crs_mesh_blk_area PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_mesh_blk_area ALTER COLUMN alt_id SET STATISTICS 250;
 ALTER TABLE bde.crs_mesh_blk_area ALTER COLUMN audit_id SET STATISTICS 250;
@@ -1297,18 +1138,14 @@ GRANT SELECT ON TABLE bde.crs_mesh_blk_area TO bde_user;
 -- BDE table crs_mesh_blk_bdry
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_mesh_blk_bdry (
+CREATE TABLE IF NOT EXISTS bde.crs_mesh_blk_bdry (
     mbk_id INTEGER NOT NULL,
     mbl_id INTEGER NOT NULL,
     alt_id INTEGER,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (mbk_id, mbl_id),
+    CONSTRAINT pkey_crs_mesh_blk_bdry PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_mesh_blk_bdry
-    ADD UNIQUE (mbk_id, mbl_id);
-
-ALTER TABLE ONLY bde.crs_mesh_blk_bdry
-    ADD CONSTRAINT pkey_crs_mesh_blk_bdry PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_mesh_blk_bdry ALTER COLUMN alt_id SET STATISTICS 500;
 ALTER TABLE bde.crs_mesh_blk_bdry ALTER COLUMN audit_id SET STATISTICS 500;
@@ -1325,22 +1162,17 @@ GRANT SELECT ON TABLE bde.crs_mesh_blk_bdry TO bde_user;
 -- BDE table crs_mesh_blk_line
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_mesh_blk_line (
+CREATE TABLE IF NOT EXISTS bde.crs_mesh_blk_line (
     id INTEGER NOT NULL,
     line_type VARCHAR(4) NOT NULL,
     status VARCHAR(4) NOT NULL,
     alt_id INTEGER,
     audit_id INTEGER NOT NULL,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(linestring, 4167),
+    UNIQUE (audit_id),
+    CONSTRAINT pkey_crs_mesh_blk_line PRIMARY KEY (id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_mesh_blk_line', 'shape', 4167, 'LINESTRING', 2);
-
-ALTER TABLE ONLY bde.crs_mesh_blk_line
-    ADD UNIQUE (audit_id);
-
-ALTER TABLE ONLY bde.crs_mesh_blk_line
-    ADD CONSTRAINT pkey_crs_mesh_blk_line PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_mesh_blk_line ALTER COLUMN alt_id SET STATISTICS 500;
 ALTER TABLE bde.crs_mesh_blk_line ALTER COLUMN audit_id SET STATISTICS 500;
@@ -1356,18 +1188,14 @@ GRANT SELECT ON TABLE bde.crs_mesh_blk_line TO bde_user;
 -- BDE table crs_mesh_blk_place
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_mesh_blk_place (
+CREATE TABLE IF NOT EXISTS bde.crs_mesh_blk_place (
     epl_id INTEGER NOT NULL,
     mbk_id INTEGER NOT NULL,
     alt_id INTEGER,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (epl_id, mbk_id),
+    CONSTRAINT pkey_crs_mesh_blk_place PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_mesh_blk_place
-    ADD UNIQUE (epl_id, mbk_id);
-
-ALTER TABLE ONLY bde.crs_mesh_blk_place
-    ADD CONSTRAINT pkey_crs_mesh_blk_place PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_mesh_blk_place ALTER COLUMN alt_id SET STATISTICS 250;
 ALTER TABLE bde.crs_mesh_blk_place ALTER COLUMN audit_id SET STATISTICS 250;
@@ -1384,20 +1212,16 @@ GRANT SELECT ON TABLE bde.crs_mesh_blk_place TO bde_user;
 -- BDE table crs_network_plan
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_network_plan (
+CREATE TABLE IF NOT EXISTS bde.crs_network_plan (
     id INTEGER NOT NULL,
     type VARCHAR(10) NOT NULL,
     status VARCHAR(4) NOT NULL,
     datum_order VARCHAR(4) NOT NULL,
     dtm_id INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_network_plan PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_network_plan
-    ADD CONSTRAINT pkey_crs_network_plan PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_network_plan
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_network_plan OWNER TO bde_dba;
 
@@ -1409,7 +1233,7 @@ GRANT SELECT ON TABLE bde.crs_network_plan TO bde_user;
 -- BDE table crs_node
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_node (
+CREATE TABLE IF NOT EXISTS bde.crs_node (
     id INTEGER NOT NULL,
     cos_id_official INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
@@ -1419,16 +1243,11 @@ CREATE TABLE bde.crs_node (
     alt_id INTEGER,
     wrk_id_created INTEGER,
     audit_id INTEGER NOT NULL,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(point, 4167),
+    CONSTRAINT pkey_crs_node PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_node', 'shape', 4167, 'POINT', 2);
-
-ALTER TABLE ONLY bde.crs_node
-    ADD CONSTRAINT pkey_crs_node PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_node
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_node ALTER COLUMN alt_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_node ALTER COLUMN audit_id SET STATISTICS 1000;
@@ -1447,18 +1266,14 @@ GRANT SELECT ON TABLE bde.crs_node TO bde_user;
 -- BDE table crs_node_prp_order
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_node_prp_order (
+CREATE TABLE IF NOT EXISTS bde.crs_node_prp_order (
     dtm_id INTEGER NOT NULL,
     nod_id INTEGER NOT NULL,
     cor_id INTEGER,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (dtm_id, nod_id),
+    CONSTRAINT pkey_crs_node_prp_order PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_node_prp_order
-    ADD UNIQUE (dtm_id, nod_id);
-
-ALTER TABLE ONLY bde.crs_node_prp_order
-    ADD CONSTRAINT pkey_crs_node_prp_order PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_node_prp_order OWNER TO bde_dba;
 
@@ -1470,20 +1285,16 @@ GRANT SELECT ON TABLE bde.crs_node_prp_order TO bde_user;
 -- BDE table crs_node_works
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_node_works (
+CREATE TABLE IF NOT EXISTS bde.crs_node_works (
     nod_id INTEGER NOT NULL,
     wrk_id INTEGER NOT NULL,
     pend_node_status VARCHAR(4),
     purpose VARCHAR(4),
     adopted CHAR(1),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (nod_id, wrk_id),
+    CONSTRAINT pkey_crs_node_works PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_node_works
-    ADD UNIQUE (nod_id, wrk_id);
-
-ALTER TABLE ONLY bde.crs_node_works
-    ADD CONSTRAINT pkey_crs_node_works PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_node_works ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_node_works ALTER COLUMN nod_id SET STATISTICS 1000;
@@ -1499,7 +1310,7 @@ GRANT SELECT ON TABLE bde.crs_node_works TO bde_user;
 -- BDE table crs_nominal_index
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_nominal_index (
+CREATE TABLE IF NOT EXISTS bde.crs_nominal_index (
     id INTEGER NOT NULL,
     ttl_title_no VARCHAR(20) NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -1512,11 +1323,9 @@ CREATE TABLE bde.crs_nominal_index (
     dlg_id_ext INTEGER,
     dlg_id_hst INTEGER,
     significance SMALLINT NOT NULL,
-    system_ext CHAR(1)
+    system_ext CHAR(1),
+    CONSTRAINT pkey_crs_nominal_index PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_nominal_index
-    ADD CONSTRAINT pkey_crs_nominal_index PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_nominal_index ALTER COLUMN corporate_name SET STATISTICS 1000;
 ALTER TABLE bde.crs_nominal_index ALTER COLUMN id SET STATISTICS 1000;
@@ -1535,7 +1344,7 @@ GRANT SELECT ON TABLE bde.crs_nominal_index TO bde_user;
 -- BDE table crs_obs_accuracy
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_obs_accuracy (
+CREATE TABLE IF NOT EXISTS bde.crs_obs_accuracy (
     obn_id1 INTEGER NOT NULL,
     obn_id2 INTEGER NOT NULL,
     value_11 DOUBLE PRECISION,
@@ -1548,14 +1357,10 @@ CREATE TABLE bde.crs_obs_accuracy (
     value_32 DOUBLE PRECISION,
     value_33 DOUBLE PRECISION,
     id INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_obs_accuracy PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_obs_accuracy
-    ADD CONSTRAINT pkey_crs_obs_accuracy PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_obs_accuracy
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_obs_accuracy ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_obs_accuracy ALTER COLUMN id SET STATISTICS 1000;
@@ -1572,19 +1377,15 @@ GRANT SELECT ON TABLE bde.crs_obs_accuracy TO bde_user;
 -- BDE table crs_obs_elem_type
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_obs_elem_type (
+CREATE TABLE IF NOT EXISTS bde.crs_obs_elem_type (
     type VARCHAR(4) NOT NULL,
     description VARCHAR(100) NOT NULL,
     uom_code VARCHAR(4) NOT NULL,
     format_code VARCHAR(4) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (type),
+    CONSTRAINT pkey_crs_obs_elem_type PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_obs_elem_type
-    ADD UNIQUE (type);
-
-ALTER TABLE ONLY bde.crs_obs_elem_type
-    ADD CONSTRAINT pkey_crs_obs_elem_type PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_obs_elem_type OWNER TO bde_dba;
 
@@ -1596,18 +1397,14 @@ GRANT SELECT ON TABLE bde.crs_obs_elem_type TO bde_user;
 -- BDE table crs_obs_set
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_obs_set (
+CREATE TABLE IF NOT EXISTS bde.crs_obs_set (
     id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     reason VARCHAR(100) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_obs_set PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_obs_set
-    ADD CONSTRAINT pkey_crs_obs_set PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_obs_set
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_obs_set OWNER TO bde_dba;
 
@@ -1619,7 +1416,7 @@ GRANT SELECT ON TABLE bde.crs_obs_set TO bde_user;
 -- BDE table crs_obs_type
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_obs_type (
+CREATE TABLE IF NOT EXISTS bde.crs_obs_type (
     type VARCHAR(4) NOT NULL,
     sub_type VARCHAR(4) NOT NULL,
     vector_type VARCHAR(4) NOT NULL,
@@ -1630,14 +1427,10 @@ CREATE TABLE bde.crs_obs_type (
     datum_reqd CHAR(1),
     time_reqd CHAR(1),
     trajectory_reqd CHAR(1),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (type, sub_type),
+    CONSTRAINT pkey_crs_obs_type PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_obs_type
-    ADD UNIQUE (type, sub_type);
-
-ALTER TABLE ONLY bde.crs_obs_type
-    ADD CONSTRAINT pkey_crs_obs_type PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_obs_type OWNER TO bde_dba;
 
@@ -1649,7 +1442,7 @@ GRANT SELECT ON TABLE bde.crs_obs_type TO bde_user;
 -- BDE table crs_observation
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_observation (
+CREATE TABLE IF NOT EXISTS bde.crs_observation (
     id INTEGER NOT NULL,
     obt_type VARCHAR(4),
     obt_sub_type VARCHAR(4),
@@ -1672,14 +1465,10 @@ CREATE TABLE bde.crs_observation (
     arc_direction VARCHAR(4),
     obn_id_amendment INTEGER,
     code VARCHAR(100),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_observation PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_observation
-    ADD CONSTRAINT pkey_crs_observation PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_observation
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_observation ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_observation ALTER COLUMN cos_id SET STATISTICS 1000;
@@ -1703,21 +1492,16 @@ GRANT SELECT ON TABLE bde.crs_observation TO bde_user;
 -- BDE table crs_off_cord_sys
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_off_cord_sys (
+CREATE TABLE IF NOT EXISTS bde.crs_off_cord_sys (
     id INTEGER NOT NULL,
     cos_id INTEGER NOT NULL,
     description VARCHAR(100) NOT NULL,
     audit_id INTEGER NOT NULL,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(polygon, 4167),
+    CONSTRAINT pkey_crs_off_cord_sys PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_off_cord_sys', 'shape', 4167, 'POLYGON', 2);
-
-ALTER TABLE ONLY bde.crs_off_cord_sys
-    ADD CONSTRAINT pkey_crs_off_cord_sys PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_off_cord_sys
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_off_cord_sys OWNER TO bde_dba;
 
@@ -1729,7 +1513,7 @@ GRANT SELECT ON TABLE bde.crs_off_cord_sys TO bde_user;
 -- BDE table crs_office
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_office (
+CREATE TABLE IF NOT EXISTS bde.crs_office (
     code VARCHAR(4) NOT NULL,
     name VARCHAR(50) NOT NULL,
     rcs_name VARCHAR(50) NOT NULL,
@@ -1748,14 +1532,10 @@ CREATE TABLE bde.crs_office (
     postal_postcode VARCHAR(6),
     printer_name VARCHAR(50),
     telephone VARCHAR(30),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (code),
+    CONSTRAINT pkey_crs_office PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_office
-    ADD UNIQUE (code);
-
-ALTER TABLE ONLY bde.crs_office
-    ADD CONSTRAINT pkey_crs_office PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_office OWNER TO bde_dba;
 
@@ -1767,7 +1547,7 @@ GRANT SELECT ON TABLE bde.crs_office TO bde_user;
 -- BDE table crs_ordinate_adj
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_ordinate_adj (
+CREATE TABLE IF NOT EXISTS bde.crs_ordinate_adj (
     adj_id INTEGER NOT NULL,
     coo_id_source INTEGER NOT NULL,
     sdc_status_prop CHAR(1) NOT NULL,
@@ -1783,14 +1563,10 @@ CREATE TABLE bde.crs_ordinate_adj (
     h_min_accuracy NUMERIC(22,12),
     h_max_azimuth NUMERIC(22,12),
     v_accuracy NUMERIC(22,12),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (coo_id_source, adj_id),
+    CONSTRAINT pkey_crs_ordinate_adj PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_ordinate_adj
-    ADD UNIQUE (coo_id_source, adj_id);
-
-ALTER TABLE ONLY bde.crs_ordinate_adj
-    ADD CONSTRAINT pkey_crs_ordinate_adj PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_ordinate_adj ALTER COLUMN adj_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_ordinate_adj ALTER COLUMN coo_id_output SET STATISTICS 1000;
@@ -1807,20 +1583,16 @@ GRANT SELECT ON TABLE bde.crs_ordinate_adj TO bde_user;
 -- BDE table crs_ordinate_type
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_ordinate_type (
+CREATE TABLE IF NOT EXISTS bde.crs_ordinate_type (
     type VARCHAR(4) NOT NULL,
     uom_code VARCHAR(4) NOT NULL,
     description VARCHAR(100) NOT NULL,
     format_code VARCHAR(4) NOT NULL,
     mandatory CHAR(1) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (type),
+    CONSTRAINT pkey_crs_ordinate_type PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_ordinate_type
-    ADD UNIQUE (type);
-
-ALTER TABLE ONLY bde.crs_ordinate_type
-    ADD CONSTRAINT pkey_crs_ordinate_type PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_ordinate_type OWNER TO bde_dba;
 
@@ -1832,7 +1604,7 @@ GRANT SELECT ON TABLE bde.crs_ordinate_type TO bde_user;
 -- BDE table crs_parcel
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_parcel (
+CREATE TABLE IF NOT EXISTS bde.crs_parcel (
     id INTEGER NOT NULL,
     ldt_loc_id INTEGER NOT NULL,
     img_id INTEGER,
@@ -1847,16 +1619,11 @@ CREATE TABLE bde.crs_parcel (
     total_area NUMERIC(20,4),
     calculated_area NUMERIC(20,4),
     audit_id INTEGER NOT NULL,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(geometry, 4167),
+    CONSTRAINT pkey_crs_parcel PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_parcel', 'shape', 4167, 'GEOMETRY', 2);
-
-ALTER TABLE ONLY bde.crs_parcel
-    ADD CONSTRAINT pkey_crs_parcel PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_parcel
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_parcel ALTER COLUMN alt_id SET STATISTICS 500;
 ALTER TABLE bde.crs_parcel ALTER COLUMN audit_id SET STATISTICS 500;
@@ -1876,19 +1643,15 @@ GRANT SELECT ON TABLE bde.crs_parcel TO bde_user;
 -- BDE table crs_parcel_bndry
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_parcel_bndry (
+CREATE TABLE IF NOT EXISTS bde.crs_parcel_bndry (
     pri_id INTEGER NOT NULL,
     sequence INTEGER NOT NULL,
     lin_id INTEGER NOT NULL,
     reversed CHAR(1) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (pri_id, sequence),
+    CONSTRAINT pkey_crs_parcel_bndry PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_parcel_bndry
-    ADD UNIQUE (pri_id, sequence);
-
-ALTER TABLE ONLY bde.crs_parcel_bndry
-    ADD CONSTRAINT pkey_crs_parcel_bndry PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_parcel_bndry ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_parcel_bndry ALTER COLUMN lin_id SET STATISTICS 1000;
@@ -1904,17 +1667,13 @@ GRANT SELECT ON TABLE bde.crs_parcel_bndry TO bde_user;
 -- BDE table crs_parcel_dimen
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_parcel_dimen (
+CREATE TABLE IF NOT EXISTS bde.crs_parcel_dimen (
     obn_id INTEGER NOT NULL,
     par_id INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (obn_id, par_id),
+    CONSTRAINT pkey_crs_parcel_dimen PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_parcel_dimen
-    ADD UNIQUE (obn_id, par_id);
-
-ALTER TABLE ONLY bde.crs_parcel_dimen
-    ADD CONSTRAINT pkey_crs_parcel_dimen PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_parcel_dimen ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_parcel_dimen ALTER COLUMN obn_id SET STATISTICS 1000;
@@ -1930,20 +1689,15 @@ GRANT SELECT ON TABLE bde.crs_parcel_dimen TO bde_user;
 -- BDE table crs_parcel_label
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_parcel_label (
+CREATE TABLE IF NOT EXISTS bde.crs_parcel_label (
     id INTEGER NOT NULL,
     par_id INTEGER NOT NULL,
     audit_id INTEGER NOT NULL,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(point, 4167),
+    CONSTRAINT pkey_crs_parcel_label PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_parcel_label', 'shape', 4167, 'POINT', 2);
-
-ALTER TABLE ONLY bde.crs_parcel_label
-    ADD CONSTRAINT pkey_crs_parcel_label PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_parcel_label
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_parcel_label ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_parcel_label ALTER COLUMN id SET STATISTICS 500;
@@ -1959,19 +1713,15 @@ GRANT SELECT ON TABLE bde.crs_parcel_label TO bde_user;
 -- BDE table crs_parcel_ring
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_parcel_ring (
+CREATE TABLE IF NOT EXISTS bde.crs_parcel_ring (
     id INTEGER NOT NULL,
     par_id INTEGER NOT NULL,
     pri_id_parent_ring INTEGER,
     is_ring CHAR(1) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_parcel_ring PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_parcel_ring
-    ADD CONSTRAINT pkey_crs_parcel_ring PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_parcel_ring
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_parcel_ring ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_parcel_ring ALTER COLUMN id SET STATISTICS 500;
@@ -1988,7 +1738,7 @@ GRANT SELECT ON TABLE bde.crs_parcel_ring TO bde_user;
 -- BDE table crs_programme
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_programme (
+CREATE TABLE IF NOT EXISTS bde.crs_programme (
     status VARCHAR(4) NOT NULL,
     type VARCHAR(4) NOT NULL,
     account_id VARCHAR(20),
@@ -2000,14 +1750,10 @@ CREATE TABLE bde.crs_programme (
     sched_end DATE,
     nwp_id INTEGER NOT NULL,
     id INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_programme PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_programme
-    ADD CONSTRAINT pkey_crs_programme PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_programme
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_programme OWNER TO bde_dba;
 
@@ -2019,7 +1765,7 @@ GRANT SELECT ON TABLE bde.crs_programme TO bde_user;
 -- BDE table crs_proprietor
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_proprietor (
+CREATE TABLE IF NOT EXISTS bde.crs_proprietor (
     id INTEGER NOT NULL,
     ets_id INTEGER NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -2032,11 +1778,9 @@ CREATE TABLE bde.crs_proprietor (
     name_suffix VARCHAR(4),
     original_flag CHAR(1) NOT NULL,
     sort_order INTEGER,
-    system_ext CHAR(1)
+    system_ext CHAR(1),
+    CONSTRAINT pkey_crs_proprietor PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_proprietor
-    ADD CONSTRAINT pkey_crs_proprietor PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_proprietor ALTER COLUMN ets_id SET STATISTICS 500;
 ALTER TABLE bde.crs_proprietor ALTER COLUMN id SET STATISTICS 500;
@@ -2051,19 +1795,15 @@ GRANT SELECT ON TABLE bde.crs_proprietor TO bde_user;
 -- BDE table crs_reduct_meth
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_reduct_meth (
+CREATE TABLE IF NOT EXISTS bde.crs_reduct_meth (
     id INTEGER NOT NULL,
     status VARCHAR(4) NOT NULL,
     description VARCHAR(100) NOT NULL,
     name VARCHAR(30) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_reduct_meth PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_reduct_meth
-    ADD CONSTRAINT pkey_crs_reduct_meth PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_reduct_meth
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_reduct_meth OWNER TO bde_dba;
 
@@ -2075,7 +1815,7 @@ GRANT SELECT ON TABLE bde.crs_reduct_meth TO bde_user;
 -- BDE table crs_reduct_run
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_reduct_run (
+CREATE TABLE IF NOT EXISTS bde.crs_reduct_run (
     id INTEGER NOT NULL,
     rdm_id INTEGER NOT NULL,
     datetime TIMESTAMP,
@@ -2083,14 +1823,10 @@ CREATE TABLE bde.crs_reduct_run (
     traj_type VARCHAR(4),
     usr_id_exec VARCHAR(20),
     software_used VARCHAR(30),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_reduct_run PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_reduct_run
-    ADD CONSTRAINT pkey_crs_reduct_run PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_reduct_run
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_reduct_run OWNER TO bde_dba;
 
@@ -2102,18 +1838,14 @@ GRANT SELECT ON TABLE bde.crs_reduct_run TO bde_user;
 -- BDE table crs_ref_survey
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_ref_survey (
+CREATE TABLE IF NOT EXISTS bde.crs_ref_survey (
     sur_wrk_id_exist INTEGER NOT NULL,
     sur_wrk_id_new INTEGER NOT NULL,
     bearing_corr DECIMAL(16),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (sur_wrk_id_exist, sur_wrk_id_new),
+    CONSTRAINT pkey_crs_ref_survey PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_ref_survey
-    ADD UNIQUE (sur_wrk_id_exist, sur_wrk_id_new);
-
-ALTER TABLE ONLY bde.crs_ref_survey
-    ADD CONSTRAINT pkey_crs_ref_survey PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_ref_survey ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_ref_survey ALTER COLUMN sur_wrk_id_exist SET STATISTICS 250;
@@ -2129,22 +1861,17 @@ GRANT SELECT ON TABLE bde.crs_ref_survey TO bde_user;
 -- BDE table crs_road_ctr_line
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_road_ctr_line (
+CREATE TABLE IF NOT EXISTS bde.crs_road_ctr_line (
     id INTEGER NOT NULL,
     alt_id INTEGER,
     status VARCHAR(4) NOT NULL,
     non_cadastral_rd CHAR(1) NOT NULL,
     audit_id INTEGER NOT NULL,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(linestring, 4167),
+    CONSTRAINT pkey_crs_road_ctr_line PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_road_ctr_line', 'shape', 4167, 'LINESTRING', 2);
-
-ALTER TABLE ONLY bde.crs_road_ctr_line
-    ADD CONSTRAINT pkey_crs_road_ctr_line PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_road_ctr_line
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_road_ctr_line ALTER COLUMN alt_id SET STATISTICS 250;
 ALTER TABLE bde.crs_road_ctr_line ALTER COLUMN audit_id SET STATISTICS 250;
@@ -2160,7 +1887,7 @@ GRANT SELECT ON TABLE bde.crs_road_ctr_line TO bde_user;
 -- BDE table crs_road_name
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_road_name (
+CREATE TABLE IF NOT EXISTS bde.crs_road_name (
     id INTEGER NOT NULL,
     alt_id INTEGER,
     type VARCHAR(4) NOT NULL,
@@ -2169,14 +1896,10 @@ CREATE TABLE bde.crs_road_name (
     status VARCHAR(4) NOT NULL,
     unofficial_flag CHAR(1) NOT NULL,
     audit_id INTEGER NOT NULL,
-    sufi INTEGER
+    sufi INTEGER,
+    CONSTRAINT pkey_crs_road_name PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_road_name
-    ADD CONSTRAINT pkey_crs_road_name PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_road_name
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_road_name OWNER TO bde_dba;
 
@@ -2188,19 +1911,15 @@ GRANT SELECT ON TABLE bde.crs_road_name TO bde_user;
 -- BDE table crs_road_name_asc
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_road_name_asc (
+CREATE TABLE IF NOT EXISTS bde.crs_road_name_asc (
     rna_id INTEGER NOT NULL,
     rcl_id INTEGER NOT NULL,
     alt_id INTEGER,
     priority INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (rna_id, rcl_id),
+    CONSTRAINT pkey_crs_road_name_asc PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_road_name_asc
-    ADD UNIQUE (rna_id, rcl_id);
-
-ALTER TABLE ONLY bde.crs_road_name_asc
-    ADD CONSTRAINT pkey_crs_road_name_asc PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_road_name_asc ALTER COLUMN alt_id SET STATISTICS 250;
 ALTER TABLE bde.crs_road_name_asc ALTER COLUMN audit_id SET STATISTICS 250;
@@ -2217,21 +1936,17 @@ GRANT SELECT ON TABLE bde.crs_road_name_asc TO bde_user;
 -- BDE table crs_setup
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_setup (
+CREATE TABLE IF NOT EXISTS bde.crs_setup (
     id INTEGER NOT NULL,
     nod_id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     valid_flag CHAR(1) NOT NULL,
     equipment_type VARCHAR(4),
     wrk_id INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_setup PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_setup
-    ADD CONSTRAINT pkey_crs_setup PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_setup
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_setup ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_setup ALTER COLUMN equipment_type SET STATISTICS 1000;
@@ -2249,20 +1964,16 @@ GRANT SELECT ON TABLE bde.crs_setup TO bde_user;
 -- BDE table crs_site
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_site (
+CREATE TABLE IF NOT EXISTS bde.crs_site (
     id INTEGER NOT NULL,
     type VARCHAR(4) NOT NULL,
     "desc" VARCHAR(2048),
     occupier VARCHAR(100),
     audit_id INTEGER NOT NULL,
-    wrk_id_created INTEGER
+    wrk_id_created INTEGER,
+    CONSTRAINT pkey_crs_site PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_site
-    ADD CONSTRAINT pkey_crs_site PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_site
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_site ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_site ALTER COLUMN id SET STATISTICS 250;
@@ -2278,17 +1989,13 @@ GRANT SELECT ON TABLE bde.crs_site TO bde_user;
 -- BDE table crs_site_locality
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_site_locality (
+CREATE TABLE IF NOT EXISTS bde.crs_site_locality (
     sit_id INTEGER NOT NULL,
     loc_id INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (sit_id, loc_id),
+    CONSTRAINT pkey_crs_site_locality PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_site_locality
-    ADD UNIQUE (sit_id, loc_id);
-
-ALTER TABLE ONLY bde.crs_site_locality
-    ADD CONSTRAINT pkey_crs_site_locality PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_site_locality ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_site_locality ALTER COLUMN loc_id SET STATISTICS 250;
@@ -2304,7 +2011,7 @@ GRANT SELECT ON TABLE bde.crs_site_locality TO bde_user;
 -- BDE table crs_stat_act_parcl
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_stat_act_parcl (
+CREATE TABLE IF NOT EXISTS bde.crs_stat_act_parcl (
     sta_id INTEGER NOT NULL,
     par_id INTEGER NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -2312,14 +2019,10 @@ CREATE TABLE bde.crs_stat_act_parcl (
     purpose VARCHAR(250),
     name VARCHAR(250),
     comments VARCHAR(250),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (sta_id, par_id),
+    CONSTRAINT pkey_crs_stat_act_parcl PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_stat_act_parcl
-    ADD UNIQUE (sta_id, par_id);
-
-ALTER TABLE ONLY bde.crs_stat_act_parcl
-    ADD CONSTRAINT pkey_crs_stat_act_parcl PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_stat_act_parcl ALTER COLUMN par_id SET STATISTICS 250;
 ALTER TABLE bde.crs_stat_act_parcl ALTER COLUMN sta_id SET STATISTICS 250;
@@ -2334,21 +2037,17 @@ GRANT SELECT ON TABLE bde.crs_stat_act_parcl TO bde_user;
 -- BDE table crs_stat_version
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_stat_version (
+CREATE TABLE IF NOT EXISTS bde.crs_stat_version (
     version INTEGER NOT NULL,
     area_class VARCHAR(4) NOT NULL,
     "desc" VARCHAR(50),
     statute_action VARCHAR(50) NOT NULL,
     start_date DATE NOT NULL,
     end_date DATE,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (version, area_class),
+    CONSTRAINT pkey_crs_stat_version PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_stat_version
-    ADD UNIQUE (version, area_class);
-
-ALTER TABLE ONLY bde.crs_stat_version
-    ADD CONSTRAINT pkey_crs_stat_version PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_stat_version OWNER TO bde_dba;
 
@@ -2360,7 +2059,7 @@ GRANT SELECT ON TABLE bde.crs_stat_version TO bde_user;
 -- BDE table crs_statist_area
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_statist_area (
+CREATE TABLE IF NOT EXISTS bde.crs_statist_area (
     id INTEGER NOT NULL,
     name VARCHAR(100) NOT NULL,
     name_abrev VARCHAR(18) NOT NULL,
@@ -2371,16 +2070,11 @@ CREATE TABLE bde.crs_statist_area (
     usr_id_firm_ta VARCHAR(20),
     alt_id INTEGER,
     se_row_id INTEGER,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    shape geometry(multipolygon, 4167),
+    CONSTRAINT pkey_crs_statist_area PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_statist_area', 'shape', 4167, 'MULTIPOLYGON', 2);
-
-ALTER TABLE ONLY bde.crs_statist_area
-    ADD CONSTRAINT pkey_crs_statist_area PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_statist_area
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_statist_area OWNER TO bde_dba;
 
@@ -2392,7 +2086,7 @@ GRANT SELECT ON TABLE bde.crs_statist_area TO bde_user;
 -- BDE table crs_statute
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_statute  (
+CREATE TABLE IF NOT EXISTS bde.crs_statute  (
     id INTEGER NOT NULL,
     section VARCHAR(100) NOT NULL,
     name_and_date VARCHAR(200) NOT NULL,
@@ -2401,14 +2095,10 @@ CREATE TABLE bde.crs_statute  (
     repeal_date DATE,
     type VARCHAR(4),
     "default" CHAR(1),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    CONSTRAINT pkey_crs_statute PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_statute
-    ADD CONSTRAINT pkey_crs_statute PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_statute
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_statute OWNER TO bde_dba;
 
@@ -2420,7 +2110,7 @@ GRANT SELECT ON TABLE bde.crs_statute TO bde_user;
 -- BDE table crs_statute_action
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_statute_action (
+CREATE TABLE IF NOT EXISTS bde.crs_statute_action (
     type VARCHAR(4) NOT NULL,
     status VARCHAR(4),
     ste_id INTEGER,
@@ -2432,14 +2122,10 @@ CREATE TABLE bde.crs_statute_action (
     recorded_date DATE,
     id INTEGER NOT NULL,
     audit_id INTEGER NOT NULL,
-    gazette_notice_id INTEGER
+    gazette_notice_id INTEGER,
+    CONSTRAINT pkey_crs_statute_action PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_statute_action
-    ADD CONSTRAINT pkey_crs_statute_action PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_statute_action
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_statute_action ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_statute_action ALTER COLUMN id SET STATISTICS 250;
@@ -2456,7 +2142,7 @@ GRANT SELECT ON TABLE bde.crs_statute_action TO bde_user;
 -- BDE table crs_street_address
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_street_address (
+CREATE TABLE IF NOT EXISTS bde.crs_street_address (
     house_number VARCHAR(25) NOT NULL,
     range_low INTEGER NOT NULL,
     range_high INTEGER,
@@ -2470,16 +2156,11 @@ CREATE TABLE bde.crs_street_address (
     se_row_id INTEGER,
     sufi INTEGER,
     overridden_mbk_code CHAR(1),
-    mbk_code VARCHAR(7)
+    mbk_code VARCHAR(7),
+    shape geometry(point, 4167),
+    CONSTRAINT pkey_crs_street_address PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_street_address', 'shape', 4167, 'POINT', 2);
-
-ALTER TABLE ONLY bde.crs_street_address
-    ADD CONSTRAINT pkey_crs_street_address PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_street_address
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_street_address ALTER COLUMN alt_id SET STATISTICS 500;
 ALTER TABLE bde.crs_street_address ALTER COLUMN audit_id SET STATISTICS 500;
@@ -2497,19 +2178,15 @@ GRANT SELECT ON TABLE bde.crs_street_address TO bde_user;
 -- BDE table crs_sur_admin_area
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_sur_admin_area (
+CREATE TABLE IF NOT EXISTS bde.crs_sur_admin_area (
     sur_wrk_id INTEGER NOT NULL,
     stt_id INTEGER NOT NULL,
     xstt_id INTEGER,
     eed_req_id INTEGER,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (sur_wrk_id, stt_id),
+    CONSTRAINT pkey_crs_sur_admin_area PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_sur_admin_area
-    ADD UNIQUE (sur_wrk_id, stt_id);
-
-ALTER TABLE ONLY bde.crs_sur_admin_area
-    ADD CONSTRAINT pkey_crs_sur_admin_area PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_sur_admin_area ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_sur_admin_area ALTER COLUMN eed_req_id SET STATISTICS 250;
@@ -2527,16 +2204,13 @@ GRANT SELECT ON TABLE bde.crs_sur_admin_area TO bde_user;
 -- BDE table crs_sur_plan_ref
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_sur_plan_ref (
+CREATE TABLE IF NOT EXISTS bde.crs_sur_plan_ref (
     id INTEGER NOT NULL,
     wrk_id INTEGER,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(point, 4167),
+    CONSTRAINT pkey_crs_sur_plan_ref PRIMARY KEY (id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_sur_plan_ref', 'shape', 4167, 'POINT', 2);
-
-ALTER TABLE ONLY bde.crs_sur_plan_ref
-    ADD CONSTRAINT pkey_crs_sur_plan_ref PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_sur_plan_ref ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.crs_sur_plan_ref ALTER COLUMN wrk_id SET STATISTICS 500;
@@ -2551,7 +2225,7 @@ GRANT SELECT ON TABLE bde.crs_sur_plan_ref TO bde_user;
 -- BDE table crs_survey
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_survey (
+CREATE TABLE IF NOT EXISTS bde.crs_survey (
     wrk_id INTEGER NOT NULL,
     ldt_loc_id INTEGER NOT NULL,
     dataset_series CHAR(4) NOT NULL,
@@ -2578,14 +2252,10 @@ CREATE TABLE bde.crs_survey (
     usr_id_sol_firm VARCHAR(20),
     sig_id INTEGER,
     xml_uploaded CHAR(1),
-    xsv_id INTEGER
+    xsv_id INTEGER,
+    CONSTRAINT pkey_crs_survey PRIMARY KEY (wrk_id),
+    UNIQUE (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_survey
-    ADD CONSTRAINT pkey_crs_survey PRIMARY KEY (wrk_id);
-
-ALTER TABLE ONLY bde.crs_survey
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_survey ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_survey ALTER COLUMN dataset_id SET STATISTICS 500;
@@ -2609,18 +2279,14 @@ GRANT SELECT ON TABLE bde.crs_survey TO bde_user;
 -- BDE table crs_survey_image
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_survey_image (
+CREATE TABLE IF NOT EXISTS bde.crs_survey_image (
     type VARCHAR(4) NOT NULL,
     sur_wrk_id INTEGER NOT NULL,
     img_id INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (type, sur_wrk_id),
+    CONSTRAINT pkey_crs_survey_image PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_survey_image
-    ADD UNIQUE (type, sur_wrk_id);
-
-ALTER TABLE ONLY bde.crs_survey_image
-    ADD CONSTRAINT pkey_crs_survey_image PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_survey_image OWNER TO bde_dba;
 
@@ -2632,7 +2298,7 @@ GRANT SELECT ON TABLE bde.crs_survey_image TO bde_user;
 -- BDE table crs_sys_code
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_sys_code (
+CREATE TABLE IF NOT EXISTS bde.crs_sys_code (
     scg_code VARCHAR(4) NOT NULL,
     code VARCHAR(4) NOT NULL,
     "desc" VARCHAR(2048),
@@ -2642,14 +2308,10 @@ CREATE TABLE bde.crs_sys_code (
     num_value NUMERIC(22,12),
     start_date DATE,
     end_date DATE,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (scg_code, code),
+    CONSTRAINT pkey_crs_sys_code PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_sys_code
-    ADD UNIQUE (scg_code, code);
-
-ALTER TABLE ONLY bde.crs_sys_code
-    ADD CONSTRAINT pkey_crs_sys_code PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_sys_code OWNER TO bde_dba;
 
@@ -2661,7 +2323,7 @@ GRANT SELECT ON TABLE bde.crs_sys_code TO bde_user;
 -- BDE table crs_sys_code_group
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_sys_code_group (
+CREATE TABLE IF NOT EXISTS bde.crs_sys_code_group (
     "desc" VARCHAR(100) NOT NULL,
     user_create_flag CHAR(1) NOT NULL,
     user_modify_flag CHAR(1) NOT NULL,
@@ -2670,14 +2332,10 @@ CREATE TABLE bde.crs_sys_code_group (
     data_type CHAR(1) NOT NULL,
     group_type VARCHAR(1),
     code VARCHAR(4) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (code),
+    CONSTRAINT pkey_crs_sys_code_group PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_sys_code_group
-    ADD UNIQUE (code);
-
-ALTER TABLE ONLY bde.crs_sys_code_group
-    ADD CONSTRAINT pkey_crs_sys_code_group PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_sys_code_group OWNER TO bde_dba;
 
@@ -2689,7 +2347,7 @@ GRANT SELECT ON TABLE bde.crs_sys_code_group TO bde_user;
 -- BDE table crs_title
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_title (
+CREATE TABLE IF NOT EXISTS bde.crs_title (
     title_no VARCHAR(20) NOT NULL,
     ldt_loc_id INTEGER NOT NULL,
     register_type VARCHAR(4) NOT NULL,
@@ -2715,14 +2373,10 @@ CREATE TABLE bde.crs_title (
     audit_id INTEGER NOT NULL,
     maori_land CHAR(1),
     no_survivorship CHAR(1),
-    ttl_title_no_head_srs VARCHAR(20)
+    ttl_title_no_head_srs VARCHAR(20),
+    UNIQUE (title_no),
+    CONSTRAINT pkey_crs_title PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_title
-    ADD UNIQUE (title_no);
-
-ALTER TABLE ONLY bde.crs_title
-    ADD CONSTRAINT pkey_crs_title PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_title ALTER COLUMN alt_id SET STATISTICS 500;
 ALTER TABLE bde.crs_title ALTER COLUMN audit_id SET STATISTICS 500;
@@ -2745,18 +2399,14 @@ GRANT SELECT ON TABLE bde.crs_title TO bde_user;
 -- BDE table crs_title_action
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_title_action (
+CREATE TABLE IF NOT EXISTS bde.crs_title_action (
     ttl_title_no VARCHAR(20) NOT NULL,
     act_tin_id INTEGER NOT NULL,
     act_id INTEGER NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (ttl_title_no, act_tin_id, act_id),
+    CONSTRAINT pkey_crs_title_action PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_title_action
-    ADD UNIQUE (ttl_title_no, act_tin_id, act_id);
-
-ALTER TABLE ONLY bde.crs_title_action
-    ADD CONSTRAINT pkey_crs_title_action PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_title_action ALTER COLUMN ttl_title_no SET STATISTICS 1000;
 ALTER TABLE bde.crs_title_action ALTER COLUMN act_tin_id SET STATISTICS 1000;
@@ -2773,15 +2423,13 @@ GRANT SELECT ON TABLE bde.crs_title_action TO bde_user;
 -- BDE table crs_title_doc_ref
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_title_doc_ref (
+CREATE TABLE IF NOT EXISTS bde.crs_title_doc_ref (
     id INTEGER NOT NULL,
     type VARCHAR(4),
     tin_id INTEGER,
-    reference_no VARCHAR(15)
+    reference_no VARCHAR(15),
+    CONSTRAINT pkey_crs_title_doc_ref PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_title_doc_ref
-    ADD CONSTRAINT pkey_crs_title_doc_ref PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_title_doc_ref ALTER COLUMN id SET STATISTICS 250;
 
@@ -2795,7 +2443,7 @@ GRANT SELECT ON TABLE bde.crs_title_doc_ref TO bde_user;
 -- BDE table crs_title_estate
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_title_estate (
+CREATE TABLE IF NOT EXISTS bde.crs_title_estate (
     id INTEGER NOT NULL,
     ttl_title_no VARCHAR(20) NOT NULL,
     type VARCHAR(4) NOT NULL,
@@ -2810,11 +2458,9 @@ CREATE TABLE bde.crs_title_estate (
     act_tin_id_ext INTEGER,
     original_flag CHAR(1) NOT NULL,
     term VARCHAR(255),
-    tin_id_orig INTEGER
+    tin_id_orig INTEGER,
+    CONSTRAINT pkey_crs_title_estate PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_title_estate
-    ADD CONSTRAINT pkey_crs_title_estate PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_title_estate ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
 ALTER TABLE bde.crs_title_estate ALTER COLUMN id SET STATISTICS 500;
@@ -2831,7 +2477,7 @@ GRANT SELECT ON TABLE bde.crs_title_estate TO bde_user;
 -- BDE table crs_title_mem_text
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_title_mem_text (
+CREATE TABLE IF NOT EXISTS bde.crs_title_mem_text (
     ttm_id INTEGER NOT NULL,
     sequence_no INTEGER NOT NULL,
     curr_hist_flag VARCHAR(4) NOT NULL,
@@ -2843,14 +2489,10 @@ CREATE TABLE bde.crs_title_mem_text (
     col_5_text VARCHAR(2048),
     col_6_text VARCHAR(2048),
     col_7_text VARCHAR(2048),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (ttm_id, sequence_no),
+    CONSTRAINT pkey_crs_title_mem_text PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_title_mem_text
-    ADD UNIQUE (ttm_id, sequence_no);
-
-ALTER TABLE ONLY bde.crs_title_mem_text
-    ADD CONSTRAINT pkey_crs_title_mem_text PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_title_mem_text ALTER COLUMN ttm_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_title_mem_text ALTER COLUMN sequence_no SET STATISTICS 1000;
@@ -2866,7 +2508,7 @@ GRANT SELECT ON TABLE bde.crs_title_mem_text TO bde_user;
 -- BDE table crs_title_memorial
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_title_memorial (
+CREATE TABLE IF NOT EXISTS bde.crs_title_memorial (
     id INTEGER NOT NULL,
     ttl_title_no VARCHAR(20) NOT NULL,
     mmt_code VARCHAR(10) NOT NULL,
@@ -2890,11 +2532,9 @@ CREATE TABLE bde.crs_title_memorial (
     col_6_size INTEGER,
     col_7_size INTEGER,
     act_id_ext INTEGER,
-    act_tin_id_ext INTEGER
+    act_tin_id_ext INTEGER,
+    CONSTRAINT pkey_crs_title_memorial PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_title_memorial
-    ADD CONSTRAINT pkey_crs_title_memorial PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_title_memorial ALTER COLUMN id SET STATISTICS 1000;
 ALTER TABLE bde.crs_title_memorial ALTER COLUMN ttl_title_no SET STATISTICS 1000;
@@ -2916,18 +2556,14 @@ GRANT SELECT ON TABLE bde.crs_title_memorial TO bde_user;
 -- BDE table crs_topology_class
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_topology_class  (
+CREATE TABLE IF NOT EXISTS bde.crs_topology_class  (
     code VARCHAR(4) NOT NULL,
     type VARCHAR(4) NOT NULL,
     name VARCHAR(100) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (code),
+    CONSTRAINT pkey_crs_topology_class PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_topology_class
-    ADD UNIQUE (code);
-
-ALTER TABLE ONLY bde.crs_topology_class
-    ADD CONSTRAINT pkey_crs_topology_class PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_topology_class OWNER TO bde_dba;
 
@@ -2939,7 +2575,7 @@ GRANT SELECT ON TABLE bde.crs_topology_class TO bde_user;
 -- BDE table crs_transact_type
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_transact_type (
+CREATE TABLE IF NOT EXISTS bde.crs_transact_type (
     grp VARCHAR(4) NOT NULL,
     type VARCHAR(4) NOT NULL,
     description VARCHAR(100) NOT NULL,
@@ -2985,14 +2621,10 @@ CREATE TABLE bde.crs_transact_type (
     request_workflow_assignment VARCHAR(4),
     short_name CHAR(100),
     submitting_firm_only CHAR(1),
-    view_in_search_tree CHAR(1)
+    view_in_search_tree CHAR(1),
+    UNIQUE (grp, type),
+    CONSTRAINT pkey_crs_transact_type PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_transact_type
-    ADD UNIQUE (grp, type);
-
-ALTER TABLE ONLY bde.crs_transact_type
-    ADD CONSTRAINT pkey_crs_transact_type PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_transact_type OWNER TO bde_dba;
 
@@ -3004,7 +2636,7 @@ GRANT SELECT ON TABLE bde.crs_transact_type TO bde_user;
 -- BDE table crs_ttl_enc
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_ttl_enc (
+CREATE TABLE IF NOT EXISTS bde.crs_ttl_enc (
     id INTEGER NOT NULL,
     ttl_title_no VARCHAR(20) NOT NULL,
     enc_id INTEGER NOT NULL,
@@ -3012,11 +2644,9 @@ CREATE TABLE bde.crs_ttl_enc (
     act_tin_id_crt INTEGER NOT NULL,
     act_id_crt INTEGER NOT NULL,
     act_id_ext INTEGER,
-    act_tin_id_ext INTEGER
+    act_tin_id_ext INTEGER,
+    CONSTRAINT pkey_crs_ttl_enc PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_ttl_enc
-    ADD CONSTRAINT pkey_crs_ttl_enc PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_ttl_enc ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
 ALTER TABLE bde.crs_ttl_enc ALTER COLUMN enc_id SET STATISTICS 500;
@@ -3033,7 +2663,7 @@ GRANT SELECT ON TABLE bde.crs_ttl_enc TO bde_user;
 -- BDE table crs_ttl_hierarchy
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_ttl_hierarchy (
+CREATE TABLE IF NOT EXISTS bde.crs_ttl_hierarchy (
     id INTEGER NOT NULL,
     status VARCHAR(4) NOT NULL,
     ttl_title_no_prior VARCHAR(20),
@@ -3042,11 +2672,9 @@ CREATE TABLE bde.crs_ttl_hierarchy (
     act_tin_id_crt INTEGER,
     act_id_crt INTEGER,
     act_id_ext INTEGER,
-    act_tin_id_ext INTEGER
+    act_tin_id_ext INTEGER,
+    CONSTRAINT pkey_crs_ttl_hierarchy PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_ttl_hierarchy
-    ADD CONSTRAINT pkey_crs_ttl_hierarchy PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_ttl_hierarchy ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
 ALTER TABLE bde.crs_ttl_hierarchy ALTER COLUMN id SET STATISTICS 500;
@@ -3064,7 +2692,7 @@ GRANT SELECT ON TABLE bde.crs_ttl_hierarchy TO bde_user;
 -- BDE table crs_ttl_inst
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_ttl_inst (
+CREATE TABLE IF NOT EXISTS bde.crs_ttl_inst (
     id INTEGER NOT NULL,
     inst_no VARCHAR(30) NOT NULL,
     trt_grp VARCHAR(4) NOT NULL,
@@ -3091,11 +2719,9 @@ CREATE TABLE bde.crs_ttl_inst (
     req_changed CHAR(1),
     requisition_resub_no INTEGER,
     ttin_id INTEGER,
-    ttin_new_rej CHAR(1) NOT NULL
+    ttin_new_rej CHAR(1) NOT NULL,
+    CONSTRAINT pkey_crs_ttl_inst PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.crs_ttl_inst
-    ADD CONSTRAINT pkey_crs_ttl_inst PRIMARY KEY (id);
 
 ALTER TABLE bde.crs_ttl_inst ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_ttl_inst ALTER COLUMN dlg_id SET STATISTICS 500;
@@ -3119,18 +2745,14 @@ GRANT SELECT ON TABLE bde.crs_ttl_inst TO bde_user;
 -- BDE table crs_ttl_inst_title
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_ttl_inst_title (
+CREATE TABLE IF NOT EXISTS bde.crs_ttl_inst_title (
     tin_id INTEGER NOT NULL,
     ttl_title_no VARCHAR(20) NOT NULL,
     created_by_inst CHAR(1),
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (tin_id, ttl_title_no),
+    CONSTRAINT pkey_crs_ttl_inst_title PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_ttl_inst_title
-    ADD UNIQUE (tin_id, ttl_title_no);
-
-ALTER TABLE ONLY bde.crs_ttl_inst_title
-    ADD CONSTRAINT pkey_crs_ttl_inst_title PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_ttl_inst_title ALTER COLUMN tin_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_ttl_inst_title ALTER COLUMN ttl_title_no SET STATISTICS 1000;
@@ -3145,17 +2767,13 @@ GRANT SELECT ON TABLE bde.crs_ttl_inst_title TO bde_user;
 -- BDE table crs_unit_of_meas
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_unit_of_meas (
+CREATE TABLE IF NOT EXISTS bde.crs_unit_of_meas (
     code VARCHAR(4) NOT NULL,
     description VARCHAR(100) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (code),
+    CONSTRAINT pkey_crs_unit_of_meas PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_unit_of_meas
-    ADD UNIQUE (code);
-
-ALTER TABLE ONLY bde.crs_unit_of_meas
-    ADD CONSTRAINT pkey_crs_unit_of_meas PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_unit_of_meas OWNER TO bde_dba;
 
@@ -3167,7 +2785,7 @@ GRANT SELECT ON TABLE bde.crs_unit_of_meas TO bde_user;
 -- BDE table crs_user
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_user (
+CREATE TABLE IF NOT EXISTS bde.crs_user (
     id VARCHAR(20) NOT NULL,
     type VARCHAR(4) NOT NULL,
     status VARCHAR(4) NOT NULL,
@@ -3217,14 +2835,10 @@ CREATE TABLE bde.crs_user (
     postal_recipient_suffix VARCHAR(100),
     preferred_name VARCHAR(200),
     single_pref_contact CHAR(1) NOT NULL,
-    sup_competency_det VARCHAR(2048)
+    sup_competency_det VARCHAR(2048),
+    UNIQUE (id),
+    CONSTRAINT pkey_crs_user PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_user
-    ADD UNIQUE (id);
-
-ALTER TABLE ONLY bde.crs_user
-    ADD CONSTRAINT pkey_crs_user PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_user OWNER TO bde_dba;
 
@@ -3236,7 +2850,7 @@ GRANT SELECT ON TABLE bde.crs_user TO bde_user;
 -- BDE table crs_vector
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_vector (
+CREATE TABLE IF NOT EXISTS bde.crs_vector (
     type VARCHAR(4) NOT NULL,
     nod_id_start INTEGER NOT NULL,
     nod_id_end INTEGER,
@@ -3244,16 +2858,11 @@ CREATE TABLE bde.crs_vector (
     source INTEGER NOT NULL,
     id INTEGER NOT NULL,
     audit_id INTEGER NOT NULL,
-    se_row_id INTEGER
+    se_row_id INTEGER,
+    shape geometry(geometry, 4167),
+    CONSTRAINT pkey_crs_vector PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
-
-PERFORM AddGeometryColumn('bde', 'crs_vector', 'shape', 4167, 'GEOMETRY', 2);
-
-ALTER TABLE ONLY bde.crs_vector
-    ADD CONSTRAINT pkey_crs_vector PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_vector
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_vector ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_vector ALTER COLUMN id SET STATISTICS 1000;
@@ -3270,19 +2879,15 @@ GRANT SELECT ON TABLE bde.crs_vector TO bde_user;
 -- BDE table crs_vertx_sequence
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_vertx_sequence (
+CREATE TABLE IF NOT EXISTS bde.crs_vertx_sequence (
     lin_id INTEGER NOT NULL,
     sequence SMALLINT NOT NULL,
     value1 NUMERIC(22,12) NOT NULL,
     value2 NUMERIC(22,12) NOT NULL,
-    audit_id INTEGER NOT NULL
+    audit_id INTEGER NOT NULL,
+    UNIQUE (lin_id, sequence),
+    CONSTRAINT pkey_crs_vertx_sequence PRIMARY KEY (audit_id)
 );
-
-ALTER TABLE ONLY bde.crs_vertx_sequence
-    ADD UNIQUE (lin_id, sequence);
-
-ALTER TABLE ONLY bde.crs_vertx_sequence
-    ADD CONSTRAINT pkey_crs_vertx_sequence PRIMARY KEY (audit_id);
 
 ALTER TABLE bde.crs_vertx_sequence ALTER COLUMN lin_id SET STATISTICS 1000;
 
@@ -3296,7 +2901,7 @@ GRANT SELECT ON TABLE bde.crs_vertx_sequence TO bde_user;
 -- BDE table crs_work
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.crs_work (
+CREATE TABLE IF NOT EXISTS bde.crs_work (
     id INTEGER NOT NULL,
     trt_grp VARCHAR(4) NOT NULL,
     trt_type VARCHAR(4) NOT NULL,
@@ -3324,14 +2929,11 @@ CREATE TABLE bde.crs_work (
     usr_id_prin_firm VARCHAR(20),
     manual_rules VARCHAR(1) NOT NULL,
     annotations TEXT,
-    trv_id INTEGER
+    trv_id INTEGER,
+    CONSTRAINT pkey_crs_work PRIMARY KEY (id),
+    UNIQUE (audit_id)
 );
 
-ALTER TABLE ONLY bde.crs_work
-    ADD CONSTRAINT pkey_crs_work PRIMARY KEY (id);
-
-ALTER TABLE ONLY bde.crs_work
-    ADD UNIQUE (audit_id);
 
 ALTER TABLE bde.crs_work ALTER COLUMN alt_id SET STATISTICS 500;
 ALTER TABLE bde.crs_work ALTER COLUMN audit_id SET STATISTICS 500;
@@ -3361,18 +2963,16 @@ GRANT SELECT ON TABLE bde.crs_work TO bde_user;
 -- BDE table cbe_title_parcel_association
 --------------------------------------------------------------------------------
 
-CREATE TABLE bde.cbe_title_parcel_association (
+CREATE TABLE IF NOT EXISTS bde.cbe_title_parcel_association (
     id INTEGER NOT NULL ,
     ttl_title_no VARCHAR(20) NOT NULL,
     par_id INTEGER NOT NULL,
     source VARCHAR(4) NOT NULL,
     status VARCHAR(4) NOT NULL,
     inserted_date DATE NOT NULL,
-    last_updated TIMESTAMP NOT NULL
+    last_updated TIMESTAMP NOT NULL,
+    CONSTRAINT pkey_cbe_title_parcel_association PRIMARY KEY (id)
 );
-
-ALTER TABLE ONLY bde.cbe_title_parcel_association
-    ADD CONSTRAINT pkey_cbe_title_parcel_association PRIMARY KEY (id);
 
 ALTER TABLE bde.cbe_title_parcel_association ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.cbe_title_parcel_association ALTER COLUMN ttl_title_no SET STATISTICS 500;
