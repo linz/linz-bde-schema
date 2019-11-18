@@ -1,3 +1,9 @@
+linz-bde-schema (1.8.0-1linz~bionic1) bionic; urgency=medium
+
+  * Package rebuild for bionic
+
+ -- Ivan Mincik <imincik@linz.govt.nz>  Mon, 18 Nov 2019 16:00:00 +0100
+
 linz-bde-schema (1.8.0-1linz~trusty1) trusty; urgency=medium
 
   * New upstream version
