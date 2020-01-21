@@ -1,6 +1,13 @@
 
 -- WARNING: always update this file whenever test/base.pg is updated
 
+-- Test table_version tables permissions {
+
+-- See https://github.com/linz/linz-bde-schema/issues/170
+SELECT sequence_privs_are ( 'table_version'::name, 'revision_id_seq'::name, 'bde_dba'::name, ARRAY['SELECT'] );
+
+-- }
+
 -- Test revision tables existance and their composition {
 
 SELECT has_table('table_version'::name, 'bde_cbe_title_parcel_association_revision'::name);

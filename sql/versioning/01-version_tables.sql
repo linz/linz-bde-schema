@@ -36,6 +36,11 @@ BEGIN
     -- See https://github.com/linz/linz-bde-schema/issues/70
     GRANT CREATE ON SCHEMA table_version TO bde_dba;
 
+	-- It makes sense for bde_dba to also have SELECT permissions
+    -- on sequences in table_version schema
+    -- See https://github.com/linz/linz-bde-schema/issues/170
+    GRANT SELECT ON ALL SEQUENCES IN SCHEMA table_version TO bde_dba;
+
     v_needs_rev := false;
 
     FOR v_schema, v_table IN
