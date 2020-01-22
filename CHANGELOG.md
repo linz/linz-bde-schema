@@ -5,6 +5,7 @@ All notable changes for the LINZ BDE schema are documented in this file.
 ## 1.9.0dev - 2020-MM-DD
 ### Enhanced
 - Grant SELECT on `table_version.revision_id_seq` to `bde_dba` (#170)
+- Grant `bde_user` to `bde_admin` and `bde_admin` to `bde_dba` (#172)
 
 ## 1.8.0 - 2019-11-12
 ### Enhanced

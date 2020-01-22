@@ -85,8 +85,9 @@ BEGIN
         SELECT table_version.ver_get_version_table_full(v_schema, v_table)
         INTO   v_rev_table;
 
-        EXECUTE 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE ' || v_rev_table || ' TO bde_admin';
         EXECUTE 'GRANT SELECT ON TABLE ' || v_rev_table || ' TO bde_user';
+        -- SELECT is going to be inherited from bde_user role (granted to bde_admin)
+        EXECUTE 'GRANT UPDATE, INSERT, DELETE ON TABLE ' || v_rev_table || ' TO bde_admin';
     END LOOP;
 
     IF v_needs_rev THEN

@@ -2558,7 +2558,6 @@ ALTER TABLE bde.cbe_title_parcel_association OWNER TO bde_dba;
 -- Fix up permissions on schema
 
 GRANT ALL ON SCHEMA bde TO bde_dba;
-GRANT USAGE ON SCHEMA bde TO bde_admin;
 GRANT USAGE ON SCHEMA bde TO bde_user;
 
 -- Fix up permissions on schema tables
@@ -2567,17 +2566,20 @@ REVOKE ALL
     ON ALL TABLES IN SCHEMA bde
     FROM public;
 
+GRANT SELECT
+    ON ALL TABLES IN SCHEMA bde
+    TO bde_user;
+
+-- Additional grants to bde_admin
+GRANT UPDATE, INSERT, DELETE
+    ON ALL TABLES IN SCHEMA bde
+    TO bde_admin;
+
+-- Additional grants to bde_dba
 GRANT ALL
     ON ALL TABLES IN SCHEMA bde
     TO bde_dba;
 
-GRANT SELECT, UPDATE, INSERT, DELETE
-    ON ALL TABLES IN SCHEMA bde
-    TO bde_admin;
-
-GRANT SELECT
-    ON ALL TABLES IN SCHEMA bde
-    TO bde_user;
 
 END;
 $SCHEMA$;
