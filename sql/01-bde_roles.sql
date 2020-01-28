@@ -39,7 +39,7 @@ END IF;
 GRANT bde_user TO bde_admin;
 
 COMMENT ON ROLE bde_admin IS $COMMENT$
-Everything that user can do plus the ability to edit data in the tables.
+Has rights of bde_user plus ability to edit data in all bde tables.
 $COMMENT$;
 
 -- bde_dba
@@ -50,7 +50,9 @@ IF NOT EXISTS (SELECT * FROM pg_roles where rolname = 'bde_dba') THEN
     ALTER ROLE bde_dba SET search_path=bde, bde_control, public;
 END IF;
 COMMENT ON ROLE bde_dba IS $COMMENT$
-'Owns all objects in bde schema. Has rights to manage all of them.'
+Owns all objects in bde schema. Has rights to manage all of them.
+
+Inherits rights of bde_admin.
 $COMMENT$;
 
 GRANT bde_admin TO bde_dba;
