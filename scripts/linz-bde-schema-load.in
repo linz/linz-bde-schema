@@ -93,9 +93,9 @@ which $DBPATCH_LOADER > /dev/null || {
 }
 
 # Check if dbpatch-loader supports stdout
-dbpatch-loader - fake > /dev/null 2>&1 &&
-    DBPATCH_SUPPORTS_STDOUT=yes ||
-    DBPATCH_SUPPORTS_STDOUT=no
+dbpatch-loader - fake 2>&1 | grep -q "database.*does not exist" &&
+    DBPATCH_SUPPORTS_STDOUT=no ||
+    DBPATCH_SUPPORTS_STDOUT=yes
 
 if test $PGDATABASE = "-" -a $DBPATCH_SUPPORTS_STDOUT != yes; then
     echo "ERROR: dbpatch-loader does not support stdout mode, cannot proceed." >&2
@@ -124,9 +124,9 @@ which $TABLEVERSION_LOADER > /dev/null || {
 }
 
 # Check if table_version-loader supports stdout
-table_version-loader -  > /dev/null 2>&1 &&
-    TABLEVERSION_SUPPORTS_STDOUT=yes ||
-    TABLEVERSION_SUPPORTS_STDOUT=no
+table_version-loader -  2>&1 | grep -q "database.*does not exist" &&
+    TABLEVERSION_SUPPORTS_STDOUT=no ||
+    TABLEVERSION_SUPPORTS_STDOUT=yes
 
 if test $PGDATABASE = "-" -a $TABLEVERSION_SUPPORTS_STDOUT != yes; then
     echo "ERROR: table_version-loader does not support stdout mode, cannot proceed" >&2
