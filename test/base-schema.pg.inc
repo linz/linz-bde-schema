@@ -1905,7 +1905,8 @@ ARRAY[
   'status',
   'trt_type',
   'trt_grp',
-  'id'
+  'id',
+  'ver_datum_code'
   ]);
 
 -- }
