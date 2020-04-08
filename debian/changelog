@@ -1,3 +1,9 @@
+linz-bde-schema (1.9.0-2linz~bionic1) bionic; urgency=medium
+
+  * Depend on non-PostgreSQL tableversion and dbpatch packages
+
+ -- Ivan Mincik <imincik@linz.govt.nz>  Wed, 08 Apr 2020 11:32:44 +0200
+
 linz-bde-schema (1.9.0-1linz~bionic1) bionic; urgency=medium
 
   * New upstream version
