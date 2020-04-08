@@ -61,21 +61,9 @@ jobs:
             postgresql-${{ matrix.pg }}-pgtap \
             postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }} \
             postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }}-scripts \
-            postgresql-server-dev-${{ matrix.pg }}
-        # Install dbpatch PostgreSQL extension
-        pushd /tmp
-        wget -q -O - \
-            https://github.com/linz/postgresql-dbpatch/archive/${{ matrix.dbpatch_branch }}.tar.gz \
-            | tar xzf - && cd postgresql-dbpatch-${{ matrix.dbpatch_branch }}
-        sudo -E make install
-        popd
-        # Install table_version PostgreSQL extension
-        pushd /tmp
-        wget -q -O - \
-            https://github.com/linz/postgresql-tableversion/archive/${{ matrix.tableversion_branch }}.tar.gz \
-            | tar vxzf - && cd postgresql-tableversion-${{ matrix.tableversioN_branch }}
-        sudo -E make install
-        popd
+            postgresql-server-dev-${{ matrix.pg }} \
+            tableversion \
+            dbpatch
     - name: Setup PostgreSQL user
       run: |
         sudo -u postgres createuser -s "$USER"
