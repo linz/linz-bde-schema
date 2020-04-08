@@ -2,6 +2,11 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.10.0dev - 2020-MM-DD
+### Changed
+- Landonline 3.21 support (#180):
+ - Add `ver_datum_code` column to `bde.crs_work`
+
 ## 1.9.0 - 2020-02-11
 ### Enhanced
 - Grant SELECT on `table_version.revision_id_seq` to `bde_dba` (#170)
