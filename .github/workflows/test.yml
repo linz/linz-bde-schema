@@ -105,6 +105,8 @@ jobs:
     - name: Test packaging
       run: |
         make deb
+        # Building this package requires dbpatch and tableversion
+        sudo apt-get install dbpatch tableversion
         sudo dpkg -i ../linz-bde-schema*.deb
     - name: Test publication
       run: |
