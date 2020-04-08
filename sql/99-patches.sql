@@ -193,5 +193,53 @@ $$
 $P$
 );
 
+-------------------------------------------------------------------------------
+-- LOL 3.21: Add ver_datum_code column to bde.crs_work
+--
+-- This was precisely 3.21.18 adding that column
+-- See https://github.com/linz/linz-bde-schema/pull/181#issuecomment-610620099
+-------------------------------------------------------------------------------
+
+PERFORM _patches.apply_patch(
+    'LOL 3.21: Add ver_datum_code column to bde.crs_work',
+    $P$
+DO $$
+DECLARE
+  v_isversioned BOOL;
+BEGIN
+
+  v_isversioned := false;
+
+  IF EXISTS (SELECT p.oid
+             FROM pg_catalog.pg_proc p, pg_catalog.pg_namespace n
+             WHERE p.proname = 'ver_is_table_versioned'
+             AND n.oid = p.pronamespace
+             AND n.nspname = 'table_version')
+  THEN
+    IF table_version.ver_is_table_versioned('bde', 'crs_work')
+    THEN
+      v_isversioned := true;
+    END IF;
+  END IF;
+
+  -- If table is versioned, use table_version API to add columns
+  IF v_isversioned
+  THEN
+      PERFORM table_version.ver_versioned_table_add_column(
+          'bde',
+          'crs_work',
+          'ver_datum_code',
+          'VARCHAR(4)'
+      );
+  ELSE
+    -- Otherwise use direct ALTER TABLE
+    ALTER TABLE bde.crs_work ADD COLUMN ver_datum_code VARCHAR(4);
+  END IF;
+
+END;
+$$
+$P$
+);
+
 END;
 $PATCHES$;
