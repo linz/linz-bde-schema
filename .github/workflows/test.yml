@@ -61,7 +61,9 @@ jobs:
             postgresql-${{ matrix.pg }}-pgtap \
             postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }} \
             postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }}-scripts \
-            postgresql-server-dev-${{ matrix.pg }}
+            postgresql-server-dev-${{ matrix.pg }} \
+            tableversion \
+            dbpatch
         # Install dbpatch PostgreSQL extension
         pushd /tmp
         wget -q -O - \
@@ -103,6 +105,8 @@ jobs:
     - name: Test packaging
       run: |
         make deb
+        # Building this package requires dbpatch and tableversion
+        sudo apt-get install dbpatch tableversion
         sudo dpkg -i ../linz-bde-schema*.deb
     - name: Test publication
       run: |
