@@ -11,7 +11,7 @@ Vcs-Browser: https://github.com/linz/linz-bde-schema.git
 Package: linz-bde-schema
 Architecture: all
 Depends: ${misc:Depends}
-Recommends: tableversion
+Recommends: tableversion,
             dbpatch
 Description: Provides the core BDE schemas and functions that are used
  for storing and accessing raw BDE unloads from the Landonline database
