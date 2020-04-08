@@ -61,7 +61,9 @@ jobs:
             postgresql-${{ matrix.pg }}-pgtap \
             postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }} \
             postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }}-scripts \
-            postgresql-server-dev-${{ matrix.pg }}
+            postgresql-server-dev-${{ matrix.pg }},
+            tableversion,
+            dbpatch
         # Install dbpatch PostgreSQL extension
         pushd /tmp
         wget -q -O - \
