@@ -5,9 +5,10 @@ All notable changes for the LINZ BDE schema are documented in this file.
 ## 1.10.0dev - 2020-MM-DD
 ### Changed
 - Landonline 3.21 support (#180):
- - Add `ver_datum_code` column to `bde.crs_work`
+  - Add `ver_datum_code` column to `bde.crs_work`
 ### Enhanced
 - Stop searching for tableversion/dbpatch scripts, not needed anymore
+- Only ALTER table on upgrade if really needed (#186)
 
 ## 1.9.0 - 2020-02-11
 ### Enhanced
