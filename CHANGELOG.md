@@ -2,6 +2,10 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.10.1 - 2020-05-27
+### Fixed
+- Work around RDS bug with `search_path` (#192)
+
 ## 1.10.0 - 2020-05-05
 ### Changed
 - Landonline 3.21 support (#180):
