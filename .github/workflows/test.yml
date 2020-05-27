@@ -62,7 +62,9 @@ jobs:
             postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }} \
             postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }}-scripts \
             postgresql-server-dev-${{ matrix.pg }} \
+            postgresql-${{ matrix.pg }}-tableversion \
             tableversion \
+            postgresql-${{ matrix.pg }}-dbpatch \
             dbpatch
         # Install dbpatch PostgreSQL extension
         pushd /tmp
