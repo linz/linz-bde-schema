@@ -34,8 +34,12 @@ BEGIN
     THEN
         EXECUTE format('ALTER TABLE %s OWNER TO %I', p_table, p_owner);
     END IF;
-END;
-$$;
+END
+$$
+-- make sure regprocedure::text is fully-qualified
+-- to work around an RDS bug
+SET search_path = ''
+;
 
 CREATE SCHEMA IF NOT EXISTS bde;
 ALTER SCHEMA bde OWNER TO bde_dba;
