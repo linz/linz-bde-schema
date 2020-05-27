@@ -2,6 +2,11 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.11.0dev - 2020-MM-DD
+### Added
+### Enhanced
+### Changed
+
 ## 1.10.0 - 2020-05-05
 ### Changed
 - Landonline 3.21 support (#180):
