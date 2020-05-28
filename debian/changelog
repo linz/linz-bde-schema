@@ -1,3 +1,16 @@
+linz-bde-schema (1.10.2-linz~bionic1) bionic; urgency=medium
+
+  * New upstream version
+
+ -- Sandro Santilli <strk@kbt.io>  Thu, 28 May 2020 10:39:48 +0000
+
+linz-bde-schema (1.10.1-linz~bionic1) bionic; urgency=medium
+
+  * New upstream version
+
+ -- Sandro Santilli <strk@kbt.io>  Wed, 27 May 2020 14:40:17 +0000
+
+
 linz-bde-schema (1.10.0-1linz~bionic1) bionic; urgency=medium
 
   * New upstream version
