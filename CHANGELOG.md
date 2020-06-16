@@ -2,6 +2,10 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.10.3 - 2020-06-16
+### Fixed
+- Lack of changelog in debian packaging
+
 ## 1.10.2 - 2020-05-28
 ### Fixed
 - Version in Makefile (#193)
