@@ -1758,6 +1758,19 @@ ARRAY[
   'ttin_new_rej'
   , '_revision_created', '_revision_expired']);
 
+SELECT has_table('table_version'::name, 'bde_crs_ttl_inst_protect_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_inst_protect_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_inst_protect_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_ttl_inst_protect_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_ttl_inst_protect_revision'::name,
+ARRAY[
+  'id',
+  'tin_id',
+  'protect_start',
+  'protect_end',
+  'protect_reference'
+  , '_revision_created', '_revision_expired']);
+
 SELECT has_table('table_version'::name, 'bde_crs_ttl_inst_title_revision'::name);
 SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_inst_title_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_inst_title_revision'::name, 'bde_user'::name, ARRAY['SELECT']);

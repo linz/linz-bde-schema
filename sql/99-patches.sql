@@ -241,5 +241,58 @@ $$
 $P$
 );
 
+--------------------------------------------------------------------------------
+-- LOL 3.22b: Add crs_ttl_inst_protect table
+--
+-- Added in LOL-3.22b
+--------------------------------------------------------------------------------
+
+PERFORM _patches.apply_patch(
+    'LOL 3.22p: Add crs_ttl_inst_protect table',
+    $P$
+DO $$
+BEGIN
+
+  CREATE TABLE bde.crs_ttl_inst_protect (
+      id INTEGER PRIMARY KEY,
+      tin_id INTEGER NOT NULL,
+      protect_start DATE,
+      protect_end DATE,
+      protect_reference VARCHAR(100)
+  );
+
+  ALTER TABLE bde.crs_ttl_inst_protect OWNER TO bde_dba;
+
+  REVOKE ALL
+      ON TABLE bde.crs_ttl_inst_protect
+      FROM public;
+
+  GRANT UPDATE, INSERT, DELETE
+      ON TABLE bde.crs_ttl_inst_protect
+      TO bde_admin;
+
+  GRANT SELECT
+      ON TABLE bde.crs_ttl_inst_protect
+      TO bde_user;
+
+  -- If tables are versioned, version the new table
+  IF EXISTS (SELECT p.oid FROM pg_catalog.pg_proc p,
+                               pg_catalog.pg_namespace n
+                          WHERE p.proname = 'ver_is_table_versioned'
+                          AND n.oid = p.pronamespace
+                          AND n.nspname = 'table_version')
+  THEN
+    IF table_version.ver_is_table_versioned('bde', 'crs_work')
+    THEN
+      PERFORM table_version.ver_enable_versioning('bde', 'crs_ttl_inst_protect');
+    END IF;
+  END IF;
+
+END;
+$$
+$P$
+);
+
+
 END;
 $PATCHES$;

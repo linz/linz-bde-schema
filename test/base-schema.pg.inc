@@ -1762,6 +1762,20 @@ ARRAY[
   'ttin_new_rej'
   ]);
 
+SELECT has_table('bde'::name, 'crs_ttl_inst_protect'::name);
+SELECT table_privs_are('bde'::name, 'crs_ttl_inst_protect'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_ttl_inst_protect'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_ttl_inst_protect'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_ttl_inst_protect'::name,
+ARRAY[
+  'id',
+  'tin_id',
+  'protect_start',
+  'protect_end',
+  'protect_reference'
+  ]);
+
+
 SELECT has_table('bde'::name, 'crs_ttl_inst_title'::name);
 SELECT table_privs_are('bde'::name, 'crs_ttl_inst_title'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_ttl_inst_title'::name, 'bde_user'::name, ARRAY['SELECT']);
