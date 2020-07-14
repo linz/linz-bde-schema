@@ -2,6 +2,9 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.12.0dev - 2020-YY-DD
+### Added
+
 ## 1.11.0 - 2020-07-14
 ### Added
 - Landonline 3.22 support: new `crs_ttl_inst_protect` table
