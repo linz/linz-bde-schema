@@ -2,6 +2,9 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.13.0dev - 2020-MM-DD
+### Added
+
 ## 1.12.1dev - 2020-08-18
 ### Fixed
 - Enlarge `crs_title` and `crs_ttl_inst_protect` `protect_reference`
