@@ -2,6 +2,9 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.12.1dev - 2020-MM-DD
+### Fixed
+
 ## 1.12.0 - 2020-08-11
 ### Enhanced
 - CI: skip upload of "-start" suffixed packages
