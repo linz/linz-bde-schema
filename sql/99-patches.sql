@@ -294,5 +294,89 @@ $P$
 );
 
 
+--------------------------------------------------------------------------------
+-- protect_reference column VARCHAR(100) > VARCHAR(255)
+--
+-- For tables bde.crs_title & bde.crs_ttl_inst_protect
+-- as per https://github.com/linz/linz-bde-schema/issues/209
+--------------------------------------------------------------------------------
+
+PERFORM _patches.apply_patch(
+    'LOL 3.22: Enlarge crs_title and crs_ttl_inst_protect protect_reference column to 255 chars',
+    $P$
+DO $$
+DECLARE
+  v_versioning_enabled BOOL;
+  v_ctip_isversioned BOOL;
+  v_ct_isversioned BOOL;
+
+BEGIN
+
+  v_versioning_enabled := false;
+  v_ctip_isversioned := false;
+  v_ct_isversioned := false;
+
+  -- Is the DB versioned
+  IF EXISTS (SELECT p.oid
+             FROM pg_catalog.pg_proc p, pg_catalog.pg_namespace n
+             WHERE p.proname = 'ver_is_table_versioned'
+             AND n.oid = p.pronamespace
+             AND n.nspname = 'table_version')
+  THEN
+    v_versioning_enabled := true;
+  END IF;
+
+  IF v_versioning_enabled
+  THEN
+    -- Is crs_ttl_inst_protect is versioned
+    IF table_version.ver_is_table_versioned('bde', 'crs_ttl_inst_protect')
+    THEN
+      v_ctip_isversioned := true;
+    END IF;
+    -- Is crs_title is versioned
+    IF table_version.ver_is_table_versioned('bde', 'crs_title')
+    THEN
+      v_ct_isversioned := true;
+    END IF;
+  END IF;
+
+  -- If crs_ttl_inst_protect is versioned, use table_version API to chnage columns
+  IF v_ctip_isversioned
+  THEN
+      PERFORM table_version.ver_versioned_table_change_column_type(
+          'bde',
+          'crs_ttl_inst_protect',
+          'protect_reference',
+          'VARCHAR(255)'
+      );
+  -- Otherwise use direct ALTER TABLE
+  ELSE
+    ALTER TABLE bde.crs_ttl_inst_protect
+    ALTER COLUMN protect_reference TYPE VARCHAR(255);
+  END IF;
+
+
+  -- If crs_title is versioned, use table_version API to chnage columns
+  IF v_ct_isversioned
+  THEN
+      PERFORM table_version.ver_versioned_table_change_column_type(
+          'bde',
+          'crs_title',
+          'protect_reference',
+          'VARCHAR(255)'
+      );
+  -- Otherwise use direct ALTER TABLE
+  ELSE
+    ALTER TABLE bde.crs_title
+    ALTER COLUMN protect_reference TYPE VARCHAR(255);
+  END IF;
+
+
+END;
+$$
+$P$
+);
+
+
 END;
 $PATCHES$;

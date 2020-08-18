@@ -1529,6 +1529,17 @@ ARRAY[
   'no_survivorship'
   ]);
 
+SELECT lives_ok($CODE$
+  DO $$
+    DECLARE
+      x bde.crs_title.protect_reference%type;
+    BEGIN
+      x := array_to_string(ARRAY(select 'x'::text from generate_series(1,255)), '');
+    END;
+  $$;
+$CODE$);
+
+
 SELECT has_table('bde'::name, 'crs_title_doc_ref'::name);
 SELECT table_privs_are('bde'::name, 'crs_title_doc_ref'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_title_doc_ref'::name, 'bde_user'::name, ARRAY['SELECT']);
@@ -1774,6 +1785,16 @@ ARRAY[
   'protect_end',
   'protect_reference'
   ]);
+
+SELECT lives_ok($CODE$
+  DO $$
+    DECLARE
+      x bde.crs_ttl_inst_protect.protect_reference%type;
+    BEGIN
+      x := array_to_string(ARRAY(select 'x'::text from generate_series(1,255)), '');
+    END;
+  $$;
+$CODE$);
 
 
 SELECT has_table('bde'::name, 'crs_ttl_inst_title'::name);
