@@ -1624,6 +1624,16 @@ ARRAY[
   'act_tin_id_ext'
   , '_revision_created', '_revision_expired']);
 
+SELECT lives_ok($CODE$
+  DO $$
+    DECLARE
+      x table_version.bde_crs_title_revision.protect_reference%type;
+    BEGIN
+      x := array_to_string(ARRAY(select 'x'::text from generate_series(1,255)), '');
+    END;
+  $$;
+$CODE$);
+
 SELECT has_table('table_version'::name, 'bde_crs_topology_class_revision'::name);
 SELECT table_privs_are('table_version'::name, 'bde_crs_topology_class_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('table_version'::name, 'bde_crs_topology_class_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
@@ -1770,6 +1780,16 @@ ARRAY[
   'protect_end',
   'protect_reference'
   , '_revision_created', '_revision_expired']);
+
+SELECT lives_ok($CODE$
+  DO $$
+    DECLARE
+      x table_version.bde_crs_ttl_inst_protect_revision.protect_reference%type;
+    BEGIN
+      x := array_to_string(ARRAY(select 'x'::text from generate_series(1,255)), '');
+    END;
+  $$;
+$CODE$);
 
 SELECT has_table('table_version'::name, 'bde_crs_ttl_inst_title_revision'::name);
 SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_inst_title_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
