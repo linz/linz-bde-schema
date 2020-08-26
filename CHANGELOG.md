@@ -2,10 +2,9 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
-## 1.6.2 - 2020-08-22
+## 1.6.2 - 2020-08-31
 ### Fixed
-- Enlarge `crs_title` `protect_reference`
-  column to 255 chars (#209)
+- Enlarge `crs_title` `protect_reference` column to 255 chars (#209)
 
 ## 1.6.1 - 2019-09-09
 ### Enhanced

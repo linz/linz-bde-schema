@@ -196,12 +196,12 @@ $P$
 --------------------------------------------------------------------------------
 -- protect_reference column VARCHAR(100) > VARCHAR(255)
 --
--- For tables bde.crs_title
+-- For table bde.crs_title
 -- as per https://github.com/linz/linz-bde-schema/issues/209
 --------------------------------------------------------------------------------
 
 PERFORM _patches.apply_patch(
-    'LOL 3.22: Enlarge crs_title protect_reference column to 255 chars',
+    '[Backport] LOL 3.22: Enlarge crs_title protect_reference column to 255 chars',
     $P$
 DO $$
 DECLARE
@@ -232,7 +232,7 @@ BEGIN
     END IF;
   END IF;
 
-  -- If crs_title is versioned, use table_version API to chnage columns
+  -- If crs_title is versioned, use table_version API to change columns
   IF v_isversioned
   THEN
       PERFORM table_version.ver_versioned_table_change_column_type(
