@@ -30,6 +30,7 @@ if ( $ddl ) {
         if ( /CREATE TABLE (.*) \(/ )
         {
             my $table = $1;
+            $table =~ s/^.*\.//;
             #print "-- Found table: [$table]\n";
             $tables{$table} = 1;
         }
