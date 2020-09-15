@@ -2,6 +2,10 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.12.3dev - YYYY-MM-DD
+### Fixed
+-
+
 ## 1.12.2 - 2020-09-15
 ### Fixed
 - Updated schema comments
