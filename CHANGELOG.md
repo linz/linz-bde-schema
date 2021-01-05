@@ -2,8 +2,16 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
-## 1.13.0dev - 2020-MM-DD
+## 1.13.0 - 2021-01-05
 ### Added
+- Add support for skipping comments
+- Include 12 tables documeted in DataDictionary-3.22.xml and not the PDF
+- Allos using schema dump to filter xml comments
+- Update schema comments from LDS Full Data dictionary 2.6
+
+### Fixed
+- Fix ordering of tests
+- protect_reference column > VARCHAR(255)
 
 ## 1.12.1 - 2020-08-18
 ### Fixed
