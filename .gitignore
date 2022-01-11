@@ -1,8 +1,8 @@
 **/*~
-/sql/05-bde_version.sql
-/sql/03-bde_functions.sql
+/results/
 /scripts/linz-bde-schema-load
 /scripts/linz-bde-schema-publish
-/results/
-/test-versioned/
+/sql/03-bde_functions.sql
+/sql/05-bde_version.sql
 /test-prepared/
+/test-versioned/
