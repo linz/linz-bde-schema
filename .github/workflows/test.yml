@@ -21,15 +21,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
-            pg: [ '9.3', '9.6', '10', '11' ]
+            pg: ['10', '11']
             pgis: [ '2.4', '2.5' ]
             os: [ ubuntu-18.04 ]
             dbpatch_branch: [ 'master' ]
             tableversion_branch: [ 'master' ]
             exclude:
-              # excludes PostGIS 2.5 on PostgreSQL 9.3
-              - pg: 9.3
-                pgis: 2.5
               # excludes PostGIS 2.4 on PostgreSQL 11
               - pg: 11
                 pgis: 2.4
