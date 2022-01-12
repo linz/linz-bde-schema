@@ -21,18 +21,24 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
         matrix:
-            pg: [ '9.3', '9.6', '10', '11' ]
-            pgis: [ '2.4', '2.5' ]
-            os: [ ubuntu-18.04 ]
-            dbpatch_branch: [ 'master' ]
-            tableversion_branch: [ 'master' ]
-            exclude:
-              # excludes PostGIS 2.5 on PostgreSQL 9.3
-              - pg: 9.3
-                pgis: 2.5
-              # excludes PostGIS 2.4 on PostgreSQL 11
-              - pg: 11
-                pgis: 2.4
+            # Combines <https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS> and
+            # `curl https://apt.postgresql.org/pub/repos/apt/dists/bionic-pgdg/main/binary-amd64/Packages | grep --only-matching '^Package: postgresql-[0-9.]\+-postgis-[0-9.]\+$' | sort --version-sort`.
+            include:
+                -   os: ubuntu-18.04
+                    pg: '10'
+                    pgis: '2.4'
+                -   os: ubuntu-18.04
+                    pg: '10'
+                    pgis: '2.5'
+                -   os: ubuntu-18.04
+                    pg: '10'
+                    pgis: '3'
+                -   os: ubuntu-18.04
+                    pg: '12'
+                    pgis: '2.5'
+                -   os: ubuntu-18.04
+                    pg: '12'
+                    pgis: '3'
     env:
       # Set PATH as postgresql-server-dev-all pretends version is 11
       PATH: /usr/lib/postgresql/${{ matrix.pg }}/bin:/bin:/usr/bin:/usr/local/bin
@@ -40,6 +46,9 @@ jobs:
       APT: "apt-get -o Dpkg::Progress=0 -o Dpkg::Use-Pty=0"
       # Avoid warnings on apt-key usage
       APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
+      DBPATCH_BRANCH: "master"
+      TABLEVERSION_BRANCH: "master"
+
     steps:
     - uses: actions/checkout@v1
     - name: Install dependencies
@@ -80,15 +89,15 @@ jobs:
         # Install dbpatch PostgreSQL extension
         pushd /tmp
         wget -q -O - \
-            https://github.com/linz/postgresql-dbpatch/archive/${{ matrix.dbpatch_branch }}.tar.gz \
-            | tar xzf - && cd postgresql-dbpatch-${{ matrix.dbpatch_branch }}
+            https://github.com/linz/postgresql-dbpatch/archive/${{env.DBPATCH_BRANCH}}.tar.gz \
+            | tar xzf - && cd postgresql-dbpatch-${{env.DBPATCH_BRANCH}}
         sudo -E make install
         popd
         # Install table_version PostgreSQL extension
         pushd /tmp
         wget -q -O - \
-            https://github.com/linz/postgresql-tableversion/archive/${{ matrix.tableversion_branch }}.tar.gz \
-            | tar vxzf - && cd postgresql-tableversion-${{ matrix.tableversioN_branch }}
+            https://github.com/linz/postgresql-tableversion/archive/${{env.TABLEVERSION_BRANCH}}.tar.gz \
+            | tar vxzf - && cd postgresql-tableversion-${{env.TABLEVERSION_BRANCH}}
         sudo -E make install
         popd
     - name: Setup PostgreSQL user
