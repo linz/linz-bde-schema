@@ -20,10 +20,7 @@ jobs:
     name: PostgreSQL ${{ matrix.pg }}, PostGIS ${{ matrix.pgis }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
-        fail-fast: false
         matrix:
-            dbpatch_branch: [ 'master' ]
-            tableversion_branch: [ 'master' ]
             # Combines <https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS> and
             # `curl https://apt.postgresql.org/pub/repos/apt/dists/bionic-pgdg/main/binary-amd64/Packages | grep --only-matching '^Package: postgresql-[0-9.]\+-postgis-[0-9.]\+$' | sort --version-sort`.
             include:
@@ -49,6 +46,9 @@ jobs:
       APT: "apt-get -o Dpkg::Progress=0 -o Dpkg::Use-Pty=0"
       # Avoid warnings on apt-key usage
       APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
+      DBPATCH_BRANCH: "master"
+      TABLEVERSION_BRANCH: "master"
+
     steps:
     - uses: actions/checkout@v1
     - name: Install dependencies
@@ -89,15 +89,15 @@ jobs:
         # Install dbpatch PostgreSQL extension
         pushd /tmp
         wget -q -O - \
-            https://github.com/linz/postgresql-dbpatch/archive/${{ matrix.dbpatch_branch }}.tar.gz \
-            | tar xzf - && cd postgresql-dbpatch-${{ matrix.dbpatch_branch }}
+            https://github.com/linz/postgresql-dbpatch/archive/${{env.DBPATCH_BRANCH}}.tar.gz \
+            | tar xzf - && cd postgresql-dbpatch-${{env.DBPATCH_BRANCH}}
         sudo -E make install
         popd
         # Install table_version PostgreSQL extension
         pushd /tmp
         wget -q -O - \
-            https://github.com/linz/postgresql-tableversion/archive/${{ matrix.tableversion_branch }}.tar.gz \
-            | tar vxzf - && cd postgresql-tableversion-${{ matrix.tableversioN_branch }}
+            https://github.com/linz/postgresql-tableversion/archive/${{env.TABLEVERSION_BRANCH}}.tar.gz \
+            | tar vxzf - && cd postgresql-tableversion-${{env.TABLEVERSION_BRANCH}}
         sudo -E make install
         popd
     - name: Setup PostgreSQL user
