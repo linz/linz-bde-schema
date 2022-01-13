@@ -6,3 +6,4 @@ scripts/linz-bde-schema-publish
 results/
 test-versioned/
 test-prepared/
+/.idea/
