@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DB_NAME=
+db_name=
 export PSQL=psql
 
 if test "$1" = "--version"
@@ -12,18 +12,18 @@ fi
 
 while test -n "$1"
 do
-    DB_NAME="$1"
+    db_name="$1"
     shift
 done
 
-if test -z "$DB_NAME"
+if test -z "$db_name"
 then
     echo "Usage: $0 { <database> | - }" >&2
     echo "       $0 --version" >&2
     exit 1
 fi
 
-export PGDATABASE="$DB_NAME"
+export PGDATABASE="$db_name"
 
 rollback()
 {

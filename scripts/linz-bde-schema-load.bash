@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-DB_NAME=
+db_name=
 export SKIP_INDEXES=no
 export ADD_REVISIONS=no
 export EXTENSION_MODE=on # NOTE: "on" is not a typo, it's "on"/"off"
@@ -67,18 +67,18 @@ do
         shift
         continue
     else
-        DB_NAME="$1"
+        db_name="$1"
         shift
     fi
 done
 
-if test -z "$DB_NAME"
+if test -z "$db_name"
 then
     usage >&2
     exit 1
 fi
 
-export PGDATABASE="$DB_NAME"
+export PGDATABASE="$db_name"
 
 rollback()
 {
