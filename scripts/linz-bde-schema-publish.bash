@@ -8,9 +8,6 @@ if test "$1" = "--version"; then
     exit 0
 fi
 
-if test -n "${BDESCHEMA_SQLDIR}"; then
-    export SCRIPTSDIR="${BDESCHEMA_SQLDIR}"
-fi
 
 while test -n "$1"; do
     DB_NAME=$1; shift
