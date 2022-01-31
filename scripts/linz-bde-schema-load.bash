@@ -32,7 +32,7 @@ EOF
 
 if test -n "${BDESCHEMA_SQLDIR}"
 then
-    SCRIPTSDIR=${BDESCHEMA_SQLDIR}
+    SCRIPTSDIR="${BDESCHEMA_SQLDIR}"
 fi
 
 if test ! -f "${SCRIPTSDIR}/02-bde_schema.sql"
