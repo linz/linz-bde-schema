@@ -30,7 +30,7 @@ EOF
 }
 
 
-if test -n "${BDESCHEMA_SQLDIR}"
+if test -n "${BDESCHEMA_SQLDIR-}"
 then
     SCRIPTSDIR="${BDESCHEMA_SQLDIR}"
 fi
@@ -44,7 +44,7 @@ EOF
     exit 1
 fi
 
-while test -n "$1"
+while test -n "${1-}"
 do
     if test "$1" = "--noindexes"
     then
