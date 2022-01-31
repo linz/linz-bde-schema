@@ -6,15 +6,15 @@ dropdb --if-exists ${PGDATABASE}
 createdb ${PGDATABASE} || exit 1
 
 linz-bde-schema-load $PGDATABASE
-bdeTables=`psql -qXtAc "select count(*) from pg_class c, pg_namespace n WHERE c.relnamespace = n.oid and n.nspname = 'bde' and c.relkind = 'r'"`
+bdeTables=$(psql -qXtAc "select count(*) from pg_class c, pg_namespace n WHERE c.relnamespace = n.oid and n.nspname = 'bde' and c.relkind = 'r'")
 
 compareTableCount() {
     exp=$bdeTables
-    obt=`psql -qXtAc "select count(*) from pg_catalog.pg_publication_tables WHERE pubname = 'all_bde'"`
+    obt=$(psql -qXtAc "select count(*) from pg_catalog.pg_publication_tables WHERE pubname = 'all_bde'")
 
-    test $exp = $obt || {
+    test "$exp" = "$obt" || {
         echo "Expected $exp published tables in 'all_bde' publication, got $obt:" >&2
-        list=`psql -qXtAc "select tablename from pg_catalog.pg_publication_tables WHERE pubname = 'all_bde'"`
+        list=$(psql -qXtAc "select tablename from pg_catalog.pg_publication_tables WHERE pubname = 'all_bde'")
         echo "$list" >&2
         exit 1
     }

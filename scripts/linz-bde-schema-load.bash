@@ -39,18 +39,18 @@ EOF
 fi
 
 while test -n "$1"; do
-    if test $1 = "--noindexes"; then
+    if test "$1" = "--noindexes"; then
         SKIP_INDEXES=yes
         shift; continue
-    elif test $1 = "--revision"; then
+    elif test "$1" = "--revision"; then
         ADD_REVISIONS=yes
         shift; continue
-    elif test $1 = "--readonly"; then
+    elif test "$1" = "--readonly"; then
         READ_ONLY=yes
         shift; continue
-    elif test $1 = "--help"; then
+    elif test "$1" = "--help"; then
         usage && exit
-    elif test $1 = "--noextension"; then
+    elif test "$1" = "--noextension"; then
         EXTENSION_MODE=off
         shift; continue
     else
@@ -84,7 +84,7 @@ dbpatch-loader - fake 2>&1 | grep -q "database.*does not exist" &&
     DBPATCH_SUPPORTS_STDOUT=no ||
     DBPATCH_SUPPORTS_STDOUT=yes
 
-if test $PGDATABASE = "-" -a $DBPATCH_SUPPORTS_STDOUT != yes; then
+if test "$PGDATABASE" = "-" -a $DBPATCH_SUPPORTS_STDOUT != yes; then
     echo "ERROR: dbpatch-loader does not support stdout mode, cannot proceed." >&2
     echo "HINT: install dbpatch 1.4.0 or higher to fix this." >&2
     exit 1
@@ -98,7 +98,7 @@ fi
 if test $DBPATCH_SUPPORTS_STDOUT != yes; then
     echo "WARNING: dbpatch-loader does not support stdout mode, working in non-transactional mode" >&2
     echo "HINT: install dbpatch 1.4.0 or higher to fix this." >&2
-    ${DBPATCH_LOADER} ${DBPATCH_OPTS} ${PGDATABASE} _patches || exit 1
+    ${DBPATCH_LOADER} ${DBPATCH_OPTS} "${PGDATABASE}" _patches || exit 1
 fi
 
 
@@ -115,7 +115,7 @@ table_version-loader -  2>&1 | grep -q "database.*does not exist" &&
     TABLEVERSION_SUPPORTS_STDOUT=no ||
     TABLEVERSION_SUPPORTS_STDOUT=yes
 
-if test $PGDATABASE = "-" -a $TABLEVERSION_SUPPORTS_STDOUT != yes; then
+if test "$PGDATABASE" = "-" -a $TABLEVERSION_SUPPORTS_STDOUT != yes; then
     echo "ERROR: table_version-loader does not support stdout mode, cannot proceed" >&2
     echo "HINT: install table_version 1.6.0 or higher to fix this." >&2
     exit 1
@@ -129,7 +129,7 @@ fi
 if test "${ADD_REVISIONS}" = "yes" -a $TABLEVERSION_SUPPORTS_STDOUT != yes; then
     echo "WARNING: table_version-loader does not support stdout mode, working in non-transactional mode" >&2
     echo "HINT: install table_version 1.6.0 or higher to fix this." >&2
-    ${TABLEVERSION_LOADER} ${TABLEVERSION_OPTS} ${PGDATABASE} || exit 1
+    ${TABLEVERSION_LOADER} ${TABLEVERSION_OPTS} "${PGDATABASE}" || exit 1
 fi
 
 
@@ -147,7 +147,7 @@ if test "${ADD_REVISIONS}" = "yes" -a $TABLEVERSION_SUPPORTS_STDOUT = yes; then
     ${TABLEVERSION_LOADER} ${TABLEVERSION_OPTS} - || rollback
 fi
 
-if test $PGDATABASE != "-"; then
+if test "$PGDATABASE" != "-"; then
     echo 'SET client_min_messages TO WARNING;'
 fi
 
@@ -160,12 +160,12 @@ for file in ${SCRIPTSDIR}/*.sql; do
     then
         continue
     fi
-    cat ${file} || rollback
+    cat "${file}" || rollback
 done
 
 if test "${ADD_REVISIONS}" = "yes"; then
     file=${SCRIPTSDIR}/versioning/01-version_tables.sql
-    cat ${file} || rollback
+    cat "${file}" || rollback
 fi
 
 if test "${READ_ONLY}" = "yes"; then
@@ -181,7 +181,7 @@ echo "COMMIT;"
 } |
 grep -v "^\(BEGIN\|COMMIT\);" |
 ( echo "BEGIN;"; cat; echo "COMMIT;"; ) |
-if test $PGDATABASE = "-"; then
+if test "$PGDATABASE" = "-"; then
     cat
 else
     $PSQL -XtA --set ON_ERROR_STOP=1 -o /dev/null

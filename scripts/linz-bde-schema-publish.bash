@@ -9,7 +9,7 @@ if test "$1" = "--version"; then
 fi
 
 if test -n "${BDESCHEMA_SQLDIR}"; then
-    SCRIPTSDIR=${BDESCHEMA_SQLDIR}
+    eport SCRIPTSDIR="${BDESCHEMA_SQLDIR}"
 fi
 
 while test -n "$1"; do
@@ -71,7 +71,7 @@ EOF
 } |
 grep -v "^\(BEGIN\|COMMIT\);" |
 ( echo "BEGIN;"; cat; echo "COMMIT;"; ) |
-if test $PGDATABASE = "-"; then
+if test "$PGDATABASE" = "-"; then
     cat
 else
     $PSQL -XtA --set ON_ERROR_STOP=1 -o /dev/null
