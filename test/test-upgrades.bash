@@ -20,15 +20,15 @@ TEST_DATABASE=linz-bde-schema-upgrade-test-db
 git fetch --unshallow --tags # to get all commits/tags
 
 TMPDIR=/tmp/linz-bde-schema-test-$$
-mkdir -p ${TMPDIR}
+mkdir -p "${TMPDIR}"
 
-export PGDATABASE=${TEST_DATABASE}
+export PGDATABASE="${TEST_DATABASE}"
 
 for ver in ${UPGRADEABLE_VERSIONS}; do
-    OWD=$PWD
+    OWD="$PWD"
 
-    dropdb --if-exists ${TEST_DATABASE}
-    createdb ${TEST_DATABASE} || exit 1
+    dropdb --if-exists "${TEST_DATABASE}"
+    createdb "${TEST_DATABASE}" || exit 1
 
     psql -XtA <<EOF
 CREATE EXTENSION IF NOT EXISTS postgis;
@@ -36,7 +36,7 @@ CREATE SCHEMA IF NOT EXISTS _patches;
 CREATE EXTENSION IF NOT EXISTS dbpatch SCHEMA _patches;
 EOF
 
-    cd ${TMPDIR} || exit 1
+    cd "${TMPDIR}" || exit 1
     test -d linz-bde-schema || {
         git clone --quiet --reference "$OWD" \
             https://github.com/linz/linz-bde-schema || exit 1

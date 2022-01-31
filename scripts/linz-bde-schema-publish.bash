@@ -10,7 +10,7 @@ fi
 
 
 while test -n "$1"; do
-    DB_NAME=$1; shift
+    DB_NAME="$1"; shift
 done
 
 if test -z "$DB_NAME"; then
@@ -19,7 +19,7 @@ if test -z "$DB_NAME"; then
     exit 1
 fi
 
-export PGDATABASE=$DB_NAME
+export PGDATABASE="$DB_NAME"
 
 rollback()
 {
