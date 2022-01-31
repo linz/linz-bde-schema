@@ -32,7 +32,7 @@ do
     OWD="$PWD"
 
     dropdb --if-exists "${test_database}"
-    createdb "${test_database}" || exit 1
+    createdb "${test_database}"
 
     psql -XtA <<EOF
 CREATE EXTENSION IF NOT EXISTS postgis;
@@ -40,24 +40,24 @@ CREATE SCHEMA IF NOT EXISTS _patches;
 CREATE EXTENSION IF NOT EXISTS dbpatch SCHEMA _patches;
 EOF
 
-    cd "${tmpdir}" || exit 1
+    cd "${tmpdir}"
     test -d linz-bde-schema || {
         git clone --quiet --reference "$OWD" \
-            https://github.com/linz/linz-bde-schema || exit 1
+            https://github.com/linz/linz-bde-schema
     }
-    cd linz-bde-schema || exit 1
-    git checkout "${ver}" || exit 1
-    sudo env "PATH=$PATH" make install DESTDIR="$PWD"/inst || exit 1
+    cd linz-bde-schema
+    git checkout "${ver}"
+    sudo env "PATH=$PATH" make install DESTDIR="$PWD"/inst
 
     # Install the just-installed linz-bde-schema first !
     for file in inst/usr/share/linz-bde-schema/sql/*.sql \
                  inst/usr/share/linz-bde-schema/sql/versioning/*.sql
     do
         echo "Loading $file from linz-bde-schema ${ver}"
-        psql -o /dev/null -XtA -f "$file" ${test_database} --set ON_ERROR_STOP=1 || exit 1
+        psql -o /dev/null -XtA -f "$file" ${test_database} --set ON_ERROR_STOP=1
     done
 
-    cd "${OWD}" || exit 1
+    cd "${OWD}"
 
 # Turn DB to read-only mode, as it would be done
 # by linz-bde-schema-load --readonly
@@ -66,6 +66,6 @@ REVOKE UPDATE, INSERT, DELETE, TRUNCATE
     ON ALL TABLES IN SCHEMA bde
     FROM bde_dba, bde_admin, bde_user;
 EOF
-    pg_prove test/ || exit 1
+    pg_prove test/
 
 done

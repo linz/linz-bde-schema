@@ -118,7 +118,7 @@ if test "$DBPATCH_SUPPORTS_STDOUT" != yes
 then
     echo "WARNING: dbpatch-loader does not support stdout mode, working in non-transactional mode" >&2
     echo "HINT: install dbpatch 1.4.0 or higher to fix this." >&2
-    "${DBPATCH_LOADER}" "${DBPATCH_OPTS[@]}" "${PGDATABASE}" _patches || exit 1
+    "${DBPATCH_LOADER}" "${DBPATCH_OPTS[@]}" "${PGDATABASE}" _patches
 fi
 
 
@@ -151,7 +151,7 @@ if test "${ADD_REVISIONS}" = "yes" -a "$TABLEVERSION_SUPPORTS_STDOUT" != yes
 then
     echo "WARNING: table_version-loader does not support stdout mode, working in non-transactional mode" >&2
     echo "HINT: install table_version 1.6.0 or higher to fix this." >&2
-    "${TABLEVERSION_LOADER}" "${TABLEVERSION_OPTS[@]}" "${PGDATABASE}" || exit 1
+    "${TABLEVERSION_LOADER}" "${TABLEVERSION_OPTS[@]}" "${PGDATABASE}"
 fi
 
 
