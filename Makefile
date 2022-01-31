@@ -46,11 +46,11 @@ all: $(SQLSCRIPTS) $(SCRIPTS_built)
 %.sql: %.sql.in Makefile
 	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 
-scripts/linz-bde-schema-load: scripts/linz-bde-schema-load.in
+scripts/linz-bde-schema-load: scripts/linz-bde-schema-load.bash
 	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 	chmod +x $@
 
-scripts/linz-bde-schema-publish: scripts/linz-bde-schema-publish.in
+scripts/linz-bde-schema-publish: scripts/linz-bde-schema-publish.bash
 	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 	chmod +x $@
 
@@ -82,7 +82,7 @@ check-publisher:
 	V=`linz-bde-schema-publish --version` && \
 	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
 
-	test/test-publication.sh
+	test/test-publication.bash
 
 check-loader:
 
