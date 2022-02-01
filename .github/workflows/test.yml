@@ -72,9 +72,11 @@ jobs:
                   sudo ${APT} purge libpq5 libpq-dev *php* postgresql postgresql-client-common
                   postgresql-common
 
+            - name: Remove existing PostgreSQL libraries
+              run: sudo rm --force --recursive --verbose /var/lib/postgresql
+
             - name: Install dependencies
               run: |
-                  sudo rm -rf /var/lib/postgresql
                   sudo ${APT} install curl ca-certificates gnupg
                   distro=`lsb_release -cs`
                   # Enable fetching packages from apt.postgresql repository
