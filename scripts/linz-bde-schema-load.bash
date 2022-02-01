@@ -156,8 +156,7 @@ CREATE EXTENSION IF NOT EXISTS postgis SCHEMA public;
 EOF
 
 for file in ${SCRIPTSDIR}/*.sql; do
-    if test ${SKIP_INDEXES} = 'yes' &&
-       `basename $file .sql` = '04-bde_schema_index';
+    if [[ "$SKIP_INDEXES" = 'yes' ]] && [[ "$(basename "$file" .sql)" = '04-bde_schema_index' ]]
     then
         continue
     fi
