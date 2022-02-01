@@ -75,9 +75,13 @@ jobs:
             - name: Remove existing PostgreSQL libraries
               run: sudo rm --force --recursive --verbose /var/lib/postgresql
 
+            - name: Install build dependencies
+              run: |
+                  sudo ${APT} update
+                  sudo ${APT} install curl ca-certificates gnupg
+
             - name: Install dependencies
               run: |
-                  sudo ${APT} install curl ca-certificates gnupg
                   distro=`lsb_release -cs`
                   # Enable fetching packages from apt.postgresql repository
                   curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
