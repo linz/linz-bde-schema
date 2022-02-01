@@ -9,7 +9,7 @@ if test "$1" = "--version"; then
 fi
 
 if test -n "${BDESCHEMA_SQLDIR}"; then
-    eport SCRIPTSDIR="${BDESCHEMA_SQLDIR}"
+    export SCRIPTSDIR="${BDESCHEMA_SQLDIR}"
 fi
 
 while test -n "$1"; do
