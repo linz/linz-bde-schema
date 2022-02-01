@@ -20,12 +20,10 @@ SQLSCRIPTS = \
   sql/05-bde_version.sql \
   sql/99-patches.sql \
   sql/versioning/01-version_tables.sql
-  $(END)
 
 SCRIPTS_built = \
     scripts/linz-bde-schema-load \
-    scripts/linz-bde-schema-publish \
-    $(END)
+    scripts/linz-bde-schema-publish
 
 TEST_SCRIPTS = \
     test/base.pg
