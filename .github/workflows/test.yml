@@ -83,17 +83,23 @@ jobs:
             - id: distro
               run: echo "::set-output name=codename::$(lsb_release -cs)"
 
-            - name: Install dependencies
+            - name: Enable fetching packages from apt.postgresql repository
               run: |
-                  # Enable fetching packages from apt.postgresql repository
                   curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
                   echo "deb http://apt.postgresql.org/pub/repos/apt/ ${{ steps.distro.outputs.codename }}-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
-                  # Enable fetching packages from packagecloud test repository
+
+            - name: Enable fetching packages from packagecloud test repository
+              run: |
                   curl -Ls https://packagecloud.io/linz/test/gpgkey | sudo apt-key add -
                   echo "deb https://packagecloud.io/linz/test/ubuntu/ ${{ steps.distro.outputs.codename }} main" | sudo tee /etc/apt/sources.list.d/linz-test.list
-                  # Enable fetching packages from packagecloud prod repository
+
+            - name: Enable fetching packages from packagecloud prod repository
+              run: |
                   curl -Ls https://packagecloud.io/linz/prod/gpgkey | sudo apt-key add -
                   echo "deb https://packagecloud.io/linz/prod/ubuntu/ ${{ steps.distro.outputs.codename }} main" | sudo tee /etc/apt/sources.list.d/linz-prod.list
+
+            - name: Install dependencies
+              run: |
                   sudo ${APT} -qq update
                   sudo ${APT} -qq install \
                       debhelper \
@@ -108,7 +114,9 @@ jobs:
                       tableversion \
                       postgresql-${{ matrix.pg }}-dbpatch \
                       dbpatch
-                  # Install dbpatch PostgreSQL extension
+
+            - name: Install dbpatch PostgreSQL extension
+              run: |
                   pushd /tmp
                   wget -q -O - \
                       https://github.com/linz/postgresql-dbpatch/archive/${{env.DBPATCH_BRANCH}}.tar.gz \
@@ -116,7 +124,9 @@ jobs:
                   cd postgresql-dbpatch-${{env.DBPATCH_BRANCH}}
                   sudo -E make install
                   popd
-                  # Install table_version PostgreSQL extension
+
+            - name: Install table_version PostgreSQL extension
+              run: |
                   pushd /tmp
                   wget -q -O - \
                       https://github.com/linz/postgresql-tableversion/archive/${{env.TABLEVERSION_BRANCH}}.tar.gz \
