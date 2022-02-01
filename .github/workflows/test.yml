@@ -67,15 +67,13 @@ jobs:
             - name: Check out repository
               uses: actions/checkout@v1
 
+            - name: Purge other software
+              run:
+                  sudo ${APT} purge libpq5 libpq-dev *php* postgresql postgresql-client-common
+                  postgresql-common
+
             - name: Install dependencies
               run: |
-                  sudo ${APT} -qq purge \
-                      libpq5 \
-                      libpq-dev \
-                      *php* \
-                      postgresql \
-                      postgresql-client-common \
-                      postgresql-common
                   sudo rm -rf /var/lib/postgresql
                   sudo ${APT} install curl ca-certificates gnupg
                   distro=`lsb_release -cs`
