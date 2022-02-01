@@ -112,14 +112,16 @@ jobs:
                   pushd /tmp
                   wget -q -O - \
                       https://github.com/linz/postgresql-dbpatch/archive/${{env.DBPATCH_BRANCH}}.tar.gz \
-                      | tar xzf - && cd postgresql-dbpatch-${{env.DBPATCH_BRANCH}}
+                      | tar xzf -
+                  cd postgresql-dbpatch-${{env.DBPATCH_BRANCH}}
                   sudo -E make install
                   popd
                   # Install table_version PostgreSQL extension
                   pushd /tmp
                   wget -q -O - \
                       https://github.com/linz/postgresql-tableversion/archive/${{env.TABLEVERSION_BRANCH}}.tar.gz \
-                      | tar vxzf - && cd postgresql-tableversion-${{env.TABLEVERSION_BRANCH}}
+                      | tar vxzf -
+                  cd postgresql-tableversion-${{env.TABLEVERSION_BRANCH}}
                   sudo -E make install
                   popd
 
