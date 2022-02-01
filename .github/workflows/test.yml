@@ -145,7 +145,7 @@ jobs:
             - name: Test upgrades
               run: |
                   # Test upgrades
-                  test/test-upgrades.sh
+                  test/test-upgrades.bash
 
             - name: Test packaging
               run: |
