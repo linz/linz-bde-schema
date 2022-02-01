@@ -5,8 +5,6 @@ REVISION = $(shell test -d .git && git describe --always || echo $(VERSION))
 
 TEST_DATABASE = regress_linz_bde_schema
 
-SED = sed
-
 datadir=${DESTDIR}/usr/share/linz-bde-schema
 bindir=${DESTDIR}/usr/bin
 
@@ -44,14 +42,14 @@ EXTRA_CLEAN = \
 all: $(SQLSCRIPTS) $(SCRIPTS_built)
 
 %.sql: %.sql.in Makefile
-	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
+	sed -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 
 scripts/linz-bde-schema-load: scripts/linz-bde-schema-load.bash
-	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
+	sed -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 	chmod +x $@
 
 scripts/linz-bde-schema-publish: scripts/linz-bde-schema-publish.bash
-	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
+	sed -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 	chmod +x $@
 
 install: $(SQLSCRIPTS) $(SCRIPTS_built)
