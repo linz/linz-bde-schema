@@ -67,27 +67,39 @@ jobs:
             - name: Check out repository
               uses: actions/checkout@v1
 
+            - name: Purge other software
+              run:
+                  sudo ${APT} purge libpq5 libpq-dev *php* postgresql postgresql-client-common
+                  postgresql-common
+
+            - name: Remove existing PostgreSQL libraries
+              run: sudo rm --force --recursive --verbose /var/lib/postgresql
+
+            - name: Install build dependencies
+              run: |
+                  sudo ${APT} update
+                  sudo ${APT} install curl ca-certificates gnupg
+
+            - id: distro
+              run: echo "::set-output name=codename::$(lsb_release -cs)"
+
+            - name: Enable fetching packages from apt.postgresql repository
+              run: |
+                  curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+                  echo "deb http://apt.postgresql.org/pub/repos/apt/ ${{ steps.distro.outputs.codename }}-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+
+            - name: Enable fetching packages from packagecloud test repository
+              run: |
+                  curl -Ls https://packagecloud.io/linz/test/gpgkey | sudo apt-key add -
+                  echo "deb https://packagecloud.io/linz/test/ubuntu/ ${{ steps.distro.outputs.codename }} main" | sudo tee /etc/apt/sources.list.d/linz-test.list
+
+            - name: Enable fetching packages from packagecloud prod repository
+              run: |
+                  curl -Ls https://packagecloud.io/linz/prod/gpgkey | sudo apt-key add -
+                  echo "deb https://packagecloud.io/linz/prod/ubuntu/ ${{ steps.distro.outputs.codename }} main" | sudo tee /etc/apt/sources.list.d/linz-prod.list
+
             - name: Install dependencies
               run: |
-                  sudo ${APT} -qq purge \
-                      libpq5 \
-                      libpq-dev \
-                      *php* \
-                      postgresql \
-                      postgresql-client-common \
-                      postgresql-common
-                  sudo rm -rf /var/lib/postgresql
-                  sudo ${APT} install curl ca-certificates gnupg
-                  distro=`lsb_release -cs`
-                  # Enable fetching packages from apt.postgresql repository
-                  curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
-                  echo "deb http://apt.postgresql.org/pub/repos/apt/ ${distro}-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
-                  # Enable fetching packages from packagecloud test repository
-                  curl -Ls https://packagecloud.io/linz/test/gpgkey | sudo apt-key add -
-                  echo "deb https://packagecloud.io/linz/test/ubuntu/ ${distro} main" | sudo tee /etc/apt/sources.list.d/linz-test.list
-                  # Enable fetching packages from packagecloud prod repository
-                  curl -Ls https://packagecloud.io/linz/prod/gpgkey | sudo apt-key add -
-                  echo "deb https://packagecloud.io/linz/prod/ubuntu/ ${distro} main" | sudo tee /etc/apt/sources.list.d/linz-prod.list
                   sudo ${APT} -qq update
                   sudo ${APT} -qq install \
                       debhelper \
@@ -102,18 +114,24 @@ jobs:
                       tableversion \
                       postgresql-${{ matrix.pg }}-dbpatch \
                       dbpatch
-                  # Install dbpatch PostgreSQL extension
+
+            - name: Install dbpatch PostgreSQL extension
+              run: |
                   pushd /tmp
                   wget -q -O - \
                       https://github.com/linz/postgresql-dbpatch/archive/${{env.DBPATCH_BRANCH}}.tar.gz \
-                      | tar xzf - && cd postgresql-dbpatch-${{env.DBPATCH_BRANCH}}
+                      | tar xzf -
+                  cd postgresql-dbpatch-${{env.DBPATCH_BRANCH}}
                   sudo -E make install
                   popd
-                  # Install table_version PostgreSQL extension
+
+            - name: Install table_version PostgreSQL extension
+              run: |
                   pushd /tmp
                   wget -q -O - \
                       https://github.com/linz/postgresql-tableversion/archive/${{env.TABLEVERSION_BRANCH}}.tar.gz \
-                      | tar vxzf - && cd postgresql-tableversion-${{env.TABLEVERSION_BRANCH}}
+                      | tar vxzf -
+                  cd postgresql-tableversion-${{env.TABLEVERSION_BRANCH}}
                   sudo -E make install
                   popd
 
