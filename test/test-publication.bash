@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
+set -o errexit -o noclobber -o nounset -o pipefail
+shopt -s failglob inherit_errexit
+
 export PGDATABASE=linz-bde-schema-test-db
 
 dropdb --if-exists "${PGDATABASE}"
-createdb "${PGDATABASE}" || exit 1
+createdb "${PGDATABASE}"
 
 linz-bde-schema-load "$PGDATABASE"
 bdeTables="$(psql -qXtAc "select count(*) from pg_class c, pg_namespace n WHERE c.relnamespace = n.oid and n.nspname = 'bde' and c.relkind = 'r'")"
@@ -20,15 +23,15 @@ compareTableCount() {
     }
 }
 
-linz-bde-schema-publish "$PGDATABASE" || exit 1
+linz-bde-schema-publish "$PGDATABASE"
 compareTableCount
 echo "PASS: publication first run"
 
-linz-bde-schema-publish "$PGDATABASE" || exit 1
+linz-bde-schema-publish "$PGDATABASE"
 compareTableCount
 echo "PASS: publication second run"
 
-linz-bde-schema-publish - | psql -qXtA "$PGDATABASE" || exit 1
+linz-bde-schema-publish - | psql -qXtA "$PGDATABASE"
 compareTableCount
 echo "PASS: publication third run via stdout"
 
