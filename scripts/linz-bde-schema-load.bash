@@ -121,15 +121,14 @@ if test "$PGDATABASE" = "-" -a "$TABLEVERSION_SUPPORTS_STDOUT" != yes; then
     exit 1
 fi
 
-TABLEVERSION_OPTS=
 if test "${EXTENSION_MODE}" = "off"; then
-    TABLEVERSION_OPTS="--no-extension"
+    TABLEVERSION_OPTS=("--no-extension")
 fi
 
 if test "${ADD_REVISIONS}" = "yes" -a "$TABLEVERSION_SUPPORTS_STDOUT" != yes; then
     echo "WARNING: table_version-loader does not support stdout mode, working in non-transactional mode" >&2
     echo "HINT: install table_version 1.6.0 or higher to fix this." >&2
-    "${TABLEVERSION_LOADER}" "${TABLEVERSION_OPTS}" "${PGDATABASE}" || exit 1
+    "${TABLEVERSION_LOADER}" "${TABLEVERSION_OPTS[@]}" "${PGDATABASE}" || exit 1
 fi
 
 
@@ -144,7 +143,7 @@ fi
 
 # Enable table_version if needed
 if test "${ADD_REVISIONS}" = "yes" -a "$TABLEVERSION_SUPPORTS_STDOUT" = yes; then
-    "${TABLEVERSION_LOADER}" "${TABLEVERSION_OPTS}" - || rollback
+    "${TABLEVERSION_LOADER}" "${TABLEVERSION_OPTS[@]}" - || rollback
 fi
 
 if test "$PGDATABASE" != "-"; then
