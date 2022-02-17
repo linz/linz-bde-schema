@@ -14,5 +14,6 @@ pkgs.mkShell {
       pkgs.gitFull
       pkgs.nodejs
       pkgs.pre-commit
+      pkgs.which
   ];
 }
