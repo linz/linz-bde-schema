@@ -49,6 +49,12 @@ WARNING: upgrades from version 1.0.2 to 1.1.2 will leave database in an inconsis
 broken schema patch found in such release. The patch was absent in previous releases and fixed in
 later releases so upgrades from them will be ok.
 
+## Linting
+
+Prerequisites: [Nix](https://nixos.org/download.html)
+
+Run `nix-shell --pure --run 'pre-commit run --all-files'`.
+
 ## Testing
 
 Testing is done using `pg_regress` and `PgTap`. To run the tests run the following command:
