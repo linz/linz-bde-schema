@@ -192,6 +192,3 @@ clean:
 	rm -f regression.out
 	rm -rf results
 	rm -f $(EXTRA_CLEAN)
-
-deb:
-	dpkg-buildpackage -b -us -uc
