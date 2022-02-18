@@ -9,11 +9,11 @@
 }:
 pkgs.mkShell {
   packages = [
-      pkgs.cacert
-      pkgs.cargo
-      pkgs.gitFull
-      pkgs.nodejs
-      pkgs.pre-commit
-      pkgs.which
+    pkgs.cacert
+    pkgs.cargo
+    pkgs.gitFull
+    pkgs.nodejs
+    pkgs.pre-commit
+    pkgs.which
   ];
 }

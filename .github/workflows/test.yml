@@ -21,14 +21,14 @@ jobs:
         runs-on: ubuntu-20.04
 
         steps:
-        - name: Check out repository
-          uses: actions/checkout@v2.4.0
+            - name: Check out repository
+              uses: actions/checkout@v2.4.0
 
-        - name: Install Nix
-          uses: cachix/install-nix-action@v16
+            - name: Install Nix
+              uses: cachix/install-nix-action@v16
 
-        - name: Run pre-commit hooks
-          run: nix-shell --pure --run 'pre-commit run --all-files'
+            - name: Run pre-commit hooks
+              run: nix-shell --pure --run 'pre-commit run --all-files'
 
     test:
         name: PostgreSQL ${{ matrix.pg }}, PostGIS ${{ matrix.pgis }} on ${{ matrix.os }}
