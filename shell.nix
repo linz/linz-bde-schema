@@ -11,6 +11,7 @@ pkgs.mkShell {
   packages = [
     pkgs.cacert
     pkgs.cargo
+    pkgs.docker
     pkgs.gitFull
     pkgs.nodejs
     pkgs.pre-commit
