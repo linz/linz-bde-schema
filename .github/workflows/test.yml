@@ -30,8 +30,8 @@ jobs:
             - name: Run pre-commit hooks
               run: nix-shell --pure --run 'pre-commit run --all-files'
 
-    test:
-        name: PostgreSQL ${{ matrix.pg }}, PostGIS ${{ matrix.pgis }} on ${{ matrix.os }}
+    test-source:
+        name: Test PostgreSQL ${{ matrix.pg }}, PostGIS ${{ matrix.pgis }} on ${{ matrix.os }}
         runs-on: ${{ matrix.os }}
         strategy:
             fail-fast: false
@@ -58,7 +58,6 @@ jobs:
             # Set PATH as postgresql-server-dev-all pretends version is 11
             PATH: /usr/lib/postgresql/${{ matrix.pg }}/bin:/bin:/usr/bin:/usr/local/bin
             # Make apt non-interactive by default, and not showing progress
-            APT: 'apt-get -o Dpkg::Progress=0 -o Dpkg::Use-Pty=0'
             # Avoid warnings on apt-key usage
             APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
             DBPATCH_BRANCH: 'master'
@@ -78,13 +77,15 @@ jobs:
             - name: Remove existing PostgreSQL libraries
               run: sudo rm --force --recursive --verbose /var/lib/postgresql
 
-            - name: Install build dependencies
-              run: |
-                  sudo ${APT} update
-                  sudo ${APT} install curl ca-certificates gnupg
+            - name: Update package database
+              run: sudo apt-get update
 
-            - id: distro
-              run: echo "::set-output name=codename::$(lsb_release -cs)"
+            - name: Install build dependencies
+              run: sudo apt-get install curl ca-certificates gnupg
+
+            - name: Get release codename
+              id: distro
+              run: echo "::set-output name=codename::$(lsb_release --codename --short)"
 
             - name: Enable fetching packages from apt.postgresql repository
               run: |
@@ -101,22 +102,17 @@ jobs:
                   curl -Ls https://packagecloud.io/linz/prod/gpgkey | sudo apt-key add -
                   echo "deb https://packagecloud.io/linz/prod/ubuntu/ ${{ steps.distro.outputs.codename }} main" | sudo tee /etc/apt/sources.list.d/linz-prod.list
 
+            - name: Update package database with PostgreSQL repo
+              run: sudo apt-get update
+
             - name: Install dependencies
-              run: |
-                  sudo ${APT} -qq update
-                  sudo ${APT} -qq install \
-                      debhelper \
-                      fakeroot \
-                      postgresql-client-${{ matrix.pg }} \
-                      postgresql-${{ matrix.pg }} \
-                      postgresql-${{ matrix.pg }}-pgtap \
-                      postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }} \
-                      postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }}-scripts \
-                      postgresql-server-dev-${{ matrix.pg }} \
-                      postgresql-${{ matrix.pg }}-tableversion \
-                      tableversion \
-                      postgresql-${{ matrix.pg }}-dbpatch \
-                      dbpatch
+              run:
+                  sudo apt-get install --assume-yes \ debhelper \ fakeroot \ postgresql-client-${{
+                  matrix.pg }} \ postgresql-${{ matrix.pg }} \ postgresql-${{ matrix.pg }}-pgtap \
+                  postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }} \ postgresql-${{ matrix.pg
+                  }}-postgis-${{ matrix.pgis }}-scripts \ postgresql-server-dev-${{ matrix.pg }} \
+                  postgresql-${{ matrix.pg }}-tableversion \ tableversion \ postgresql-${{ matrix.pg
+                  }}-dbpatch \ dbpatch
 
             - name: Install dbpatch PostgreSQL extension
               run: |
@@ -138,35 +134,29 @@ jobs:
                   sudo -E make install
                   popd
 
-            - name: Setup PostgreSQL user
-              run: |
-                  sudo -u postgres createuser -s "$USER"
-                  sudo -u postgres createuser -s root
+            - name: Setup current user as PostgreSQL superuser
+              run: sudo --user=postgres createuser --superuser "$USER"
+
+            - name: Setup PostgreSQL root user
+              run: sudo --user=postgres createuser --superuser root
 
             - name: Build
-              run: |
-                  # Build
-                  make
+              run: make
 
             - name: Test build
-              run: |
-                  # Pre-install tests
-                  make check
+              run: make check
 
             - name: Install
-              run: |
-                  sudo -E make install
+              run: sudo -E make install
 
             - name: Test installation
-              run: |
-                  # Post-install tests
-                  make installcheck
-                  make check-loader-stdout
+              run: make installcheck
+
+            - name: Test loader
+              run: make check-loader-stdout
 
             - name: Test upgrades
-              run: |
-                  # Test upgrades
-                  test/test-upgrades.bash
+              run: test/test-upgrades.bash
 
             - name: Test packaging
               run: |
