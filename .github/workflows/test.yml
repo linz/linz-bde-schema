@@ -306,7 +306,7 @@ jobs:
               run: test/test-upgrades.bash
 
             - name: Build local debian package
-              uses: linz/linz-software-repository@v8
+              uses: linz/linz-software-repository@v9
               with:
                   release: ${{ matrix.release }}
               env:
@@ -354,7 +354,7 @@ jobs:
                   echo "REPO=$REPO" | tee -a $GITHUB_ENV
 
             - name: Build and upload to Packagecloud
-              uses: linz/linz-software-repository@v8
+              uses: linz/linz-software-repository@v9
               with:
                   release: ${{ matrix.distro }}
                   packagecloud_token: ${{ secrets.LINZCI_PACKAGECLOUD_TOKEN }}
