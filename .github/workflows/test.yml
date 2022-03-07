@@ -56,6 +56,27 @@ jobs:
                     - os: ubuntu-18.04
                       pg: '12'
                       pgis: '3'
+                    - os: ubuntu-18.04
+                      pg: '14'
+                      pgis: '3'
+                    - os: ubuntu-20.04
+                      pg: '10'
+                      pgis: '2.5'
+                    - os: ubuntu-20.04
+                      pg: '10'
+                      pgis: '3'
+                    - os: ubuntu-20.04
+                      pg: '12'
+                      pgis: '2.5'
+                    - os: ubuntu-20.04
+                      pg: '12'
+                      pgis: '3'
+                    - os: ubuntu-20.04
+                      pg: '14'
+                      pgis: '3'
+                    - os: ubuntu-latest
+                      pg: '14'
+                      pgis: '3'
         env:
             # Set PATH as postgresql-server-dev-all pretends version is 11
             PATH: /usr/lib/postgresql/${{ matrix.pg }}/bin:/bin:/usr/bin:/usr/local/bin
@@ -175,7 +196,6 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                release: [focal]
                 # Combines <https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS> and
                 # `curl https://apt.postgresql.org/pub/repos/apt/dists/bionic-pgdg/main/binary-amd64/Packages | grep --only-matching '^Package: postgresql-[0-9.]\+-postgis-[0-9.]\+$' | sort --version-sort`.
                 include:
@@ -193,6 +213,27 @@ jobs:
                       pgis: '2.5'
                     - os: ubuntu-18.04
                       pg: '12'
+                      pgis: '3'
+                    - os: ubuntu-18.04
+                      pg: '14'
+                      pgis: '3'
+                    - os: ubuntu-20.04
+                      pg: '10'
+                      pgis: '2.5'
+                    - os: ubuntu-20.04
+                      pg: '10'
+                      pgis: '3'
+                    - os: ubuntu-20.04
+                      pg: '12'
+                      pgis: '2.5'
+                    - os: ubuntu-20.04
+                      pg: '12'
+                      pgis: '3'
+                    - os: ubuntu-20.04
+                      pg: '14'
+                      pgis: '3'
+                    - os: ubuntu-latest
+                      pg: '14'
                       pgis: '3'
         env:
             # Set PATH as postgresql-server-dev-all pretends version is 11
@@ -308,7 +349,7 @@ jobs:
             - name: Build local debian package
               uses: linz/linz-software-repository@v9
               with:
-                  release: ${{ matrix.release }}
+                  release: ${{ steps.distro.outputs.codename }}
               env:
                   PG_SUPPORTED_VERSIONS: ${{ matrix.pg }}
 
