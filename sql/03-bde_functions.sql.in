@@ -1,0 +1,984 @@
+--------------------------------------------------------------------------------
+--
+-- linz-bde-schema
+--
+-- Copyright 2016 Crown copyright (c)
+-- Land Information New Zealand and the New Zealand Government.
+-- All rights reserved
+--
+-- This software is released under the terms of the new BSD license. See the
+-- LICENSE file for more information.
+--
+--------------------------------------------------------------------------------
+
+BEGIN;
+
+CREATE FUNCTION pg_temp.bless_bde_function(p_pcid regprocedure)
+RETURNS VOID LANGUAGE plpgsql VOLATILE AS $$
+DECLARE
+    v_comment TEXT;
+BEGIN
+   v_comment := 'Version: @@VERSION@@ @@REVISION@@'
+                || E'\n' || 'Installed: ' ||
+                to_char(current_timestamp,'YYYY-MM-DD HH:MI');
+
+  EXECUTE format('ALTER FUNCTION %s OWNER TO bde_dba', p_pcid);
+  EXECUTE format('REVOKE ALL ON FUNCTION %s FROM PUBLIC', p_pcid);
+  EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO bde_user', p_pcid);
+  EXECUTE format('COMMENT ON FUNCTION %s IS %L', p_pcid, v_comment);
+END
+$$
+-- make sure regprocedure::text is fully-qualified
+-- to work around an RDS bug
+SET search_path = ''
+;
+
+--
+-- Function: bde.bde_get_app_specific
+--
+
+/**
+* Format title or survey appellation for a specific parcel record.
+* Note this function has the same logic as Landonline.
+*
+* @param app          bde.crs_appellation record
+* @param p_long       Either 'Y' or 'N'. This defines if the appellation should be in long
+*                     or short appellation format. e.g 'Lot 1 Deposited Plan 1234' vs 'Lot 1 DP 1234'.
+* @return             The formatted appellation string
+*/
+-- {
+CREATE OR REPLACE FUNCTION bde.bde_get_app_specific(app bde.crs_appellation, p_long CHAR) RETURNS text
+    AS $$
+DECLARE
+    v_app_text            TEXT;
+    v_app_type            bde.crs_appellation."type"%TYPE;
+    v_part_indicator      bde.crs_appellation.part_indicator%TYPE;
+    v_count_app           INTEGER;
+    v_surv                VARCHAR(4);
+    v_title               VARCHAR(4);
+    v_parcel_type         VARCHAR(255);
+    v_parcel_value        TEXT;
+    v_2_parcel_type       VARCHAR(255);
+    v_2_parcel_value      bde.crs_appellation.second_prcl_value%TYPE;
+    v_block_number        bde.crs_appellation.block_number%TYPE;
+    v_app_val             bde.crs_appellation.appellation_value%TYPE;
+    v_sub_type            VARCHAR(255);
+    v_sub_type_pos        bde.crs_appellation.sub_type_position%TYPE;
+    v_maori_name          bde.crs_appellation.maori_name%TYPE;
+    v_other_app           bde.crs_appellation.other_appellation%TYPE;
+    v_part                VARCHAR;
+    v_share               CHAR(100);
+    v_maori_parcel        bde.crs_appellation.parcel_value%TYPE;
+BEGIN
+    v_surv := 'SURV';
+    v_title := 'TITL';
+    v_part := '';
+    v_share := '1/1';
+
+
+    v_app_type := APP.type;
+    v_part_indicator := APP.part_indicator;
+    v_parcel_type := COALESCE( (CASE p_long
+                    WHEN 'Y' THEN
+                        bde.bde_get_desccode( 'ASAP', APP.parcel_type)::TEXT
+                    WHEN 'N' THEN
+                        CASE WHEN APP.parcel_type in ( 'LOT', 'SECT', 'UNIT', 'FLAT', 'MARK' )
+                            THEN
+                               bde.bde_get_desccode('ASAP',APP.parcel_type)::TEXT
+                            ELSE
+                               bde.bde_get_charcode('ASAP',APP.parcel_type)::TEXT
+                        END
+                   END), '');
+    v_parcel_value := COALESCE( APP.parcel_value, '');
+    v_2_parcel_type := COALESCE( (CASE p_long
+                WHEN 'Y' THEN
+                    bde.bde_get_desccode('ASAP',APP.second_parcel_type)::TEXT
+                WHEN 'N' THEN
+                     bde.bde_get_charcode('ASAP',APP.second_parcel_type)::TEXT
+               END), '');
+    v_2_parcel_value := COALESCE( APP.second_prcl_value, '');
+    v_block_number := COALESCE( APP.block_number, '');
+    v_app_val := COALESCE( APP.appellation_value, '');
+    v_sub_type := COALESCE( (CASE p_long
+                WHEN 'Y' THEN
+                    bde.bde_get_desccode('ASAU',APP.sub_type)::TEXT
+                WHEN 'N' THEN
+                      CASE WHEN APP.sub_type in ( 'DP', 'LT', 'SO', 'ML', 'DPS' )
+                        THEN
+                            APP.sub_type::TEXT
+                        ELSE
+                            bde.bde_get_charcode('ASAU',APP.sub_type)::TEXT
+                      END
+               END), '');
+    v_sub_type_pos := COALESCE( APP.sub_type_position, '');
+    v_maori_name := COALESCE( APP.maori_name, '');
+    v_maori_parcel := COALESCE( APP.parcel_value, '');
+    v_other_app := COALESCE( APP.other_appellation, '');
+
+    IF ( v_app_type = 'GNRL' ) THEN
+        v_maori_name        := '';
+        v_maori_parcel      := '';
+        v_other_app         := '';
+
+    ELSIF ( v_app_type = 'MAOR' ) THEN
+        v_parcel_type      := '';
+        v_parcel_value     := '';
+        v_2_parcel_type    := '';
+        v_2_parcel_value   := '';
+        v_block_number     := '';
+        v_sub_type_pos     := 'PRFX';
+        v_other_app        := '';
+
+    ELSIF ( v_app_type = 'OTHR' ) THEN
+        v_parcel_type      := '';
+        v_parcel_value     := '';
+        v_2_parcel_type    := '';
+        v_2_parcel_value   := '';
+        v_block_number     := '';
+        v_sub_type         := '';
+        v_sub_type_pos     := '';
+        v_app_val          := '';
+        v_maori_name       := '';
+        v_maori_parcel     := '';
+    END IF;
+
+    v_app_text := bde.bde_write_appellation(
+        TRIM(both FROM v_part_indicator),
+        TRIM(both FROM v_part ),
+        v_share,
+        TRIM(both FROM v_parcel_type ),
+        TRIM(both FROM v_parcel_value ),
+        TRIM(both FROM v_2_parcel_type ),
+        TRIM(both FROM v_2_parcel_value ),
+        TRIM(both FROM v_block_number ),
+        TRIM(both FROM v_sub_type_pos ),
+        TRIM(both FROM v_sub_type ),
+        TRIM(both FROM v_app_val ),
+        TRIM(both FROM v_maori_parcel ),
+        TRIM(both FROM v_maori_name ),
+        TRIM(both FROM v_other_app )
+    );
+
+    RETURN v_app_text;
+END;
+    $$ LANGUAGE plpgsql IMMUTABLE STRICT;
+--}
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_app_specific(bde.crs_appellation, char)'); END; $$;
+
+/**
+* Retrieve the title or survey appellation for a specific parcel and format it.
+* Note this function has the same logic as Landonline.
+*
+* @param par_id       Parcel id of the appellation
+* @param p_context    Either 'SURV' (survey) or 'TITL' (title). This defines the appellation
+*                     string context that is returned. In many cases this will return
+*                     the same value but differs in many cases due to historic differences
+*                     in survey and title registration processes. This difference can
+*                     be small such as "LOT 8" vs "Allot 8", but in other cases the
+*                     appellation string can be completely different.
+* @param p_long       Either 'Y' or 'N'. This defines if the appellation should be in long
+*                     or short appellation format. e.g 'Lot 1 Deposited Plan 1234' vs 'Lot 1 DP 1234'.
+* @return             The formatted appellation string
+*/
+
+--{
+CREATE OR REPLACE FUNCTION bde.bde_get_app_specific(p_par_id INTEGER, p_context VARCHAR, p_long CHAR)
+RETURNS text AS $$
+    SELECT
+        bde.bde_get_app_specific(APP, p_long)
+    FROM
+        bde.crs_appellation APP
+    WHERE
+        APP.par_id = p_par_id AND
+        APP.status = 'CURR' AND
+        ((p_context = 'TITL' AND APP.title = 'Y' ) OR
+         (p_context = 'SURV' AND APP.survey = 'Y' ));
+    $$ LANGUAGE sql STABLE STRICT;
+--}
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_app_specific(INTEGER, VARCHAR, CHAR)'); END; $$;
+
+
+
+
+
+--
+-- Name: bde.bde_get_charcode(VARCHAR, VARCHAR)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_charcode(p_code_group VARCHAR, p_code VARCHAR) RETURNS VARCHAR AS $$
+    SELECT
+        char_value
+    FROM
+        bde.crs_sys_code
+    WHERE
+        scg_code = $1 AND
+        code = $2;
+$$ LANGUAGE sql STABLE STRICT;
+
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_charcode(VARCHAR, VARCHAR)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_dataset(INTEGER)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_dataset(p_wrk_id INTEGER) RETURNS VARCHAR
+    AS $$
+DECLARE
+    v_survey         VARCHAR(50);
+    v_dataset_series bde.crs_survey.dataset_series%TYPE;
+    v_dataset_id     bde.crs_survey.dataset_id%TYPE;
+    v_dataset_suffix bde.crs_survey.dataset_suffix%TYPE;
+BEGIN
+    SELECT
+        dataset_series,
+        dataset_id,
+        dataset_suffix
+    INTO
+        v_dataset_series,
+        v_dataset_id,
+        v_dataset_suffix
+    FROM
+        bde.crs_survey
+    WHERE
+        wrk_id = p_wrk_id;
+
+    v_survey := v_dataset_series || ' ' || v_dataset_id;
+
+    IF v_dataset_suffix IS NOT NULL THEN
+        v_survey := v_survey || '/' || v_dataset_suffix;
+    END IF;
+
+    RETURN v_survey;
+END;
+    $$ LANGUAGE plpgsql STABLE STRICT;
+
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_dataset(INTEGER)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_datasource(INTEGER)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_datasource(p_wrk_id INTEGER) RETURNS CHAR(4) AS $$
+    SELECT data_source
+    FROM   bde.crs_survey
+    WHERE  wrk_id = $1;
+$$ LANGUAGE sql STABLE STRICT;
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_datasource(INTEGER)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_desccode(VARCHAR, VARCHAR)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_desccode(p_code_group VARCHAR, p_code VARCHAR) RETURNS TEXT AS $$
+    SELECT SCO."desc"
+    FROM   bde.crs_sys_code SCO
+    WHERE  SCO.scg_code = $1
+    AND    SCO.code     = $2;
+$$ LANGUAGE sql STABLE STRICT;
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_desccode(VARCHAR, VARCHAR)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_district(INTEGER)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_district(p_loc_id INTEGER) RETURNS VARCHAR AS $$
+    SELECT name
+    FROM   bde.crs_locality
+    WHERE  id = $1;
+$$ LANGUAGE sql STABLE STRICT;
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_district(INTEGER)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_mrknodename(INTEGER, VARCHAR)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_mrknodename(p_mrk_id INTEGER, p_type VARCHAR, OUT mrk_name VARCHAR(255), OUT mrk_name_type VARCHAR)
+    AS $$
+DECLARE
+    v_tmp_nod_id INT4;
+    v_tmp_mrk_id INT4;
+    v_temp       VARCHAR;
+BEGIN
+    IF p_type = 'MARK' THEN
+        SELECT
+            MRK.nod_id,
+            MRK.id
+        INTO
+            v_tmp_nod_id,
+            v_tmp_mrk_id
+        FROM
+            bde.crs_mark MRK
+        WHERE
+            MRK.id  = p_mrk_id;
+    ELSE
+        SELECT
+            MRK.id,
+            MRK.nod_id
+        INTO
+            v_tmp_mrk_id,
+            v_tmp_nod_id
+        FROM
+            bde.crs_mark MRK
+        WHERE
+            MRK.nod_id  = p_mrk_id  AND
+            MRK.replaced = 'N' AND
+            MRK.status = 'COMM';
+    END IF;
+
+    IF v_tmp_mrk_id IS NOT NULL THEN
+        SELECT
+            CASE mkn.type
+                WHEN 'CURR' THEN 7
+                WHEN 'HIST' THEN 6
+                WHEN 'ALTE' THEN 5
+                WHEN 'CODE' THEN 4
+                WHEN 'OTHR' THEN 3
+                WHEN 'LABL' THEN 2
+                ELSE 1
+            END as order_type,
+            mkn.name,
+            bde.bde_get_charcode('MKNT', mkn.type)
+        INTO
+            v_temp,
+            mrk_name,
+            mrk_name_type
+        FROM
+            bde.crs_mark_name mkn
+        WHERE
+            mkn.mrk_id  = v_tmp_mrk_id
+        ORDER BY
+            order_type DESC;
+    END IF;
+
+    IF (p_type = 'MARK') AND (mrk_name IS NULL) AND (v_tmp_mrk_id IS NOT NULL) THEN
+        mrk_name := 'Mark ID ' || v_tmp_mrk_id::VARCHAR;
+        mrk_name_type := 'Mark ID';
+    END IF;
+
+    IF (p_type = 'NODE') AND (mrk_name IS NULL) AND (v_tmp_nod_id IS NOT NULL) THEN
+        mrk_name := 'Node ID ' || v_tmp_nod_id::VARCHAR;
+        mrk_name_type := 'Node ID';
+    END IF;
+
+    RETURN;
+END;
+    $$ LANGUAGE plpgsql STABLE STRICT;
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_mrknodename(INTEGER, VARCHAR)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_markname(INTEGER)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_markname(p_mrk_id INTEGER) RETURNS VARCHAR AS $$
+    SELECT mrk_name FROM bde.bde_get_mrknodename($1, 'MARK')
+$$ LANGUAGE sql STABLE STRICT;
+
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_markname(INTEGER)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_nodename(INTEGER)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_nodename(p_nod_id INTEGER) RETURNS VARCHAR AS $$
+    SELECT mrk_name FROM bde.bde_get_mrknodename($1, 'NODE')
+$$ LANGUAGE sql STABLE STRICT;
+
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_nodename(INTEGER)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_nodename(INTEGER, VARCHAR)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_nodename(p_nod_id INTEGER, p_type VARCHAR) RETURNS VARCHAR
+    AS $$
+DECLARE
+    v_name varchar(255);
+    v_nod_id int4;
+    v_mrk_id int4;
+BEGIN
+    SELECT  max(MRK.id)
+    INTO    v_mrk_id
+    FROM    bde.crs_mark MRK
+    WHERE   MRK.nod_id  = p_nod_id;
+
+    SELECT  MKN.name
+    INTO    v_name
+    FROM    bde.crs_mark_name MKN
+    WHERE   MKN.mrk_id  = v_mrk_id
+    AND     MKN.type = p_type;
+
+    RETURN v_name;
+END;
+    $$ LANGUAGE plpgsql STABLE STRICT;
+
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_nodename(INTEGER, VARCHAR)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_nodeorder(INTEGER)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_nodeorder(p_node_id INTEGER) RETURNS VARCHAR AS $$
+    SELECT  COR.display || ' order ' || DTM.name
+    FROM    bde.crs_cord_order      COR,
+            bde.crs_coordinate      COO,
+            bde.crs_datum           DTM,
+            bde.crs_coordinate_sys  COS
+    WHERE   COO.nod_id = $1
+    AND     COO.cor_id = COR.id
+    AND     COO.cos_id = COS.id
+    AND     COS.dtm_id = DTM.id;
+$$ LANGUAGE sql STABLE STRICT;
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_nodeorder(INTEGER)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_office(INTEGER)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_office(p_loc_id INTEGER) RETURNS VARCHAR AS $$
+    SELECT  OFC.name
+    FROM    bde.crs_office OFC,
+            bde.crs_land_district LDT
+    WHERE   LDT.loc_id = $1
+    AND     LDT.off_code = OFC.code;
+$$ LANGUAGE sql STABLE STRICT;
+
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_office(INTEGER)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_roadname(INTEGER, DOUBLE PRECISION);
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_roadname(p_rcl_id INTEGER, p_length DOUBLE PRECISION) RETURNS VARCHAR
+    AS $$
+DECLARE
+    v_fullroadname            VARCHAR(255);
+    v_display                 BOOLEAN;
+    v_rcl_id_first            INTEGER;
+    v_max_length              DOUBLE PRECISION;
+    v_roadname                RECORD;
+BEGIN
+    v_fullroadname := NULL;
+
+    IF p_length > 0.00040 THEN
+       v_display := TRUE;
+    ELSE
+        SELECT
+            min(RNS_OTHER.rcl_id),
+            max(length(RCL_OTHER.shape))
+        INTO
+            v_rcl_id_first,
+            v_max_length
+        FROM
+            bde.crs_road_name_asc  RNS_THIS,
+            bde.crs_road_name_asc  RNS_OTHER,
+            bde.crs_road_ctr_line  RCL_OTHER
+        WHERE
+            RNS_THIS.rcl_id     = p_rcl_id AND
+            RNS_THIS.priority   = 1 AND
+            RNS_THIS.rna_id     = RNS_OTHER.rna_id AND
+            RNS_OTHER.rcl_id    = RCL_OTHER.id AND
+            RNS_OTHER.priority  = 1;
+
+        IF v_max_length < 0.00040 AND v_rcl_id_first = p_rcl_id THEN
+           v_display := TRUE;
+        ELSE
+            -- Another RCL will display the label so don't display it.
+           v_display := FALSE;
+        END IF;
+    END IF;
+
+    -- If roadname is to be displayed build into string
+    IF v_display = TRUE THEN
+        FOR v_roadname IN
+            SELECT
+                RNA."name",
+                RNS.priority
+            FROM
+                bde.crs_road_name       RNA,
+                bde.crs_road_name_asc   RNS
+            WHERE
+                RNS.rcl_id = p_rcl_id AND
+                RNS.rna_id = RNA.id AND
+                RNA.status = 'CURR'
+            ORDER BY
+                RNS.priority
+        LOOP
+            IF v_roadname."name" IS NOT NULL THEN
+                IF v_fullroadname IS NULL THEN
+                    v_fullroadname := v_roadname."name";
+                ELSE
+                    v_fullroadname := v_fullroadname || ' (' || v_roadname."name" || ')';
+                END IF;
+            END IF;
+        END LOOP;
+    ELSE
+        v_fullroadname := '';
+    END IF;
+
+    RETURN v_fullroadname;
+END;
+    $$ LANGUAGE plpgsql STABLE STRICT;
+
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_roadname(INTEGER, DOUBLE PRECISION)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_trtcode(VARCHAR, VARCHAR)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_trtcode(p_code_group VARCHAR, p_type VARCHAR) RETURNS VARCHAR AS $$
+   SELECT description
+   FROM   bde.crs_transact_type
+   WHERE  grp  = $1
+   AND    type = $2;
+$$ LANGUAGE sql STABLE STRICT;
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_trtcode(VARCHAR, VARCHAR)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_username(VARCHAR)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_username(p_user_id VARCHAR) RETURNS VARCHAR AS $$
+    SELECT given_names  || ' ' || surname
+    FROM   bde.crs_user
+    WHERE  id = $1;
+$$ LANGUAGE sql STABLE STRICT;
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_username(VARCHAR)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_get_useroff(VARCHAR)
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_get_useroff(p_user_id VARCHAR) RETURNS VARCHAR AS $$
+    SELECT off_code
+    FROM   bde.crs_user
+    WHERE  id = $1;
+$$ LANGUAGE sql STABLE STRICT;
+
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_useroff(VARCHAR)'); END; $$;
+
+
+
+
+--
+-- Name: bde.bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT);
+--
+
+CREATE OR REPLACE FUNCTION bde.bde_write_appellation(
+    p_part_indicator VARCHAR,
+    p_lgd_part VARCHAR,
+    p_share CHAR,
+    p_parcel_type VARCHAR,
+    p_parcel_value TEXT,
+    p_2_parcel_type VARCHAR,
+    p_2_parcel_value VARCHAR,
+    p_block_number VARCHAR,
+    p_sub_type_pos VARCHAR,
+    p_sub_type VARCHAR,
+    p_app_val VARCHAR,
+    p_maori_parcel VARCHAR,
+    p_maori_name VARCHAR,
+    p_other_app TEXT
+)
+RETURNS TEXT
+    AS $$
+DECLARE
+    v_part               VARCHAR(5);
+    v_share              VARCHAR(9);
+    v_block              VARCHAR(7);
+    v_output             TEXT;
+BEGIN
+    v_part          := ' Part';
+    v_share         := ' share of';
+    v_block         := ' Block';
+    v_output        := '';
+
+    IF ( p_part_indicator = 'PART' ) THEN
+        v_output := v_output || v_part;
+    END IF;
+
+    IF ( p_lgd_part = 'PART' ) THEN
+        v_output := v_output || v_part;
+    END IF;
+
+    IF ( p_share <> '1/1' ) THEN
+        v_output := v_output || p_share::TEXT || v_share;
+    END IF;
+
+    IF ( char_length(p_maori_name) > 0 ) THEN
+        v_output := v_output || ' ' || p_maori_name;
+    END IF;
+
+    IF ( char_length(p_maori_parcel) > 0 ) THEN
+        v_output := v_output || ' ' || p_maori_parcel;
+    END IF;
+
+    IF ( char_length(p_maori_name) > 0 ) OR ( char_length(p_maori_parcel) > 0 ) THEN
+        v_output := v_output || v_block;
+    END IF;
+
+    IF ( char_length(p_other_app) > 0 ) THEN
+        v_output := v_output || ' ' || p_other_app;
+    END IF;
+
+    IF ( char_length(p_parcel_type) > 0 ) THEN
+        v_output := v_output || ' ' || p_parcel_type;
+    END IF;
+
+    IF ( char_length(p_parcel_value) > 0 ) THEN
+        v_output := v_output || ' ' || p_parcel_value;
+    END IF;
+
+    IF ( char_length(p_2_parcel_type) > 0 ) THEN
+        v_output := v_output || ' ' || p_2_parcel_type;
+    END IF;
+
+    IF ( char_length(p_2_parcel_value) > 0 ) THEN
+        v_output := v_output || ' ' || p_2_parcel_value;
+    END IF;
+
+    IF ( char_length(p_block_number) > 0 ) THEN
+        v_output := v_output || v_block || ' ' || p_block_number;
+    END IF;
+
+    IF ( p_sub_type_pos = 'PRFX' ) THEN
+        IF ( char_length(p_sub_type) > 0 ) THEN
+            v_output := v_output || ' ' || p_sub_type;
+        END IF;
+
+        IF ( char_length(p_app_val) > 0 ) THEN
+            v_output := v_output || ' ' || p_app_val;
+        END IF;
+    ELSE
+        IF ( char_length(p_app_val) > 0 ) THEN
+            v_output := v_output || ' ' || p_app_val;
+        END IF;
+
+        IF ( char_length(p_sub_type) > 0 ) THEN
+            v_output := v_output || ' ' || p_sub_type;
+        END IF;
+    END IF;
+
+    v_output := TRIM(both FROM v_output);
+    IF length(v_output) > 2048 THEN
+        v_output := 'Appellation Too Long';
+    END IF;
+
+    RETURN v_output;
+END;
+    $$ LANGUAGE plpgsql IMMUTABLE;
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT)'); END; $$;
+
+
+
+
+
+CREATE OR REPLACE FUNCTION bde.bde_get_combined_appellation(p_par_id INTEGER, p_long CHAR)
+RETURNS TEXT AS $$
+    SELECT
+        bde.bde_get_app_specific(APP, p_long)
+    FROM
+        bde.crs_appellation APP
+    WHERE
+        APP.par_id = p_par_id AND status = 'CURR'
+    ORDER BY
+        survey desc, title desc
+    LIMIT 1;
+$$ LANGUAGE sql STABLE STRICT;
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_combined_appellation(INTEGER, CHAR)'); END; $$;
+
+
+
+
+CREATE OR REPLACE FUNCTION bde.bde_get_par_stat_act(p_sta_id INTEGER, p_par_id INTEGER)
+    RETURNS TEXT AS $$
+DECLARE
+    v_sap_purpose     bde.crs_stat_act_parcl.purpose%TYPE;
+    v_sap_name        bde.crs_stat_act_parcl.name%TYPE;
+    v_comments        bde.crs_stat_act_parcl.comments%TYPE;
+    v_par_act_desc    TEXT DEFAULT '';
+    v_stat_act_type   bde.crs_statute_action.type%TYPE;
+    v_ste_id          bde.crs_statute.id%TYPE;
+    v_sur_wrk_id_vest bde.crs_statute_action.sur_wrk_id_vesting%TYPE;
+    v_gazette         bde.crs_statute_action.gazette_type%TYPE;
+    v_gaz_year        bde.crs_statute_action.gazette_year%TYPE;
+    v_gaz_page        bde.crs_statute_action.gazette_page%TYPE;
+    v_gaz_notice_id   INTEGER;
+    v_prefix          VARCHAR(10);
+    v_other_legality  VARCHAR(255);
+    v_name_and_date   VARCHAR(255);
+    v_section         VARCHAR(255);
+    v_stat_act_desc   TEXT;
+    v_description     TEXT;
+BEGIN
+    SELECT
+        NULLIF(TRIM(both FROM regexp_replace(SAP.purpose, E'(\r\n)|(\n)', '', 'g')), ''),
+        NULLIF(TRIM(both FROM SAP.name), ''),
+        NULLIF(TRIM(both FROM regexp_replace(SAP.comments, E'(\r\n)|(\n)', '', 'g')), '')
+    INTO
+        v_sap_purpose,
+        v_sap_name,
+        v_comments
+    FROM
+        bde.crs_stat_act_parcl SAP
+    WHERE
+        SAP.sta_id = p_sta_id AND
+        SAP.par_id = p_par_id;
+
+    IF FOUND THEN
+        IF v_sap_purpose IS NOT NULL THEN
+             v_par_act_desc := v_sap_purpose;
+        END IF;
+        IF v_sap_name IS NOT NULL THEN
+             IF v_par_act_desc <> '' THEN
+                 v_par_act_desc := v_par_act_desc || ' ';
+             END IF;
+             v_par_act_desc := v_par_act_desc || '[' || v_sap_name || ']';
+        END IF;
+    END IF;
+
+    SELECT
+        STA.type,
+        STA.ste_id,
+        STA.sur_wrk_id_vesting,
+        STA.gazette_type,
+        STA.gazette_year,
+        STA.gazette_page,
+        STA.gazette_notice_id,
+        STA.other_legality
+    INTO
+        v_stat_act_type,
+        v_ste_id,
+        v_sur_wrk_id_vest,
+        v_gazette,
+        v_gaz_year,
+        v_gaz_page,
+        v_gaz_notice_id,
+        v_other_legality
+    FROM
+        bde.crs_statute_action STA,
+        bde.crs_sys_code SCO
+    WHERE
+        SCO.scg_code = 'SAPA' AND
+        STA.id = p_sta_id;
+
+    IF v_stat_act_type = 'GNOT' THEN
+        IF v_gaz_notice_id IS NULL THEN
+            IF v_gaz_page IS NULL THEN
+                v_prefix :=  ' ';
+            ELSE
+                v_prefix := ' p ';
+            END IF;
+
+            v_stat_act_desc := bde.bde_get_charcode('STAG', v_gazette) || ' ' || CAST(v_gaz_year AS TEXT) || v_prefix || CAST(v_gaz_page AS TEXT);
+
+        ELSE
+            v_prefix := ' ln ';
+            v_stat_act_desc := bde.bde_get_charcode('STAG', v_gazette) || ' ' || CAST(v_gaz_year AS TEXT) || v_prefix || CAST(v_gaz_notice_id AS TEXT);
+
+        END IF;
+        IF v_other_legality IS NOT NULL THEN
+            v_stat_act_desc := v_stat_act_desc || ', ' || v_other_legality;
+        END IF;
+    ELSIF v_stat_act_type = 'VSDP' THEN
+        v_stat_act_desc  = 'Vested on ' || bde.bde_get_dataset(v_sur_wrk_id_vest);
+    ELSIF v_stat_act_type = 'STVE' THEN
+        SELECT
+            STE.name_and_date,
+            STE.section
+        INTO
+            v_name_and_date,
+            v_section
+        FROM
+            bde.crs_statute STE
+        WHERE
+            STE.id   = v_ste_id;
+        v_stat_act_desc := v_section || ', ' || v_name_and_date;
+    ELSIF v_stat_act_type IS NOT NULL THEN
+        v_stat_act_desc := v_other_legality;
+    END IF;
+
+    IF v_stat_act_type IS NOT NULL AND v_stat_act_desc IS NULL THEN
+        v_stat_act_desc := v_other_legality;
+    END IF;
+
+    IF v_par_act_desc = '' THEN
+        v_description := v_stat_act_desc;
+    ELSE
+        v_description := v_par_act_desc;
+        IF v_stat_act_desc IS NOT NULL THEN
+           v_description := v_description || ' ' || v_stat_act_desc;
+        END IF;
+        IF v_comments IS NOT NULL THEN
+            v_description := v_description || ' ' || v_comments;
+        END IF;
+    END IF;
+    RETURN v_description;
+END;
+    $$ LANGUAGE plpgsql STABLE STRICT;
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_par_stat_act(INTEGER, INTEGER)'); END; $$;
+
+
+
+
+CREATE OR REPLACE FUNCTION bde.bde_getnearnodes (
+    p_latitude  DOUBLE PRECISION,
+    p_longitude DOUBLE PRECISION,
+    p_tolerance DOUBLE PRECISION
+    )
+RETURNS TABLE(nod_id INTEGER, distance DOUBLE PRECISION)
+AS
+$body$
+DECLARE
+    v_point    GEOMETRY;
+    v_lat      DOUBLE PRECISION;
+    v_lon      DOUBLE PRECISION;
+    v_lat0     DOUBLE PRECISION;
+    v_lat1     DOUBLE PRECISION;
+    v_lon0     DOUBLE PRECISION;
+    v_lon1     DOUBLE PRECISION;
+    v_degoff   DOUBLE PRECISION;
+    v_spheroid SPHEROID  := 'SPHEROID["GRS_1980",6378137,298.257222101]';
+    v_srid     INTEGER   := 4167;
+BEGIN
+    v_point := ST_SetSRID(ST_MakePoint(p_longitude, p_latitude), v_srid);
+    v_lat    := p_latitude;
+    v_lon    := p_longitude;
+    v_degoff := degrees(p_tolerance/6400000.0);
+    v_lat0   := v_lat-v_degoff;
+    v_lat1   := v_lat+v_degoff;
+    v_degoff := v_degoff/cos(radians(v_lat));
+    v_lon0   := v_lon-v_degoff;
+    v_lon1   := v_lon+v_degoff;
+
+    -- RAISE INFO 'lat0 % lat1 % lon0 % lon1 % off %',lat0,lat1,lon0,lon1,degoff;
+
+    RETURN QUERY
+        SELECT
+            coo.nod_id,
+            ST_Distance_Spheroid(nod.shape, v_point, v_spheroid)
+        FROM
+            bde.crs_coordinate coo
+            JOIN bde.crs_node nod ON coo.nod_id = nod.id AND coo.cos_id = nod.cos_id_official
+        WHERE
+            coo.status = 'AUTH' AND
+            nod.shape &&
+            ST_SetSRID(
+                ST_MakeBox2D(ST_Point(v_lon0,v_lat0),ST_Point(v_lon1,v_lat1)),
+                v_srid
+            ) AND
+            ST_Distance_Spheroid(nod.shape, v_point, v_spheroid) < p_tolerance
+        ORDER BY
+            2;
+    END;
+$body$ LANGUAGE plpgsql STABLE;
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION)'); END; $$;
+
+
+
+
+--  Drop connnections to the database more than a specific age
+--
+-- This is to prevent Quantum edit sessions left open overnight from
+-- blocking the parcel layer maintenance.
+
+CREATE OR REPLACE FUNCTION bde.bde_drop_idle_connections( p_upload_id INT )
+RETURNS INT
+AS $$
+DECLARE
+    v_pid integer;
+    v_usename name;
+    v_ndrop integer;
+BEGIN
+    v_ndrop := 0;
+    FOR v_pid, v_usename IN
+       SELECT
+            procpid,
+            usename
+        FROM
+            pg_stat_activity a
+        WHERE
+            a.datname = current_database() AND
+            a.current_query = '<IDLE> in transaction' AND
+            (clock_timestamp()-query_start) > '2 HOURS'
+    LOOP
+        BEGIN
+            RAISE WARNING 'Dropping idle connection held by %', v_usename;
+            PERFORM pg_terminate_backend( v_pid );
+            v_ndrop := v_ndrop + 1;
+        EXCEPTION
+            WHEN OTHERS THEN
+                RAISE EXCEPTION 'Failed to drop idle connection:  %', SQLERRM;
+        END;
+    END LOOP;
+    RETURN v_ndrop;
+END
+$$ LANGUAGE plpgsql VOLATILE SECURITY DEFINER;
+
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_drop_idle_connections(INTEGER)'); END; $$;
+
+
+
+COMMIT;

@@ -1,0 +1,403 @@
+name: Test
+
+on:
+    push:
+        branches:
+            - master
+            - packagecloud
+            - 'release-*'
+        tags-ignore:
+            - 'debian/*'
+            - '*-start'
+    pull_request:
+        branches:
+            - '*'
+    schedule:
+        - cron: '0 12 * * 0'
+
+jobs:
+    lint:
+        name: Lint
+        runs-on: ubuntu-20.04
+
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v3
+
+            - name: Install Nix
+              uses: cachix/install-nix-action@v16
+
+            - name: Run pre-commit hooks
+              run: nix-shell --pure --run 'pre-commit run --all-files'
+
+    test-source:
+        name:
+            Test PostgreSQL ${{ matrix.pg }}, PostGIS ${{ matrix.pgis }} source install on ${{
+            matrix.os }}
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                # Combines <https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS> and
+                # `curl https://apt.postgresql.org/pub/repos/apt/dists/bionic-pgdg/main/binary-amd64/Packages | grep --only-matching '^Package: postgresql-[0-9.]\+-postgis-[0-9.]\+$' | sort --version-sort`.
+                include:
+                    - os: ubuntu-18.04
+                      pg: '10'
+                      pgis: '2.4'
+                    - os: ubuntu-18.04
+                      pg: '10'
+                      pgis: '2.5'
+                    - os: ubuntu-18.04
+                      pg: '10'
+                      pgis: '3'
+                    - os: ubuntu-18.04
+                      pg: '12'
+                      pgis: '2.5'
+                    - os: ubuntu-18.04
+                      pg: '12'
+                      pgis: '3'
+                    - os: ubuntu-18.04
+                      pg: '14'
+                      pgis: '3'
+                    - os: ubuntu-20.04
+                      pg: '10'
+                      pgis: '2.5'
+                    - os: ubuntu-20.04
+                      pg: '10'
+                      pgis: '3'
+                    - os: ubuntu-20.04
+                      pg: '12'
+                      pgis: '2.5'
+                    - os: ubuntu-20.04
+                      pg: '12'
+                      pgis: '3'
+                    - os: ubuntu-20.04
+                      pg: '14'
+                      pgis: '3'
+                    - os: ubuntu-latest
+                      pg: '14'
+                      pgis: '3'
+        env:
+            # Set PATH as postgresql-server-dev-all pretends version is 11
+            PATH: /usr/lib/postgresql/${{ matrix.pg }}/bin:/bin:/usr/bin:/usr/local/bin
+            # Make apt non-interactive by default, and not showing progress
+            # Avoid warnings on apt-key usage
+            APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
+            DBPATCH_BRANCH: 'master'
+            TABLEVERSION_BRANCH: 'master'
+
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            - name: Purge other software
+              run:
+                  sudo apt-get purge libpq5 libpq-dev *php* postgresql postgresql-client-common
+                  postgresql-common
+
+            - name: Remove existing PostgreSQL libraries
+              run: sudo rm --force --recursive --verbose /var/lib/postgresql
+
+            - name: Update package database
+              run: sudo apt-get update
+
+            - name: Install build dependencies
+              run: sudo apt-get install --assume-yes curl ca-certificates gnupg
+
+            - name: Get release codename
+              id: distro
+              run: echo "::set-output name=codename::$(lsb_release --codename --short)"
+
+            - name: Enable fetching packages from apt.postgresql repository
+              run: |
+                  curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+                  echo "deb http://apt.postgresql.org/pub/repos/apt/ ${{ steps.distro.outputs.codename }}-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+
+            - name: Enable fetching packages from packagecloud test repository
+              run: |
+                  curl -Ls https://packagecloud.io/linz/test/gpgkey | sudo apt-key add -
+                  echo "deb https://packagecloud.io/linz/test/ubuntu/ ${{ steps.distro.outputs.codename }} main" | sudo tee /etc/apt/sources.list.d/linz-test.list
+
+            - name: Enable fetching packages from packagecloud prod repository
+              run: |
+                  curl -Ls https://packagecloud.io/linz/prod/gpgkey | sudo apt-key add -
+                  echo "deb https://packagecloud.io/linz/prod/ubuntu/ ${{ steps.distro.outputs.codename }} main" | sudo tee /etc/apt/sources.list.d/linz-prod.list
+
+            - name: Update package database with PostgreSQL repo
+              run: sudo apt-get update
+
+            - name: Install dependencies
+              run: |
+                  sudo apt-get install --assume-yes \
+                      debhelper \
+                      fakeroot \
+                      postgresql-client-${{ matrix.pg }} \
+                      postgresql-${{ matrix.pg }} \
+                      postgresql-${{ matrix.pg }}-pgtap \
+                      postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }} \
+                      postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }}-scripts \
+                      postgresql-server-dev-${{ matrix.pg }} \
+                      postgresql-${{ matrix.pg }}-tableversion \
+                      tableversion \
+                      postgresql-${{ matrix.pg }}-dbpatch \
+                      dbpatch
+
+            - name: Install dbpatch PostgreSQL extension
+              run: |
+                  pushd /tmp
+                  wget -q -O - \
+                      https://github.com/linz/postgresql-dbpatch/archive/${{env.DBPATCH_BRANCH}}.tar.gz \
+                      | tar xzf -
+                  cd postgresql-dbpatch-${{env.DBPATCH_BRANCH}}
+                  sudo -E make install
+                  popd
+
+            - name: Install table_version PostgreSQL extension
+              run: |
+                  pushd /tmp
+                  wget -q -O - \
+                      https://github.com/linz/postgresql-tableversion/archive/${{env.TABLEVERSION_BRANCH}}.tar.gz \
+                      | tar vxzf -
+                  cd postgresql-tableversion-${{env.TABLEVERSION_BRANCH}}
+                  sudo -E make install
+                  popd
+
+            - name: Setup current user as PostgreSQL superuser
+              run: sudo --user=postgres createuser --superuser "$USER"
+
+            - name: Setup PostgreSQL root user
+              run: sudo --user=postgres createuser --superuser root
+
+            - name: Build
+              run: make
+
+            - name: Test build
+              run: make check
+
+            - name: Install
+              run: sudo -E make install
+
+            - name: Test installation
+              run: make installcheck
+
+            - name: Test loader
+              run: make check-loader-stdout
+
+            - name: Test upgrades
+              run: test/test-upgrades.bash
+
+    test-package:
+        name:
+            Test PostgreSQL ${{ matrix.pg }}, PostGIS ${{ matrix.pgis }} package install on ${{
+            matrix.os }}
+        runs-on: ${{ matrix.os }}
+        strategy:
+            fail-fast: false
+            matrix:
+                # Combines <https://trac.osgeo.org/postgis/wiki/UsersWikiPostgreSQLPostGIS> and
+                # `curl https://apt.postgresql.org/pub/repos/apt/dists/bionic-pgdg/main/binary-amd64/Packages | grep --only-matching '^Package: postgresql-[0-9.]\+-postgis-[0-9.]\+$' | sort --version-sort`.
+                include:
+                    - os: ubuntu-18.04
+                      pg: '10'
+                      pgis: '2.4'
+                    - os: ubuntu-18.04
+                      pg: '10'
+                      pgis: '2.5'
+                    - os: ubuntu-18.04
+                      pg: '10'
+                      pgis: '3'
+                    - os: ubuntu-18.04
+                      pg: '12'
+                      pgis: '2.5'
+                    - os: ubuntu-18.04
+                      pg: '12'
+                      pgis: '3'
+                    - os: ubuntu-18.04
+                      pg: '14'
+                      pgis: '3'
+                    - os: ubuntu-20.04
+                      pg: '10'
+                      pgis: '2.5'
+                    - os: ubuntu-20.04
+                      pg: '10'
+                      pgis: '3'
+                    - os: ubuntu-20.04
+                      pg: '12'
+                      pgis: '2.5'
+                    - os: ubuntu-20.04
+                      pg: '12'
+                      pgis: '3'
+                    - os: ubuntu-20.04
+                      pg: '14'
+                      pgis: '3'
+                    - os: ubuntu-latest
+                      pg: '14'
+                      pgis: '3'
+        env:
+            # Set PATH as postgresql-server-dev-all pretends version is 11
+            PATH: /usr/lib/postgresql/${{ matrix.pg }}/bin:/bin:/usr/bin:/usr/local/bin
+            # Make apt non-interactive by default, and not showing progress
+            # Avoid warnings on apt-key usage
+            APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE: 1
+            DBPATCH_BRANCH: 'master'
+            TABLEVERSION_BRANCH: 'master'
+
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            - name: Purge other software
+              run:
+                  sudo apt-get purge libpq5 libpq-dev *php* postgresql postgresql-client-common
+                  postgresql-common
+
+            - name: Remove existing PostgreSQL libraries
+              run: sudo rm --force --recursive --verbose /var/lib/postgresql
+
+            - name: Update package database
+              run: sudo apt-get update
+
+            - name: Install build dependencies
+              run: sudo apt-get install --assume-yes curl ca-certificates gnupg
+
+            - name: Get release codename
+              id: distro
+              run: echo "::set-output name=codename::$(lsb_release --codename --short)"
+
+            - name: Enable fetching packages from apt.postgresql repository
+              run: |
+                  curl -s https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+                  echo "deb http://apt.postgresql.org/pub/repos/apt/ ${{ steps.distro.outputs.codename }}-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list
+
+            - name: Enable fetching packages from packagecloud test repository
+              run: |
+                  curl -Ls https://packagecloud.io/linz/test/gpgkey | sudo apt-key add -
+                  echo "deb https://packagecloud.io/linz/test/ubuntu/ ${{ steps.distro.outputs.codename }} main" | sudo tee /etc/apt/sources.list.d/linz-test.list
+
+            - name: Enable fetching packages from packagecloud prod repository
+              run: |
+                  curl -Ls https://packagecloud.io/linz/prod/gpgkey | sudo apt-key add -
+                  echo "deb https://packagecloud.io/linz/prod/ubuntu/ ${{ steps.distro.outputs.codename }} main" | sudo tee /etc/apt/sources.list.d/linz-prod.list
+
+            - name: Update package database with PostgreSQL repo
+              run: sudo apt-get update
+
+            - name: Install dependencies
+              run: |
+                  sudo apt-get install --assume-yes \
+                      debhelper \
+                      fakeroot \
+                      postgresql-client-${{ matrix.pg }} \
+                      postgresql-${{ matrix.pg }} \
+                      postgresql-${{ matrix.pg }}-pgtap \
+                      postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }} \
+                      postgresql-${{ matrix.pg }}-postgis-${{ matrix.pgis }}-scripts \
+                      postgresql-server-dev-${{ matrix.pg }} \
+                      postgresql-${{ matrix.pg }}-tableversion \
+                      tableversion \
+                      postgresql-${{ matrix.pg }}-dbpatch \
+                      dbpatch
+
+            - name: Install dbpatch PostgreSQL extension
+              run: |
+                  pushd /tmp
+                  wget -q -O - \
+                      https://github.com/linz/postgresql-dbpatch/archive/${{env.DBPATCH_BRANCH}}.tar.gz \
+                      | tar xzf -
+                  cd postgresql-dbpatch-${{env.DBPATCH_BRANCH}}
+                  sudo -E make install
+                  popd
+
+            - name: Install table_version PostgreSQL extension
+              run: |
+                  pushd /tmp
+                  wget -q -O - \
+                      https://github.com/linz/postgresql-tableversion/archive/${{env.TABLEVERSION_BRANCH}}.tar.gz \
+                      | tar vxzf -
+                  cd postgresql-tableversion-${{env.TABLEVERSION_BRANCH}}
+                  sudo -E make install
+                  popd
+
+            - name: Setup current user as PostgreSQL superuser
+              run: sudo --user=postgres createuser --superuser "$USER"
+
+            - name: Setup PostgreSQL root user
+              run: sudo --user=postgres createuser --superuser root
+
+            - name: Build
+              run: make
+
+            - name: Test build
+              run: make check
+
+            - name: Install
+              run: sudo -E make install
+
+            - name: Test installation
+              run: make installcheck
+
+            - name: Test loader
+              run: make check-loader-stdout
+
+            - name: Test upgrades
+              run: test/test-upgrades.bash
+
+            - name: Build local debian package
+              uses: linz/linz-software-repository@v9
+              with:
+                  release: ${{ steps.distro.outputs.codename }}
+              env:
+                  PG_SUPPORTED_VERSIONS: ${{ matrix.pg }}
+
+            - name: Test packaging
+              run: sudo dpkg --install build-area/linz-bde-schema*.deb
+
+            - name: Test publication
+              run: make check-publisher
+
+    package:
+        needs:
+            - lint
+            - test-source
+            - test-package
+        name: Package for Debian
+        runs-on: ubuntu-20.04
+        strategy:
+            matrix:
+                distro: [bionic, focal]
+            max-parallel: 1
+        steps:
+            - name: Check out repository
+              uses: actions/checkout@v3
+              with:
+                  fetch-depth: 0
+
+            - name: Determine packagecloud publication target
+              run: |
+                  # TODO: it would be nice to turn this into a single-liner in
+                  #       github-action syntax
+                  echo "GitHub ref: ${{ github.ref }}"
+                  echo "GitHub event_name: ${{ github.event_name }}"
+                  REPO=
+                  if test "${{ github.event_name }}" = 'push'; then
+                    if expr "${{ github.ref }}" : "refs/tags/" > /dev/null; then
+                      REPO=test
+                      git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY
+                    elif test "${{ github.ref }}" = 'refs/heads/packagecloud' \
+                           -o "${{ github.ref }}" = 'refs/heads/master'
+                    then
+                      REPO=dev
+                    fi
+                  fi
+                  echo "REPO=$REPO" | tee -a $GITHUB_ENV
+
+            - name: Build and upload to Packagecloud
+              uses: linz/linz-software-repository@v9
+              with:
+                  release: ${{ matrix.distro }}
+                  packagecloud_token: ${{ secrets.LINZCI_PACKAGECLOUD_TOKEN }}
+                  packagecloud_repository: ${{ env.REPO }}

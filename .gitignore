@@ -1,2 +1,9 @@
 **/*~
-
+sql/05-bde_version.sql
+sql/03-bde_functions.sql
+scripts/linz-bde-schema-load
+scripts/linz-bde-schema-publish
+results/
+test-versioned/
+test-prepared/
+/.idea/

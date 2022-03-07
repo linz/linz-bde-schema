@@ -1,0 +1,275 @@
+\set ECHO none
+--------------------------------------------------------------------------------
+--
+-- Copyright 2016 Crown copyright (c)
+-- Land Information New Zealand and the New Zealand Government.
+-- All rights reserved
+--
+-- This software is released under the terms of the new BSD license. See the
+-- LICENSE file for more information.
+--
+--------------------------------------------------------------------------------
+-- Provide unit testing for LINZ BDE SCHEMA using pgTAP
+--------------------------------------------------------------------------------
+\set QUIET true
+\set VERBOSITY terse
+\pset format unaligned
+\pset tuples_only true
+
+SET client_min_messages TO WARNING;
+
+CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS pgtap;
+
+CREATE SCHEMA IF NOT EXISTS _patches;
+DO $$
+BEGIN
+    IF NOT EXISTS ( SELECT * FROM pg_proc WHERE proname = 'apply_patch' )
+    THEN
+        CREATE EXTENSION dbpatch SCHEMA _patches;
+    END IF;
+END; $$;
+
+-- Switch to unprivileged role
+DO $$
+BEGIN
+    IF NOT EXISTS (SELECT * FROM pg_roles
+                   WHERE rolname = 'linz_bde_schema_test_role')
+    THEN
+        CREATE ROLE linz_bde_schema_test_role
+            NOSUPERUSER CREATEDB CREATEROLE;
+    END IF;
+
+    EXECUTE format('GRANT ALL ON DATABASE %I TO linz_bde_schema_test_role',
+        current_database());
+    GRANT ALL ON SCHEMA _patches  TO linz_bde_schema_test_role;
+    GRANT ALL ON ALL TABLES IN SCHEMA _patches  TO linz_bde_schema_test_role;
+
+--VERSIONED-- -- NOTE: GRANT OPTION is needed so that linz_bde_schema_test_role can
+--VERSIONED-- --       grant CREATE on table_version to bde_dba (as requested by
+--VERSIONED-- --       sql/versioning/01-version_tables.sql)
+--VERSIONED-- GRANT ALL ON SCHEMA table_version TO linz_bde_schema_test_role WITH GRANT OPTION;
+--VERSIONED-- GRANT SELECT ON ALL SEQUENCES IN SCHEMA table_version TO linz_bde_schema_test_role WITH GRANT OPTION;
+    SET session_authorization TO linz_bde_schema_test_role;
+END $$;
+
+
+
+\i sql/01-bde_roles.sql
+\i sql/02-bde_schema.sql
+\i sql/03-bde_functions.sql
+\i sql/04-bde_schema_index.sql
+\i sql/05-bde_version.sql
+\i sql/99-patches.sql
+--VERSIONED-- \i sql/versioning/01-version_tables.sql
+
+BEGIN;
+
+SELECT * FROM plan(660
+--VERSIONED-- + 533
+);
+
+-- Test base schema existance
+\i test/base-schema.pg.inc
+
+-- Test revision tables existance and their composition
+--VERSIONED-- \i test/base-revision-tables.pg.inc
+
+-- Test bde_write_appellation {
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,null,null,null,null,null,null),
+    '', 'bde_write_appellation 1');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,null,null,null,null,null,'14'),
+    '14', 'bde_write_appellation 2');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,null,null,null,null,'13','14'),
+    '13 Block 14', 'bde_write_appellation 3');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,null,null,null,'12','13','14'),
+    '13 12 Block 14', 'bde_write_appellation 4');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,null,null,'11','12','13','14'),
+    '13 12 Block 14 11', 'bde_write_appellation 5');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,null,'10','11','12','13','14'),
+    '13 12 Block 14 11 10', 'bde_write_appellation 6');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,null,'9','10','11','12','13','14'),
+    '13 12 Block 14 11 10', 'bde_write_appellation 7');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,null,'8','9','10','11','12','13','14'),
+    '13 12 Block 14 Block 8 11 10', 'bde_write_appellation 8');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,null,'7','8','9','10','11','12','13','14'),
+    '13 12 Block 14 7 Block 8 11 10',
+    'bde_write_appellation 9');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,null,'6','7','8','9','10','11','12','13','14'),
+    '13 12 Block 14 6 7 Block 8 11 10',
+    'bde_write_appellation 10');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,null,'5','6','7','8','9','10','11','12','13','14'),
+    '13 12 Block 14 5 6 7 Block 8 11 10',
+    'bde_write_appellation 11');
+SELECT is(bde.bde_write_appellation
+    (null,null,null,'4','5','6','7','8','9','10','11','12','13','14'),
+    '13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 12');
+SELECT is(bde.bde_write_appellation
+    (null,null,'3','4','5','6','7','8','9','10','11','12','13','14'),
+    '3 share of 13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 13');
+SELECT is(bde.bde_write_appellation
+    (null,'2','3','4','5','6','7','8','9','10','11','12','13','14'),
+    '3 share of 13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 14');
+SELECT is(bde.bde_write_appellation
+    ('1','2','3','4','5','6','7','8','9','10','11','12','13','14'),
+    '3 share of 13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 15');
+SELECT is(bde.bde_write_appellation
+    ('PART','2','3','4','5','6','7','8','9','10','11','12','13','14'),
+    'Part3 share of 13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 16');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','3','4','5','6','7','8','9','10','11','12','13','14'),
+    'Part Part3 share of 13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 17');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','4','5','6','7','8','9','10','11','12','13','14'),
+    'Part Part 13 12 Block 14 4 5 6 7 Block 8 11 10',
+    'bde_write_appellation 18');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','5','6','7','8','9','10','11','12','13','14'),
+    'Part Part 13 12 Block 14 5 6 7 Block 8 11 10',
+    'bde_write_appellation 19');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','7','8','9','10','11','12','13','14'),
+    'Part Part 13 12 Block 14 7 Block 8 11 10',
+    'bde_write_appellation 20');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','8','9','10','11','12','13','14'),
+    'Part Part 13 12 Block 14 Block 8 11 10',
+    'bde_write_appellation 21');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','9','10','11','12','13','14'),
+    'Part Part 13 12 Block 14 11 10',
+    'bde_write_appellation 22');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','PRFX','10','11','12','13','14'),
+    'Part Part 13 12 Block 14 10 11',
+    'bde_write_appellation 23');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','PRFX','','11','12','13','14'),
+    'Part Part 13 12 Block 14 11',
+    'bde_write_appellation 24');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','PRFX','','','12','13','14'),
+    'Part Part 13 12 Block 14',
+    'bde_write_appellation 25');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','PRFX','','','','13','14'),
+    'Part Part 13 Block 14',
+    'bde_write_appellation 26');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','PRFX','','','','','14'),
+    'Part Part 14',
+    'bde_write_appellation 27');
+SELECT is(bde.bde_write_appellation
+    ('PART','PART','1/1','','','','','','PRFX','','','','',''),
+    'Part Part',
+    'bde_write_appellation 28');
+-- }
+
+-- Test bde_get_combined_appellation {
+
+DO $$ DECLARE tvowner TEXT; BEGIN
+IF EXISTS ( SELECT * FROM pg_proc WHERE proname = 'ver_is_table_versioned' )
+THEN IF table_version.ver_is_table_versioned('bde', 'crs_work') THEN
+
+    PERFORM table_version.ver_create_revision('test fixture');
+
+END IF; END IF; END; $$;
+
+COPY bde.crs_appellation FROM STDIN ( delimiter '|' );
+1|GNRL|Y|N|CURR|WHOL|\N|SURD|Lower Hawea|SECT|43|\N|\N|V|SUFX|\N|\N|\N|\N|\N|5084|200798
+2|GNRL|Y|N|CURR|PART|\N|SURD|Clutha|SECT|3|\N|\N|XXXVI|SUFX|\N|\N|\N|\N|\N|5107|201212
+3|GNRL|Y|Y|CURR|WHOL|\N|DP|13918|LOT|32|\N|\N|\N|PRFX|\N|\N|\N|\N|\N|3705368|1399023
+4|GNRL|N|Y|CURR|PART|\N|DP|8007|LOT|61|\N|\N|\N|PRFX|\N|\N|\N|\N|\N|3792885|1535355
+5|GNRL|Y|Y|CURR|WHOL|\N|DP|2425|LOT|11|\N|\N|VIII|PRFX|\N|\N|\N|\N|\N|3793571|1428424
+6|GNRL|Y|Y|CURR|WHOL|\N|DP|28568|LOT|5|\N|\N|\N|PRFX|\N|\N|\N|\N|\N|3824354|1438685
+7|GNRL|N|Y|HIST|PART|\N|DP|26040|LOT|2|\N|\N|\N|PRFX|\N|\N|\N|\N|\N|3935083|1689914
+7|GNRL|Y|Y|CURR|PART|\N|DP|26042|LOT|2|\N|\N|\N|PRFX|\N|18484652|11189968|\N|\N|7187126|5831252
+11|MAOR|Y|N|CURR|WHOL|Maori Reserve 883 (Rakipaoa)|\N|\N|\N|\N|\N|\N|\N|\N|\N|\N|\N|\N|\N|141034|928194
+12|MAOR|Y|N|HIST|WHOL|Ohapi|\N|\N|\N|909|\N|\N|\N|\N|\N|16592162|9687268|\N|\N|6832755|5404695
+13|MAOR|N|Y|CURR|WHOL|Nuhaka|\N|\N|\N|2E3D6|\N|\N|\N|\N|\N|\N|\N|\N|\N|6910776|5501059
+14|MAOR|Y|Y|CURR|WHOL|Torere Pa|\N|\N|\N|12|\N|\N|\N|\N|\N|\N|\N|\N|\N|7117088|5745388
+21|PART|Y|Y|CURR|WHOL|\N|DP|181158|LOT|28|\N|\N|\N|PRFX|\N|\N|\N|\N|\N|6740001|5278098
+31|OTHR|N|Y|CURR|WHOL|\N|\N|\N|\N|\N|\N|\N|\N|\N|Stopped Road|\N|\N|\N|\N|3000867|289
+32|OTHR|N|Y|HIST|PART|\N|\N|\N|\N|\N|\N|\N|\N|\N|Closed Street Block V Lower Kaikorai Survey District|\N|\N|\N|\N|3001281|427
+33|OTHR|N|Y|CURR|PART|\N|\N|\N|\N|\N|\N|\N|\N|\N|Section 44 River Sections East Taieri Survey District|\N|\N|\N|\N|3001833|611
+34|OTHR|Y|Y|CURR|PART|\N|\N|\N|\N|\N|\N|\N|\N|\N|Closed Road Block II Clutha Survey District|\N|\N|\N|\N|3041661|13887
+35|OTHR|Y|Y|CURR|WHOL|\N|\N|\N|\N|\N|\N|\N|\N|\N|Section 102 Irregular Block East Taieri Survey District|\N|\N|\N|\N|3044865|14955
+36|OTHR|Y|N|CURR|WHOL|\N|\N|\N|\N|\N|\N|\N|\N|\N|Future Development Accessory Unit 9A Deposited Plan 22767|\N|\N|\N|\N|443|173809
+\.
+
+DO $$ BEGIN
+IF EXISTS ( SELECT * FROM pg_proc WHERE proname = 'ver_is_table_versioned' )
+THEN IF table_version.ver_is_table_versioned('bde', 'crs_work') THEN
+    PERFORM table_version.ver_complete_revision();
+END IF; END IF; END; $$;
+
+SELECT results_eq($$
+	SELECT DISTINCT par_id,
+		   bde.bde_get_combined_appellation(par_id, 'N') app_short,
+		   bde.bde_get_combined_appellation(par_id, 'Y') app_long
+	FROM bde.crs_appellation
+	ORDER BY par_id
+$$, $$ VALUES
+	(1,'43 Block V Lower Hawea','43 Block V Lower Hawea'),
+	(2,'Part 3 Block XXXVI Clutha','Part 3 Block XXXVI Clutha'),
+	(3,'32 DP 13918','32 13918'),
+	(4,'Part 61 DP 8007','Part 61 8007'),
+	(5,'11 Block VIII DP 2425','11 Block VIII 2425'),
+	(6,'5 DP 28568','5 28568'),
+	(7,'Part 2 DP 26042','Part 2 26042'),
+	(11,'Maori Reserve 883 (Rakipaoa) Block','Maori Reserve 883 (Rakipaoa) Block'),
+	(12,null,null),
+	(13,'Nuhaka 2E3D6 Block','Nuhaka 2E3D6 Block'),
+	(14,'Torere Pa 12 Block','Torere Pa 12 Block'),
+	(21,'28 Block 28 DP 181158','28 Block 28 181158'),
+	(31,'Stopped Road','Stopped Road'),
+	(32,null,null),
+	(33,'Part Section 44 River Sections East Taieri Survey District','Part Section 44 River Sections East Taieri Survey District'),
+	(34,'Part Closed Road Block II Clutha Survey District','Part Closed Road Block II Clutha Survey District'),
+	(35,'Section 102 Irregular Block East Taieri Survey District','Section 102 Irregular Block East Taieri Survey District'),
+	(36,'Future Development Accessory Unit 9A Deposited Plan 22767','Future Development Accessory Unit 9A Deposited Plan 22767')
+$$,
+	'bde_get_combined_appellation should behave as expected'
+);
+
+-- }
+
+SELECT * FROM finish();
+
+ROLLBACK;
+
+-- Cleanup
+DO $$
+BEGIN
+    RESET session_authorization;
+    EXECUTE format('REASSIGN OWNED BY linz_bde_schema_test_role TO %I',
+        current_user);
+    EXECUTE format('REVOKE ALL ON DATABASE %I FROM linz_bde_schema_test_role',
+        current_database());
+    REVOKE ALL ON SCHEMA _patches  FROM linz_bde_schema_test_role;
+    REVOKE ALL ON ALL TABLES IN SCHEMA _patches FROM linz_bde_schema_test_role;
+--VERSIONED-- -- TODO: figure out which "dependent privileges exist", to
+--VERSIONED-- --      replace the CASCADE with fine-grained REVOKEs
+--VERSIONED-- REVOKE ALL ON SCHEMA table_version FROM linz_bde_schema_test_role CASCADE;
+--VERSIONED-- REVOKE ALL ON ALL SEQUENCES IN SCHEMA table_version FROM linz_bde_schema_test_role CASCADE;
+    DROP ROLE linz_bde_schema_test_role;
+END; $$;
+
+

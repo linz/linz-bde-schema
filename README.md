@@ -1,11 +1,14 @@
-LINZ BDE SCHEMAS
-================
+[![CI Status](https://github.com/linz/linz-bde-schema/workflows/test/badge.svg?branch=master)](https://github.com/linz/linz-bde-schema/actions)
 
-Provides the core BDE schemas and functions that are used for storing and accessing raw BDE
-unloads from the Landonline database system.
+# LINZ BDE SCHEMAS
 
-Installation
-------------
+Provides the core BDE schemas and functions that are used for storing and accessing raw BDE exports
+from the Landonline database system.
+
+Refer to [LINZ::Bde](https://github.com/linz/linz_bde_perl) documentation for further information
+about raw BDE exports format.
+
+## Installation
 
 First install the project into the OS data share directory:
 
@@ -13,52 +16,54 @@ First install the project into the OS data share directory:
 sudo make install
 ```
 
-Then you need to install the PostGIS and dbpatch extensions:
+Then you can load the schema into a target database
 
 ```shell
-createdb $DB_NAME
-psql $DB_NAME -c "CREATE EXTENSION postgis"
-psql $DB_NAME -c "CREATE SCHEMA _patches"
-psql $DB_NAME -c "CREATE EXTENSION dbpatch SCHEMA _patches"
+linz-bde-schema-load $DB_NAME
 ```
 
-You can then execute the installed SQL files with something like:
+If you don't want to install the indexes, add `--noindexes to the `linz-bde-schema-load` invocation:
 
 ```shell
-for file in /usr/share/linz-bde-schema/sql/*.sql
-    do psql $DB_NAME -f $file -v ON_ERROR_STOP=1
-done
+linz-bde-schema-load --noindexes $DB_NAME
 ```
 
-or the following commands if you don't want to install the indexes:
+If you would like to revision the table, add `--revision` to the `linz-bde-schema-load` invocation:
 
 ```shell
-psql $DB_NAME -f /usr/share/linz-bde-schema/sql/01-bde_roles.sql
-psql $DB_NAME -f /usr/share/linz-bde-schema/sql/02-bde_schema.sql
-psql $DB_NAME -f /usr/share/linz-bde-schema/sql/03-bde_functions.sql
-psql $DB_NAME -f /usr/share/linz-bde-schema/sql/05-bde_version.sql
-psql $DB_NAME -f /usr/share/linz-bde-schema/sql/99-patches.sql
+linz-bde-schema-load --noindexes --revision $DB_NAME
 ```
 
-If you would like to revision the table then install the table_version extension
-and then run the versioning SQL script:
+Add `--noextension` switch if required extensions are not available on the database system.
+
+NOTE: the loader script will expect to find SQL scripts under `/usr/share/linz-bde-schema/sql`, if
+you want them found in a different directory you can set the `BDESCHEMA_SQLDIR` environment
+variable.
+
+## Upgrade
+
+You can upgrade the schema in an existing database by following the install procedure. The
+`linz-bde-schema-load` script is able to both install or upgrade databases.
+
+WARNING: upgrades from version 1.0.2 to 1.1.2 will leave database in an inconsistent state due to a
+broken schema patch found in such release. The patch was absent in previous releases and fixed in
+later releases so upgrades from them will be ok.
+
+## Linting
+
+Prerequisites: [Nix](https://nixos.org/download.html)
+
+Run `nix-shell --pure --run 'pre-commit run --all-files'`.
+
+## Testing
+
+Testing is done using `pg_regress` and `PgTap`. To run the tests run the following command:
 
 ```shell
-psql $DB_NAME -c "CREATE EXTENSION table_version"
-psql $DB_NAME -f /usr/share/linz-bde-schema/sql/versioning/01-version_tables.sql
+make check
 ```
 
-Testing
--------
-
-Testing is done using pg_regress and PgTap. To run the tests run the following command:
-
-```shell
-make test
-```
-
-Building Debian packaging
---------------------------
+## Building Debian packaging
 
 Build the debian packages using the following command:
 
@@ -66,13 +71,13 @@ Build the debian packages using the following command:
 dpkg-buildpackage -us -uc
 ```
 
-Dependencies
-------------
+## Dependencies
 
-Requires PostgreSQL 9.3+/PostGIS 2.2+, PL/PgSQL, [dbpatch](https://github.com/linz/postgresql-dbpatch) and (optionally)
-[table_version](https://github.com/linz/postgresql-tableversion) extensions installed.
+Requires PostgreSQL 9.3+/PostGIS 2.2+ and PL/PgSQL on the target database system,
+[dbpatch](https://github.com/linz/postgresql-dbpatch) version 1.2.0 or higher and optionally
+[table_version](https://github.com/linz/postgresql-tableversion) version 1.5.0 or higher.
 
-License
----------------------
-This project is under 3-clause BSD License, except where otherwise specified.
-See the LICENSE file for more details.
+## License
+
+This project is under 3-clause BSD License, except where otherwise specified. See the LICENSE file
+for more details.
