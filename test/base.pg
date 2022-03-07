@@ -49,6 +49,7 @@ BEGIN
 --VERSIONED-- --       grant CREATE on table_version to bde_dba (as requested by
 --VERSIONED-- --       sql/versioning/01-version_tables.sql)
 --VERSIONED-- GRANT ALL ON SCHEMA table_version TO linz_bde_schema_test_role WITH GRANT OPTION;
+--VERSIONED-- GRANT SELECT ON ALL SEQUENCES IN SCHEMA table_version TO linz_bde_schema_test_role WITH GRANT OPTION;
     SET session_authorization TO linz_bde_schema_test_role;
 END $$;
 
@@ -64,8 +65,8 @@ END $$;
 
 BEGIN;
 
-SELECT * FROM plan(653
---VERSIONED-- + 525
+SELECT * FROM plan(660
+--VERSIONED-- + 533
 );
 
 -- Test base schema existance
@@ -267,6 +268,7 @@ BEGIN
 --VERSIONED-- -- TODO: figure out which "dependent privileges exist", to
 --VERSIONED-- --      replace the CASCADE with fine-grained REVOKEs
 --VERSIONED-- REVOKE ALL ON SCHEMA table_version FROM linz_bde_schema_test_role CASCADE;
+--VERSIONED-- REVOKE ALL ON ALL SEQUENCES IN SCHEMA table_version FROM linz_bde_schema_test_role CASCADE;
     DROP ROLE linz_bde_schema_test_role;
 END; $$;
 
