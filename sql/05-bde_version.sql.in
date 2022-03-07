@@ -13,8 +13,15 @@
 
 -- API that provides version of BDE schema installed in the database
 
+-- Early versions of bde.bde_version functions failed to
+-- to set correct ownership of bde_version function, which
+-- would prevent `CREATE OR REPLACE' from working. To deal
+-- With this, we force a drop of the function
+DROP FUNCTION IF EXISTS bde.bde_version();
+
 CREATE OR REPLACE FUNCTION bde.bde_version()
 RETURNS text AS $$
   SELECT '@@VERSION@@'::text;
-$$ language 'sql' IMMUTABLE STRICT;
+$$ LANGUAGE 'sql' IMMUTABLE STRICT;
+ALTER FUNCTION bde.bde_version() OWNER TO bde_dba;
 

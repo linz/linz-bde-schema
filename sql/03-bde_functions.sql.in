@@ -10,62 +10,65 @@
 -- LICENSE file for more information.
 --
 --------------------------------------------------------------------------------
-SET client_min_messages TO WARNING;
+
 BEGIN;
 
-SET search_path = bde, public;
-
-DO $$
+CREATE FUNCTION pg_temp.bless_bde_function(p_pcid regprocedure)
+RETURNS VOID LANGUAGE plpgsql VOLATILE AS $$
 DECLARE
-   v_pcid    TEXT;
-   v_schema  TEXT = 'bde';
+    v_comment TEXT;
 BEGIN
-    FOR v_pcid IN
-        SELECT v_schema || '.' || proname || '(' || pg_get_function_identity_arguments(oid) || ')'
-        FROM pg_proc
-        WHERE pronamespace=(SELECT oid FROM pg_namespace WHERE nspname = v_schema)
-    LOOP
-        EXECUTE 'DROP FUNCTION ' || v_pcid;
-    END LOOP;
-END;
-$$;
+   v_comment := 'Version: @@VERSION@@ @@REVISION@@'
+                || E'\n' || 'Installed: ' ||
+                to_char(current_timestamp,'YYYY-MM-DD HH:MI');
+
+  EXECUTE format('ALTER FUNCTION %s OWNER TO bde_dba', p_pcid);
+  EXECUTE format('REVOKE ALL ON FUNCTION %s FROM PUBLIC', p_pcid);
+  EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO bde_user', p_pcid);
+  EXECUTE format('COMMENT ON FUNCTION %s IS %L', p_pcid, v_comment);
+END
+$$
+-- make sure regprocedure::text is fully-qualified
+-- to work around an RDS bug
+SET search_path = ''
+;
 
 --
--- Function: bde_get_app_specific
+-- Function: bde.bde_get_app_specific
 --
 
 /**
 * Format title or survey appellation for a specific parcel record.
 * Note this function has the same logic as Landonline.
 *
-* @param app          crs_appellation record
+* @param app          bde.crs_appellation record
 * @param p_long       Either 'Y' or 'N'. This defines if the appellation should be in long
 *                     or short appellation format. e.g 'Lot 1 Deposited Plan 1234' vs 'Lot 1 DP 1234'.
 * @return             The formatted appellation string
 */
 -- {
-CREATE OR REPLACE FUNCTION bde_get_app_specific(app bde.crs_appellation, p_long CHAR) RETURNS text
+CREATE OR REPLACE FUNCTION bde.bde_get_app_specific(app bde.crs_appellation, p_long CHAR) RETURNS text
     AS $$
 DECLARE
     v_app_text            TEXT;
-    v_app_type            crs_appellation."type"%TYPE;
-    v_part_indicator      crs_appellation.part_indicator%TYPE;
+    v_app_type            bde.crs_appellation."type"%TYPE;
+    v_part_indicator      bde.crs_appellation.part_indicator%TYPE;
     v_count_app           INTEGER;
     v_surv                VARCHAR(4);
     v_title               VARCHAR(4);
     v_parcel_type         VARCHAR(255);
     v_parcel_value        TEXT;
     v_2_parcel_type       VARCHAR(255);
-    v_2_parcel_value      crs_appellation.second_prcl_value%TYPE;
-    v_block_number        crs_appellation.block_number%TYPE;
-    v_app_val             crs_appellation.appellation_value%TYPE;
+    v_2_parcel_value      bde.crs_appellation.second_prcl_value%TYPE;
+    v_block_number        bde.crs_appellation.block_number%TYPE;
+    v_app_val             bde.crs_appellation.appellation_value%TYPE;
     v_sub_type            VARCHAR(255);
-    v_sub_type_pos        crs_appellation.sub_type_position%TYPE;
-    v_maori_name          crs_appellation.maori_name%TYPE;
-    v_other_app           crs_appellation.other_appellation%TYPE;
+    v_sub_type_pos        bde.crs_appellation.sub_type_position%TYPE;
+    v_maori_name          bde.crs_appellation.maori_name%TYPE;
+    v_other_app           bde.crs_appellation.other_appellation%TYPE;
     v_part                VARCHAR;
     v_share               CHAR(100);
-    v_maori_parcel        crs_appellation.parcel_value%TYPE;
+    v_maori_parcel        bde.crs_appellation.parcel_value%TYPE;
 BEGIN
     v_surv := 'SURV';
     v_title := 'TITL';
@@ -77,34 +80,34 @@ BEGIN
     v_part_indicator := APP.part_indicator;
     v_parcel_type := COALESCE( (CASE p_long
                     WHEN 'Y' THEN
-                        bde_get_desccode( 'ASAP', APP.parcel_type)::TEXT
+                        bde.bde_get_desccode( 'ASAP', APP.parcel_type)::TEXT
                     WHEN 'N' THEN
                         CASE WHEN APP.parcel_type in ( 'LOT', 'SECT', 'UNIT', 'FLAT', 'MARK' )
                             THEN
-                               bde_get_desccode('ASAP',APP.parcel_type)::TEXT
+                               bde.bde_get_desccode('ASAP',APP.parcel_type)::TEXT
                             ELSE
-                               bde_get_charcode('ASAP',APP.parcel_type)::TEXT
+                               bde.bde_get_charcode('ASAP',APP.parcel_type)::TEXT
                         END
                    END), '');
     v_parcel_value := COALESCE( APP.parcel_value, '');
     v_2_parcel_type := COALESCE( (CASE p_long
                 WHEN 'Y' THEN
-                    bde_get_desccode('ASAP',APP.second_parcel_type)::TEXT
+                    bde.bde_get_desccode('ASAP',APP.second_parcel_type)::TEXT
                 WHEN 'N' THEN
-                     bde_get_charcode('ASAP',APP.second_parcel_type)::TEXT
+                     bde.bde_get_charcode('ASAP',APP.second_parcel_type)::TEXT
                END), '');
     v_2_parcel_value := COALESCE( APP.second_prcl_value, '');
     v_block_number := COALESCE( APP.block_number, '');
     v_app_val := COALESCE( APP.appellation_value, '');
     v_sub_type := COALESCE( (CASE p_long
                 WHEN 'Y' THEN
-                    bde_get_desccode('ASAU',APP.sub_type)::TEXT
+                    bde.bde_get_desccode('ASAU',APP.sub_type)::TEXT
                 WHEN 'N' THEN
                       CASE WHEN APP.sub_type in ( 'DP', 'LT', 'SO', 'ML', 'DPS' )
                         THEN
                             APP.sub_type::TEXT
                         ELSE
-                            bde_get_charcode('ASAU',APP.sub_type)::TEXT
+                            bde.bde_get_charcode('ASAU',APP.sub_type)::TEXT
                       END
                END), '');
     v_sub_type_pos := COALESCE( APP.sub_type_position, '');
@@ -139,7 +142,7 @@ BEGIN
         v_maori_parcel     := '';
     END IF;
 
-    v_app_text := bde_write_appellation(
+    v_app_text := bde.bde_write_appellation(
         TRIM(both FROM v_part_indicator),
         TRIM(both FROM v_part ),
         v_share,
@@ -161,10 +164,7 @@ END;
     $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 --}
 
-ALTER FUNCTION bde_get_app_specific(bde.crs_appellation, CHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_app_specific(bde.crs_appellation, CHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_app_specific(bde.crs_appellation, CHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_app_specific(bde.crs_appellation, CHAR) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_app_specific(bde.crs_appellation, char)'); END; $$;
 
 /**
 * Retrieve the title or survey appellation for a specific parcel and format it.
@@ -183,12 +183,12 @@ GRANT EXECUTE ON FUNCTION bde_get_app_specific(bde.crs_appellation, CHAR) TO bde
 */
 
 --{
-CREATE OR REPLACE FUNCTION bde_get_app_specific(p_par_id INTEGER, p_context VARCHAR, p_long CHAR)
+CREATE OR REPLACE FUNCTION bde.bde_get_app_specific(p_par_id INTEGER, p_context VARCHAR, p_long CHAR)
 RETURNS text AS $$
     SELECT
-        bde_get_app_specific(APP, p_long)
+        bde.bde_get_app_specific(APP, p_long)
     FROM
-        crs_appellation APP
+        bde.crs_appellation APP
     WHERE
         APP.par_id = p_par_id AND
         APP.status = 'CURR' AND
@@ -197,43 +197,43 @@ RETURNS text AS $$
     $$ LANGUAGE sql STABLE STRICT;
 --}
 
-ALTER FUNCTION bde_get_app_specific(INTEGER, VARCHAR, CHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_app_specific(INTEGER, VARCHAR, CHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_app_specific(INTEGER, VARCHAR, CHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_app_specific(INTEGER, VARCHAR, CHAR) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_app_specific(INTEGER, VARCHAR, CHAR)'); END; $$;
+
+
+
 
 
 --
--- Name: bde_get_charcode(VARCHAR, VARCHAR)
+-- Name: bde.bde_get_charcode(VARCHAR, VARCHAR)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_charcode(p_code_group VARCHAR, p_code VARCHAR) RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION bde.bde_get_charcode(p_code_group VARCHAR, p_code VARCHAR) RETURNS VARCHAR AS $$
     SELECT
         char_value
     FROM
-        crs_sys_code
+        bde.crs_sys_code
     WHERE
         scg_code = $1 AND
         code = $2;
 $$ LANGUAGE sql STABLE STRICT;
 
 
-ALTER FUNCTION bde_get_charcode(VARCHAR, VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_charcode(VARCHAR, VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_charcode(VARCHAR, VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_charcode(VARCHAR, VARCHAR) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_charcode(VARCHAR, VARCHAR)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_dataset(INTEGER)
+-- Name: bde.bde_get_dataset(INTEGER)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_dataset(p_wrk_id INTEGER) RETURNS VARCHAR
+CREATE OR REPLACE FUNCTION bde.bde_get_dataset(p_wrk_id INTEGER) RETURNS VARCHAR
     AS $$
 DECLARE
     v_survey         VARCHAR(50);
-    v_dataset_series crs_survey.dataset_series%TYPE;
-    v_dataset_id     crs_survey.dataset_id%TYPE;
-    v_dataset_suffix crs_survey.dataset_suffix%TYPE;
+    v_dataset_series bde.crs_survey.dataset_series%TYPE;
+    v_dataset_id     bde.crs_survey.dataset_id%TYPE;
+    v_dataset_suffix bde.crs_survey.dataset_suffix%TYPE;
 BEGIN
     SELECT
         dataset_series,
@@ -244,7 +244,7 @@ BEGIN
         v_dataset_id,
         v_dataset_suffix
     FROM
-        crs_survey
+        bde.crs_survey
     WHERE
         wrk_id = p_wrk_id;
 
@@ -259,62 +259,62 @@ END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
 
-ALTER FUNCTION bde_get_dataset(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_dataset(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_dataset(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_dataset(INTEGER) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_dataset(INTEGER)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_datasource(INTEGER)
+-- Name: bde.bde_get_datasource(INTEGER)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_datasource(p_wrk_id INTEGER) RETURNS CHAR(4) AS $$
+CREATE OR REPLACE FUNCTION bde.bde_get_datasource(p_wrk_id INTEGER) RETURNS CHAR(4) AS $$
     SELECT data_source
-    FROM   crs_survey
+    FROM   bde.crs_survey
     WHERE  wrk_id = $1;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde_get_datasource(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_datasource(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_datasource(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_datasource(INTEGER) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_datasource(INTEGER)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_desccode(VARCHAR, VARCHAR)
+-- Name: bde.bde_get_desccode(VARCHAR, VARCHAR)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_desccode(p_code_group VARCHAR, p_code VARCHAR) RETURNS TEXT AS $$
+CREATE OR REPLACE FUNCTION bde.bde_get_desccode(p_code_group VARCHAR, p_code VARCHAR) RETURNS TEXT AS $$
     SELECT SCO."desc"
-    FROM   crs_sys_code SCO
+    FROM   bde.crs_sys_code SCO
     WHERE  SCO.scg_code = $1
     AND    SCO.code     = $2;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde_get_desccode(VARCHAR, VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_desccode(VARCHAR, VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_desccode(VARCHAR, VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_desccode(VARCHAR, VARCHAR) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_desccode(VARCHAR, VARCHAR)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_district(INTEGER)
+-- Name: bde.bde_get_district(INTEGER)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_district(p_loc_id INTEGER) RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION bde.bde_get_district(p_loc_id INTEGER) RETURNS VARCHAR AS $$
     SELECT name
-    FROM   crs_locality
+    FROM   bde.crs_locality
     WHERE  id = $1;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde_get_district(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_district(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_district(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_district(INTEGER) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_district(INTEGER)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_mrknodename(INTEGER, VARCHAR)
+-- Name: bde.bde_get_mrknodename(INTEGER, VARCHAR)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_mrknodename(p_mrk_id INTEGER, p_type VARCHAR, OUT mrk_name VARCHAR(255), OUT mrk_name_type VARCHAR)
+CREATE OR REPLACE FUNCTION bde.bde_get_mrknodename(p_mrk_id INTEGER, p_type VARCHAR, OUT mrk_name VARCHAR(255), OUT mrk_name_type VARCHAR)
     AS $$
 DECLARE
     v_tmp_nod_id INT4;
@@ -329,7 +329,7 @@ BEGIN
             v_tmp_nod_id,
             v_tmp_mrk_id
         FROM
-            crs_mark MRK
+            bde.crs_mark MRK
         WHERE
             MRK.id  = p_mrk_id;
     ELSE
@@ -340,7 +340,7 @@ BEGIN
             v_tmp_mrk_id,
             v_tmp_nod_id
         FROM
-            crs_mark MRK
+            bde.crs_mark MRK
         WHERE
             MRK.nod_id  = p_mrk_id  AND
             MRK.replaced = 'N' AND
@@ -359,13 +359,13 @@ BEGIN
                 ELSE 1
             END as order_type,
             mkn.name,
-            bde_get_charcode('MKNT', mkn.type)
+            bde.bde_get_charcode('MKNT', mkn.type)
         INTO
             v_temp,
             mrk_name,
             mrk_name_type
         FROM
-            crs_mark_name mkn
+            bde.crs_mark_name mkn
         WHERE
             mkn.mrk_id  = v_tmp_mrk_id
         ORDER BY
@@ -386,44 +386,44 @@ BEGIN
 END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
-ALTER FUNCTION bde_get_mrknodename(INTEGER, VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_mrknodename(INTEGER, VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_mrknodename(INTEGER, VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_mrknodename(INTEGER, VARCHAR) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_mrknodename(INTEGER, VARCHAR)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_markname(INTEGER)
+-- Name: bde.bde_get_markname(INTEGER)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_markname(p_mrk_id INTEGER) RETURNS VARCHAR AS $$
-    SELECT mrk_name FROM bde_get_mrknodename($1, 'MARK')
+CREATE OR REPLACE FUNCTION bde.bde_get_markname(p_mrk_id INTEGER) RETURNS VARCHAR AS $$
+    SELECT mrk_name FROM bde.bde_get_mrknodename($1, 'MARK')
 $$ LANGUAGE sql STABLE STRICT;
 
 
-ALTER FUNCTION bde_get_markname(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_markname(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_markname(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_markname(INTEGER) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_markname(INTEGER)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_nodename(INTEGER)
+-- Name: bde.bde_get_nodename(INTEGER)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_nodename(p_nod_id INTEGER) RETURNS VARCHAR AS $$
-    SELECT mrk_name FROM bde_get_mrknodename($1, 'NODE')
+CREATE OR REPLACE FUNCTION bde.bde_get_nodename(p_nod_id INTEGER) RETURNS VARCHAR AS $$
+    SELECT mrk_name FROM bde.bde_get_mrknodename($1, 'NODE')
 $$ LANGUAGE sql STABLE STRICT;
 
 
-ALTER FUNCTION bde_get_nodename(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_nodename(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_nodename(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_nodename(INTEGER) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_nodename(INTEGER)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_nodename(INTEGER, VARCHAR)
+-- Name: bde.bde_get_nodename(INTEGER, VARCHAR)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_nodename(p_nod_id INTEGER, p_type VARCHAR) RETURNS VARCHAR
+CREATE OR REPLACE FUNCTION bde.bde_get_nodename(p_nod_id INTEGER, p_type VARCHAR) RETURNS VARCHAR
     AS $$
 DECLARE
     v_name varchar(255);
@@ -432,12 +432,12 @@ DECLARE
 BEGIN
     SELECT  max(MRK.id)
     INTO    v_mrk_id
-    FROM    crs_mark MRK
+    FROM    bde.crs_mark MRK
     WHERE   MRK.nod_id  = p_nod_id;
 
     SELECT  MKN.name
     INTO    v_name
-    FROM    crs_mark_name MKN
+    FROM    bde.crs_mark_name MKN
     WHERE   MKN.mrk_id  = v_mrk_id
     AND     MKN.type = p_type;
 
@@ -446,55 +446,55 @@ END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
 
-ALTER FUNCTION bde_get_nodename(INTEGER, VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_nodename(INTEGER, VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_nodename(INTEGER, VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_nodename(INTEGER, VARCHAR) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_nodename(INTEGER, VARCHAR)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_nodeorder(INTEGER)
+-- Name: bde.bde_get_nodeorder(INTEGER)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_nodeorder(p_node_id INTEGER) RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION bde.bde_get_nodeorder(p_node_id INTEGER) RETURNS VARCHAR AS $$
     SELECT  COR.display || ' order ' || DTM.name
-    FROM    crs_cord_order      COR,
-            crs_coordinate      COO,
-            crs_datum           DTM,
-            crs_coordinate_sys  COS
+    FROM    bde.crs_cord_order      COR,
+            bde.crs_coordinate      COO,
+            bde.crs_datum           DTM,
+            bde.crs_coordinate_sys  COS
     WHERE   COO.nod_id = $1
     AND     COO.cor_id = COR.id
     AND     COO.cos_id = COS.id
     AND     COS.dtm_id = DTM.id;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde_get_nodeorder(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_nodeorder(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_nodeorder(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_nodeorder(INTEGER) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_nodeorder(INTEGER)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_office(INTEGER)
+-- Name: bde.bde_get_office(INTEGER)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_office(p_loc_id INTEGER) RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION bde.bde_get_office(p_loc_id INTEGER) RETURNS VARCHAR AS $$
     SELECT  OFC.name
-    FROM    crs_office OFC,
-            crs_land_district LDT
+    FROM    bde.crs_office OFC,
+            bde.crs_land_district LDT
     WHERE   LDT.loc_id = $1
     AND     LDT.off_code = OFC.code;
 $$ LANGUAGE sql STABLE STRICT;
 
 
-ALTER FUNCTION bde_get_office(INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_office(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_office(INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_office(INTEGER) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_office(INTEGER)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_roadname(INTEGER, DOUBLE PRECISION);
+-- Name: bde.bde_get_roadname(INTEGER, DOUBLE PRECISION);
 --
 
-CREATE OR REPLACE FUNCTION bde_get_roadname(p_rcl_id INTEGER, p_length DOUBLE PRECISION) RETURNS VARCHAR
+CREATE OR REPLACE FUNCTION bde.bde_get_roadname(p_rcl_id INTEGER, p_length DOUBLE PRECISION) RETURNS VARCHAR
     AS $$
 DECLARE
     v_fullroadname            VARCHAR(255);
@@ -515,9 +515,9 @@ BEGIN
             v_rcl_id_first,
             v_max_length
         FROM
-            crs_road_name_asc  RNS_THIS,
-            crs_road_name_asc  RNS_OTHER,
-            crs_road_ctr_line  RCL_OTHER
+            bde.crs_road_name_asc  RNS_THIS,
+            bde.crs_road_name_asc  RNS_OTHER,
+            bde.crs_road_ctr_line  RCL_OTHER
         WHERE
             RNS_THIS.rcl_id     = p_rcl_id AND
             RNS_THIS.priority   = 1 AND
@@ -540,8 +540,8 @@ BEGIN
                 RNA."name",
                 RNS.priority
             FROM
-                crs_road_name       RNA,
-                crs_road_name_asc   RNS
+                bde.crs_road_name       RNA,
+                bde.crs_road_name_asc   RNS
             WHERE
                 RNS.rcl_id = p_rcl_id AND
                 RNS.rna_id = RNA.id AND
@@ -566,63 +566,63 @@ END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
 
-ALTER FUNCTION bde_get_roadname(INTEGER, DOUBLE PRECISION) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_roadname(INTEGER, DOUBLE PRECISION) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_roadname(INTEGER, DOUBLE PRECISION) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_roadname(INTEGER, DOUBLE PRECISION) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_roadname(INTEGER, DOUBLE PRECISION)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_trtcode(VARCHAR, VARCHAR)
+-- Name: bde.bde_get_trtcode(VARCHAR, VARCHAR)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_trtcode(p_code_group VARCHAR, p_type VARCHAR) RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION bde.bde_get_trtcode(p_code_group VARCHAR, p_type VARCHAR) RETURNS VARCHAR AS $$
    SELECT description
-   FROM   crs_transact_type
+   FROM   bde.crs_transact_type
    WHERE  grp  = $1
    AND    type = $2;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde_get_trtcode(VARCHAR, VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_trtcode(VARCHAR, VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_trtcode(VARCHAR, VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_trtcode(VARCHAR, VARCHAR) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_trtcode(VARCHAR, VARCHAR)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_username(VARCHAR)
+-- Name: bde.bde_get_username(VARCHAR)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_username(p_user_id VARCHAR) RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION bde.bde_get_username(p_user_id VARCHAR) RETURNS VARCHAR AS $$
     SELECT given_names  || ' ' || surname
-    FROM   crs_user
+    FROM   bde.crs_user
     WHERE  id = $1;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde_get_username(VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_username(VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_username(VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_username(VARCHAR) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_username(VARCHAR)'); END; $$;
+
+
+
 
 --
--- Name: bde_get_useroff(VARCHAR)
+-- Name: bde.bde_get_useroff(VARCHAR)
 --
 
-CREATE OR REPLACE FUNCTION bde_get_useroff(p_user_id VARCHAR) RETURNS VARCHAR AS $$
+CREATE OR REPLACE FUNCTION bde.bde_get_useroff(p_user_id VARCHAR) RETURNS VARCHAR AS $$
     SELECT off_code
-    FROM   crs_user
+    FROM   bde.crs_user
     WHERE  id = $1;
 $$ LANGUAGE sql STABLE STRICT;
 
 
-ALTER FUNCTION bde_get_useroff(VARCHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_useroff(VARCHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_useroff(VARCHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_useroff(VARCHAR) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_useroff(VARCHAR)'); END; $$;
+
+
+
 
 --
--- Name: bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT);
+-- Name: bde.bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT);
 --
 
-CREATE OR REPLACE FUNCTION bde_write_appellation(
+CREATE OR REPLACE FUNCTION bde.bde_write_appellation(
     p_part_indicator VARCHAR,
     p_lgd_part VARCHAR,
     p_share CHAR,
@@ -726,18 +726,18 @@ BEGIN
 END;
     $$ LANGUAGE plpgsql IMMUTABLE;
 
-ALTER FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT)'); END; $$;
 
 
-CREATE OR REPLACE FUNCTION bde_get_combined_appellation(p_par_id INTEGER, p_long CHAR)
+
+
+
+CREATE OR REPLACE FUNCTION bde.bde_get_combined_appellation(p_par_id INTEGER, p_long CHAR)
 RETURNS TEXT AS $$
     SELECT
-        bde_get_app_specific(APP, p_long)
+        bde.bde_get_app_specific(APP, p_long)
     FROM
-        crs_appellation APP
+        bde.crs_appellation APP
     WHERE
         APP.par_id = p_par_id AND status = 'CURR'
     ORDER BY
@@ -745,24 +745,24 @@ RETURNS TEXT AS $$
     LIMIT 1;
 $$ LANGUAGE sql STABLE STRICT;
 
-ALTER FUNCTION bde_get_combined_appellation(INTEGER, CHAR) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_combined_appellation(INTEGER, CHAR) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_combined_appellation(INTEGER, CHAR) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_combined_appellation(INTEGER, CHAR) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_combined_appellation(INTEGER, CHAR)'); END; $$;
 
-CREATE OR REPLACE FUNCTION bde_get_par_stat_act(p_sta_id INTEGER, p_par_id INTEGER)
+
+
+
+CREATE OR REPLACE FUNCTION bde.bde_get_par_stat_act(p_sta_id INTEGER, p_par_id INTEGER)
     RETURNS TEXT AS $$
 DECLARE
-    v_sap_purpose     crs_stat_act_parcl.purpose%TYPE;
-    v_sap_name        crs_stat_act_parcl.name%TYPE;
-    v_comments        crs_stat_act_parcl.comments%TYPE;
+    v_sap_purpose     bde.crs_stat_act_parcl.purpose%TYPE;
+    v_sap_name        bde.crs_stat_act_parcl.name%TYPE;
+    v_comments        bde.crs_stat_act_parcl.comments%TYPE;
     v_par_act_desc    TEXT DEFAULT '';
-    v_stat_act_type   crs_statute_action.type%TYPE;
-    v_ste_id          crs_statute.id%TYPE;
-    v_sur_wrk_id_vest crs_statute_action.sur_wrk_id_vesting%TYPE;
-    v_gazette         crs_statute_action.gazette_type%TYPE;
-    v_gaz_year        crs_statute_action.gazette_year%TYPE;
-    v_gaz_page        crs_statute_action.gazette_page%TYPE;
+    v_stat_act_type   bde.crs_statute_action.type%TYPE;
+    v_ste_id          bde.crs_statute.id%TYPE;
+    v_sur_wrk_id_vest bde.crs_statute_action.sur_wrk_id_vesting%TYPE;
+    v_gazette         bde.crs_statute_action.gazette_type%TYPE;
+    v_gaz_year        bde.crs_statute_action.gazette_year%TYPE;
+    v_gaz_page        bde.crs_statute_action.gazette_page%TYPE;
     v_gaz_notice_id   INTEGER;
     v_prefix          VARCHAR(10);
     v_other_legality  VARCHAR(255);
@@ -780,7 +780,7 @@ BEGIN
         v_sap_name,
         v_comments
     FROM
-        crs_stat_act_parcl SAP
+        bde.crs_stat_act_parcl SAP
     WHERE
         SAP.sta_id = p_sta_id AND
         SAP.par_id = p_par_id;
@@ -816,8 +816,8 @@ BEGIN
         v_gaz_notice_id,
         v_other_legality
     FROM
-        crs_statute_action STA,
-        crs_sys_code SCO
+        bde.crs_statute_action STA,
+        bde.crs_sys_code SCO
     WHERE
         SCO.scg_code = 'SAPA' AND
         STA.id = p_sta_id;
@@ -830,18 +830,18 @@ BEGIN
                 v_prefix := ' p ';
             END IF;
 
-            v_stat_act_desc := bde_get_charcode('STAG', v_gazette) || ' ' || CAST(v_gaz_year AS TEXT) || v_prefix || CAST(v_gaz_page AS TEXT);
+            v_stat_act_desc := bde.bde_get_charcode('STAG', v_gazette) || ' ' || CAST(v_gaz_year AS TEXT) || v_prefix || CAST(v_gaz_page AS TEXT);
 
         ELSE
             v_prefix := ' ln ';
-            v_stat_act_desc := bde_get_charcode('STAG', v_gazette) || ' ' || CAST(v_gaz_year AS TEXT) || v_prefix || CAST(v_gaz_notice_id AS TEXT);
+            v_stat_act_desc := bde.bde_get_charcode('STAG', v_gazette) || ' ' || CAST(v_gaz_year AS TEXT) || v_prefix || CAST(v_gaz_notice_id AS TEXT);
 
         END IF;
         IF v_other_legality IS NOT NULL THEN
             v_stat_act_desc := v_stat_act_desc || ', ' || v_other_legality;
         END IF;
     ELSIF v_stat_act_type = 'VSDP' THEN
-        v_stat_act_desc  = 'Vested on ' || bde_get_dataset(v_sur_wrk_id_vest);
+        v_stat_act_desc  = 'Vested on ' || bde.bde_get_dataset(v_sur_wrk_id_vest);
     ELSIF v_stat_act_type = 'STVE' THEN
         SELECT
             STE.name_and_date,
@@ -850,7 +850,7 @@ BEGIN
             v_name_and_date,
             v_section
         FROM
-            crs_statute STE
+            bde.crs_statute STE
         WHERE
             STE.id   = v_ste_id;
         v_stat_act_desc := v_section || ', ' || v_name_and_date;
@@ -877,12 +877,12 @@ BEGIN
 END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
-ALTER FUNCTION bde_get_par_stat_act(INTEGER, INTEGER) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_get_par_stat_act(INTEGER, INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_get_par_stat_act(INTEGER, INTEGER) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_get_par_stat_act(INTEGER, INTEGER) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_par_stat_act(INTEGER, INTEGER)'); END; $$;
 
-CREATE OR REPLACE FUNCTION bde_getnearnodes (
+
+
+
+CREATE OR REPLACE FUNCTION bde.bde_getnearnodes (
     p_latitude  DOUBLE PRECISION,
     p_longitude DOUBLE PRECISION,
     p_tolerance DOUBLE PRECISION
@@ -919,8 +919,8 @@ BEGIN
             coo.nod_id,
             ST_Distance_Spheroid(nod.shape, v_point, v_spheroid)
         FROM
-            crs_coordinate coo
-            JOIN crs_node nod ON coo.nod_id = nod.id AND coo.cos_id = nod.cos_id_official
+            bde.crs_coordinate coo
+            JOIN bde.crs_node nod ON coo.nod_id = nod.id AND coo.cos_id = nod.cos_id_official
         WHERE
             coo.status = 'AUTH' AND
             nod.shape &&
@@ -934,17 +934,17 @@ BEGIN
     END;
 $body$ LANGUAGE plpgsql STABLE;
 
-ALTER FUNCTION bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION) OWNER TO bde_dba;
-REVOKE ALL ON FUNCTION bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION) TO bde_admin;
-GRANT EXECUTE ON FUNCTION bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION) TO bde_user;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION)'); END; $$;
+
+
+
 
 --  Drop connnections to the database more than a specific age
 --
 -- This is to prevent Quantum edit sessions left open overnight from
 -- blocking the parcel layer maintenance.
 
-CREATE OR REPLACE FUNCTION bde_drop_idle_connections( p_upload_id INT )
+CREATE OR REPLACE FUNCTION bde.bde_drop_idle_connections( p_upload_id INT )
 RETURNS INT
 AS $$
 DECLARE
@@ -977,40 +977,8 @@ BEGIN
 END
 $$ LANGUAGE plpgsql VOLATILE SECURITY DEFINER;
 
-ALTER FUNCTION bde_drop_idle_connections(INTEGER) OWNER TO bde_dba;
-REVOKE ALL PRIVILEGES ON FUNCTION bde_drop_idle_connections(INTEGER) FROM PUBLIC;
-GRANT EXECUTE ON FUNCTION bde_drop_idle_connections(INTEGER) TO bde_admin;
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_drop_idle_connections(INTEGER)'); END; $$;
 
-DO $$
-DECLARE
-    v_comment TEXT;
-    v_pcid    TEXT;
-    v_schema  TEXT = 'bde';
-BEGIN
-    FOR v_comment, v_pcid IN
-        SELECT
-            obj_description(oid, 'pg_proc'),
-            proname || '(' || pg_get_function_identity_arguments(oid) || ')'
-        FROM
-            pg_proc
-        WHERE
-            pronamespace=(SELECT oid FROM pg_namespace WHERE nspname = v_schema)  AND
-            proname NOT ILIKE '_createVersionComment'
-    LOOP
-        IF v_comment IS NULL THEN
-            v_comment := '';
-        ELSE
-            v_comment := E'\n\n' || v_comment;
-        END IF;
 
-        v_comment := 'Version: @@VERSION@@ @@REVISION@@'
-                    || E'\n' || 'Installed: ' ||
-                    to_char(current_timestamp,'YYYY-MM-DD HH:MI') || v_comment;
-
-        EXECUTE 'COMMENT ON FUNCTION ' || v_schema || '.' || v_pcid || ' IS '
-            || quote_literal( v_comment );
-    END LOOP;
-END
-$$;
 
 COMMIT;
