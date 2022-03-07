@@ -24,7 +24,6 @@ BEGIN
 
   EXECUTE format('ALTER FUNCTION %s OWNER TO bde_dba', p_pcid);
   EXECUTE format('REVOKE ALL ON FUNCTION %s FROM PUBLIC', p_pcid);
-  EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO bde_admin', p_pcid);
   EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO bde_user', p_pcid);
   EXECUTE format('COMMENT ON FUNCTION %s IS %L', p_pcid, v_comment);
 END
