@@ -1,9 +1,19 @@
 
 -- WARNING: always update this file whenever test/base.pg is updated
 
+-- Test table_version tables permissions {
+
+-- See https://github.com/linz/linz-bde-schema/issues/170
+SELECT sequence_privs_are ( 'table_version'::name, 'revision_id_seq'::name, 'bde_dba'::name, ARRAY['SELECT'] );
+
+-- }
+
 -- Test revision tables existance and their composition {
 
 SELECT has_table('table_version'::name, 'bde_cbe_title_parcel_association_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_cbe_title_parcel_association_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_cbe_title_parcel_association_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_cbe_title_parcel_association_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_cbe_title_parcel_association_revision'::name,
   ARRAY[
   'last_updated',
@@ -16,6 +26,9 @@ SELECT columns_are('table_version'::name, 'bde_cbe_title_parcel_association_revi
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_action_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_action_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_action_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_action_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_action_revision'::name,
 ARRAY[
   'act_tin_id_orig',
@@ -33,6 +46,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_action_type_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_action_type_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_action_type_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_action_type_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_action_type_revision'::name,
 ARRAY[
   'type',
@@ -44,6 +60,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_adj_obs_change_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_adj_obs_change_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_adj_obs_change_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_adj_obs_change_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_adj_obs_change_revision'::name,
 ARRAY[
   'redundancy_fctr_3',
@@ -73,6 +92,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_adj_user_coef_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_adj_user_coef_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_adj_user_coef_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_adj_user_coef_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_adj_user_coef_revision'::name,
 ARRAY[
   'adc_id',
@@ -82,6 +104,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_adjust_coef_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_adjust_coef_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_adjust_coef_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_adjust_coef_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_adjust_coef_revision'::name,
 ARRAY[
   'id',
@@ -94,18 +119,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_adjustment_run_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_adjust_method_revision'::name,
-ARRAY[
-  'type',
-  'id',
-  'status',
-  'software_used',
-  'name',
-  'audit_id',
-  'description'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_adjust_method_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_adjustment_run_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_adjustment_run_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_adjustment_run_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_adjustment_run_revision'::name,
 ARRAY[
   'id',
@@ -124,7 +140,25 @@ ARRAY[
   'status'
   , '_revision_created', '_revision_expired']);
 
+SELECT has_table('table_version'::name, 'bde_crs_adjust_method_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_adjust_method_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_adjust_method_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_adjust_method_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_adjust_method_revision'::name,
+ARRAY[
+  'type',
+  'id',
+  'status',
+  'software_used',
+  'name',
+  'audit_id',
+  'description'
+  , '_revision_created', '_revision_expired']);
+
 SELECT has_table('table_version'::name, 'bde_crs_adoption_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_adoption_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_adoption_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_adoption_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_adoption_revision'::name,
 ARRAY[
   'audit_id',
@@ -137,6 +171,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_affected_parcl_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_affected_parcl_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_affected_parcl_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_affected_parcl_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_affected_parcl_revision'::name,
 ARRAY[
   'action',
@@ -146,6 +183,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_alias_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_alias_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_alias_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_alias_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_alias_revision'::name,
 ARRAY[
   'prp_id',
@@ -155,6 +195,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_appellation_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_appellation_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_appellation_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_appellation_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_appellation_revision'::name,
 ARRAY[
   'second_prcl_value',
@@ -182,6 +225,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_comprised_in_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_comprised_in_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_comprised_in_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_comprised_in_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_comprised_in_revision'::name,
 ARRAY[
   'wrk_id',
@@ -192,6 +238,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_coordinate_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_coordinate_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_coordinate_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_coordinate_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_coordinate_revision'::name,
 ARRAY[
   'sdc_status',
@@ -212,6 +261,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_coordinate_sys_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_coordinate_sys_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_coordinate_sys_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_coordinate_sys_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_coordinate_sys_revision'::name,
 ARRAY[
   'cot_id',
@@ -225,6 +277,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_coordinate_tpe_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_coordinate_tpe_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_coordinate_tpe_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_coordinate_tpe_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_coordinate_tpe_revision'::name,
 ARRAY[
   'category',
@@ -246,15 +301,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_cord_order_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_cor_precision_revision'::name,
-ARRAY[
-  'cor_id',
-  'ort_type',
-  'decimal_places',
-  'audit_id'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_cor_precision_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_cord_order_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_cord_order_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_cord_order_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_cord_order_revision'::name,
 ARRAY[
   'dtm_id',
@@ -266,7 +315,22 @@ ARRAY[
   'description'
   , '_revision_created', '_revision_expired']);
 
+SELECT has_table('table_version'::name, 'bde_crs_cor_precision_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_cor_precision_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_cor_precision_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_cor_precision_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_cor_precision_revision'::name,
+ARRAY[
+  'cor_id',
+  'ort_type',
+  'decimal_places',
+  'audit_id'
+  , '_revision_created', '_revision_expired']);
+
 SELECT has_table('table_version'::name, 'bde_crs_datum_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_datum_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_datum_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_datum_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_datum_revision'::name,
 ARRAY[
   'type',
@@ -282,6 +346,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_elect_place_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_elect_place_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_elect_place_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_elect_place_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_elect_place_revision'::name,
 ARRAY[
   'shape',
@@ -295,6 +362,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_ellipsoid_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ellipsoid_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ellipsoid_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_ellipsoid_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_ellipsoid_revision'::name,
 ARRAY[
   'semi_major_axis',
@@ -305,6 +375,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_enc_share_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_enc_share_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_enc_share_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_enc_share_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_enc_share_revision'::name,
 ARRAY[
   'system_crt',
@@ -319,6 +392,23 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_encumbrancee_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_encumbrancee_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_encumbrancee_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_encumbrancee_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_encumbrancee_revision'::name,
+ARRAY[
+  'id',
+  'ens_id',
+  'status',
+  'name',
+  'system_ext',
+  'usr_id'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_encumbrance_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_encumbrance_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_encumbrance_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_encumbrance_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_encumbrance_revision'::name,
 ARRAY[
   'term',
@@ -331,18 +421,10 @@ ARRAY[
   'ind_tan_holder'
   , '_revision_created', '_revision_expired']);
 
-SELECT has_table('table_version'::name, 'bde_crs_encumbrance_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_encumbrancee_revision'::name,
-ARRAY[
-  'id',
-  'ens_id',
-  'status',
-  'name',
-  'system_ext',
-  'usr_id'
-  , '_revision_created', '_revision_expired']);
-
 SELECT has_table('table_version'::name, 'bde_crs_estate_share_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_estate_share_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_estate_share_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_estate_share_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_estate_share_revision'::name,
 ARRAY[
   'act_id_ext',
@@ -363,6 +445,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_feature_name_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_feature_name_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_feature_name_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_feature_name_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_feature_name_revision'::name,
 ARRAY[
   'shape',
@@ -376,6 +461,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_geodetic_network_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_geodetic_network_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_geodetic_network_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_geodetic_network_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_geodetic_network_revision'::name,
 ARRAY[
   'description',
@@ -384,6 +472,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_geodetic_node_network_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_geodetic_node_network_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_geodetic_node_network_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_geodetic_node_network_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_geodetic_node_network_revision'::name,
 ARRAY[
   'audit_id',
@@ -392,19 +483,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_image_history_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_image_revision'::name,
-ARRAY[
-  'usr_id_created',
-  'barcode_datetime',
-  'ims_id',
-  'ims_date',
-  'pages',
-  'centera_id',
-  'location',
-  'id'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_image_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_image_history_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_image_history_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_image_history_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_image_history_revision'::name,
 ARRAY[
   'usr_id',
@@ -417,7 +498,26 @@ ARRAY[
   'centera_datetime'
   , '_revision_created', '_revision_expired']);
 
+SELECT has_table('table_version'::name, 'bde_crs_image_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_image_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_image_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_image_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_image_revision'::name,
+ARRAY[
+  'usr_id_created',
+  'barcode_datetime',
+  'ims_id',
+  'ims_date',
+  'pages',
+  'centera_id',
+  'location',
+  'id'
+  , '_revision_created', '_revision_expired']);
+
 SELECT has_table('table_version'::name, 'bde_crs_land_district_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_land_district_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_land_district_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_land_district_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_land_district_revision'::name,
 ARRAY[
   'default',
@@ -430,6 +530,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_legal_desc_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_legal_desc_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_legal_desc_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_legal_desc_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_legal_desc_revision'::name,
 ARRAY[
   'legal_desc_text',
@@ -442,6 +545,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_legal_desc_prl_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_legal_desc_prl_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_legal_desc_prl_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_legal_desc_prl_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_legal_desc_prl_revision'::name,
 ARRAY[
   'audit_id',
@@ -454,6 +560,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_line_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_line_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_line_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_line_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_line_revision'::name,
 ARRAY[
   'arc_length',
@@ -473,6 +582,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_locality_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_locality_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_locality_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_locality_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_locality_revision'::name,
 ARRAY[
   'shape',
@@ -485,6 +597,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_maintenance_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_maintenance_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_maintenance_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_maintenance_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_maintenance_revision'::name,
 ARRAY[
   'type',
@@ -496,6 +611,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_map_grid_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_map_grid_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_map_grid_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_map_grid_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_map_grid_revision'::name,
 ARRAY[
   'major_grid',
@@ -506,6 +624,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_mark_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mark_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mark_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_mark_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_mark_revision'::name,
 ARRAY[
   'id',
@@ -530,6 +651,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_mark_name_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mark_name_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mark_name_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_mark_name_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_mark_name_revision'::name,
 ARRAY[
   'mrk_id',
@@ -539,6 +663,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_mark_sup_doc_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mark_sup_doc_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mark_sup_doc_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_mark_sup_doc_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_mark_sup_doc_revision'::name,
 ARRAY[
   'sud_id',
@@ -547,6 +674,48 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_mesh_blk_area_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mesh_blk_area_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mesh_blk_area_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_mesh_blk_area_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_mesh_blk_area_revision'::name,
+ARRAY[
+  'mbk_id',
+  'audit_id',
+  'alt_id',
+  'stt_id'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_mesh_blk_bdry_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mesh_blk_bdry_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mesh_blk_bdry_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_mesh_blk_bdry_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_mesh_blk_bdry_revision'::name,
+ARRAY[
+  'audit_id',
+  'mbk_id',
+  'mbl_id',
+  'alt_id'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_mesh_blk_line_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mesh_blk_line_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mesh_blk_line_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_mesh_blk_line_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_mesh_blk_line_revision'::name,
+ARRAY[
+  'shape',
+  'line_type',
+  'id',
+  'audit_id',
+  'se_row_id',
+  'alt_id',
+  'status'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_mesh_blk_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mesh_blk_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mesh_blk_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_mesh_blk_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_mesh_blk_revision'::name,
 ARRAY[
   'shape',
@@ -559,37 +728,10 @@ ARRAY[
   'se_row_id'
   , '_revision_created', '_revision_expired']);
 
-SELECT has_table('table_version'::name, 'bde_crs_mesh_blk_bdry_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_mesh_blk_area_revision'::name,
-ARRAY[
-  'mbk_id',
-  'audit_id',
-  'alt_id',
-  'stt_id'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_mesh_blk_line_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_mesh_blk_bdry_revision'::name,
-ARRAY[
-  'audit_id',
-  'mbk_id',
-  'mbl_id',
-  'alt_id'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_mesh_blk_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_mesh_blk_line_revision'::name,
-ARRAY[
-  'shape',
-  'line_type',
-  'id',
-  'audit_id',
-  'se_row_id',
-  'alt_id',
-  'status'
-  , '_revision_created', '_revision_expired']);
-
 SELECT has_table('table_version'::name, 'bde_crs_mesh_blk_place_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mesh_blk_place_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mesh_blk_place_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_mesh_blk_place_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_mesh_blk_place_revision'::name,
 ARRAY[
   'mbk_id',
@@ -599,6 +741,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_mrk_phys_state_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mrk_phys_state_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_mrk_phys_state_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_mrk_phys_state_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_mrk_phys_state_revision'::name,
 ARRAY[
   'mrk_id',
@@ -631,6 +776,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_network_plan_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_network_plan_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_network_plan_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_network_plan_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_network_plan_revision'::name,
 ARRAY[
   'dtm_id',
@@ -642,6 +790,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_node_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_node_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_node_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_node_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_node_revision'::name,
 ARRAY[
   'order_group_off',
@@ -658,6 +809,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_node_prp_order_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_node_prp_order_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_node_prp_order_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_node_prp_order_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_node_prp_order_revision'::name,
 ARRAY[
   'cor_id',
@@ -667,6 +821,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_node_works_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_node_works_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_node_works_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_node_works_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_node_works_revision'::name,
 ARRAY[
   'adopted',
@@ -678,6 +835,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_nominal_index_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_nominal_index_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_nominal_index_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_nominal_index_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_nominal_index_revision'::name,
 ARRAY[
   'dlg_id_ext',
@@ -696,6 +856,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_obs_accuracy_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_obs_accuracy_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_obs_accuracy_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_obs_accuracy_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_obs_accuracy_revision'::name,
 ARRAY[
   'value_31',
@@ -714,6 +877,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_obs_elem_type_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_obs_elem_type_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_obs_elem_type_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_obs_elem_type_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_obs_elem_type_revision'::name,
 ARRAY[
   'type',
@@ -724,31 +890,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_observation_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_obs_set_revision'::name,
-ARRAY[
-  'audit_id',
-  'type',
-  'id',
-  'reason'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_obs_set_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_obs_type_revision'::name,
-ARRAY[
-  'time_reqd',
-  'type',
-  'sub_type',
-  'vector_type',
-  'oet_type_1',
-  'oet_type_2',
-  'oet_type_3',
-  'description',
-  'datum_reqd',
-  'trajectory_reqd',
-  'audit_id'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_obs_type_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_observation_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_observation_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_observation_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_observation_revision'::name,
 ARRAY[
   'arc_direction',
@@ -776,7 +920,41 @@ ARRAY[
   'id'
   , '_revision_created', '_revision_expired']);
 
+SELECT has_table('table_version'::name, 'bde_crs_obs_set_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_obs_set_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_obs_set_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_obs_set_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_obs_set_revision'::name,
+ARRAY[
+  'audit_id',
+  'type',
+  'id',
+  'reason'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_obs_type_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_obs_type_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_obs_type_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_obs_type_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_obs_type_revision'::name,
+ARRAY[
+  'time_reqd',
+  'type',
+  'sub_type',
+  'vector_type',
+  'oet_type_1',
+  'oet_type_2',
+  'oet_type_3',
+  'description',
+  'datum_reqd',
+  'trajectory_reqd',
+  'audit_id'
+  , '_revision_created', '_revision_expired']);
+
 SELECT has_table('table_version'::name, 'bde_crs_off_cord_sys_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_off_cord_sys_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_off_cord_sys_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_off_cord_sys_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_off_cord_sys_revision'::name,
 ARRAY[
   'cos_id',
@@ -788,6 +966,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_office_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_office_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_office_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_office_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_office_revision'::name,
 ARRAY[
   'fax',
@@ -812,6 +993,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_ordinate_adj_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ordinate_adj_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ordinate_adj_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_ordinate_adj_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_ordinate_adj_revision'::name,
 ARRAY[
   'audit_id',
@@ -833,6 +1017,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_ordinate_type_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ordinate_type_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ordinate_type_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_ordinate_type_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_ordinate_type_revision'::name,
 ARRAY[
   'description',
@@ -844,6 +1031,46 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_parcel_bndry_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_parcel_bndry_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_parcel_bndry_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_parcel_bndry_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_parcel_bndry_revision'::name,
+ARRAY[
+  'pri_id',
+  'reversed',
+  'lin_id',
+  'sequence',
+  'audit_id'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_parcel_dimen_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_parcel_dimen_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_parcel_dimen_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_parcel_dimen_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_parcel_dimen_revision'::name,
+ARRAY[
+  'audit_id',
+  'obn_id',
+  'par_id'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_parcel_label_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_parcel_label_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_parcel_label_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_parcel_label_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_parcel_label_revision'::name,
+ARRAY[
+  'se_row_id',
+  'id',
+  'par_id',
+  'audit_id',
+  'shape'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_parcel_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_parcel_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_parcel_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_parcel_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_parcel_revision'::name,
 ARRAY[
   'nonsurvey_def',
@@ -864,35 +1091,10 @@ ARRAY[
   'status'
   , '_revision_created', '_revision_expired']);
 
-SELECT has_table('table_version'::name, 'bde_crs_parcel_dimen_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_parcel_bndry_revision'::name,
-ARRAY[
-  'pri_id',
-  'reversed',
-  'lin_id',
-  'sequence',
-  'audit_id'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_parcel_label_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_parcel_dimen_revision'::name,
-ARRAY[
-  'audit_id',
-  'obn_id',
-  'par_id'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_parcel_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_parcel_label_revision'::name,
-ARRAY[
-  'se_row_id',
-  'id',
-  'par_id',
-  'audit_id',
-  'shape'
-  , '_revision_created', '_revision_expired']);
-
 SELECT has_table('table_version'::name, 'bde_crs_parcel_ring_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_parcel_ring_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_parcel_ring_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_parcel_ring_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_parcel_ring_revision'::name,
 ARRAY[
   'id',
@@ -903,6 +1105,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_programme_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_programme_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_programme_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_programme_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_programme_revision'::name,
 ARRAY[
   'id',
@@ -920,6 +1125,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_proprietor_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_proprietor_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_proprietor_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_proprietor_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_proprietor_revision'::name,
 ARRAY[
   'minor',
@@ -938,6 +1146,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_reduct_meth_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_reduct_meth_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_reduct_meth_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_reduct_meth_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_reduct_meth_revision'::name,
 ARRAY[
   'id',
@@ -948,6 +1159,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_reduct_run_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_reduct_run_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_reduct_run_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_reduct_run_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_reduct_run_revision'::name,
 ARRAY[
   'id',
@@ -961,6 +1175,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_ref_survey_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ref_survey_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ref_survey_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_ref_survey_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_ref_survey_revision'::name,
 ARRAY[
   'sur_wrk_id_new',
@@ -970,6 +1187,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_road_ctr_line_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_road_ctr_line_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_road_ctr_line_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_road_ctr_line_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_road_ctr_line_revision'::name,
 ARRAY[
   'status',
@@ -982,6 +1202,22 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_road_name_asc_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_road_name_asc_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_road_name_asc_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_road_name_asc_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_road_name_asc_revision'::name,
+ARRAY[
+  'rna_id',
+  'rcl_id',
+  'alt_id',
+  'priority',
+  'audit_id'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_road_name_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_road_name_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_road_name_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_road_name_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_road_name_revision'::name,
 ARRAY[
   'sufi',
@@ -995,17 +1231,10 @@ ARRAY[
   'audit_id'
   , '_revision_created', '_revision_expired']);
 
-SELECT has_table('table_version'::name, 'bde_crs_road_name_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_road_name_asc_revision'::name,
-ARRAY[
-  'rna_id',
-  'rcl_id',
-  'alt_id',
-  'priority',
-  'audit_id'
-  , '_revision_created', '_revision_expired']);
-
 SELECT has_table('table_version'::name, 'bde_crs_setup_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_setup_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_setup_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_setup_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_setup_revision'::name,
 ARRAY[
   'type',
@@ -1018,6 +1247,20 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_site_locality_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_site_locality_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_site_locality_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_site_locality_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_site_locality_revision'::name,
+ARRAY[
+  'loc_id',
+  'audit_id',
+  'sit_id'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_site_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_site_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_site_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_site_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_site_revision'::name,
 ARRAY[
   'id',
@@ -1028,15 +1271,10 @@ ARRAY[
   'audit_id'
   , '_revision_created', '_revision_expired']);
 
-SELECT has_table('table_version'::name, 'bde_crs_site_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_site_locality_revision'::name,
-ARRAY[
-  'loc_id',
-  'audit_id',
-  'sit_id'
-  , '_revision_created', '_revision_expired']);
-
 SELECT has_table('table_version'::name, 'bde_crs_stat_act_parcl_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_stat_act_parcl_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_stat_act_parcl_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_stat_act_parcl_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_stat_act_parcl_revision'::name,
 ARRAY[
   'audit_id',
@@ -1052,18 +1290,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_statist_area_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_stat_version_revision'::name,
-ARRAY[
-  'version',
-  'area_class',
-  'desc',
-  'statute_action',
-  'start_date',
-  'end_date',
-  'audit_id'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_statute_action_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_statist_area_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_statist_area_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_statist_area_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_statist_area_revision'::name,
 ARRAY[
   'name',
@@ -1080,21 +1309,10 @@ ARRAY[
   'id'
   , '_revision_created', '_revision_expired']);
 
-SELECT has_table('table_version'::name, 'bde_crs_statute_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_statute_revision'::name,
-ARRAY[
-  'in_force_date',
-  'name_and_date',
-  'section',
-  'repeal_date',
-  'type',
-  'default',
-  'audit_id',
-  'id',
-  'still_in_force'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_stat_version_revision'::name);
+SELECT has_table('table_version'::name, 'bde_crs_statute_action_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_statute_action_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_statute_action_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_statute_action_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_statute_action_revision'::name,
 ARRAY[
   'status',
@@ -1111,7 +1329,42 @@ ARRAY[
   'ste_id'
   , '_revision_created', '_revision_expired']);
 
+SELECT has_table('table_version'::name, 'bde_crs_statute_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_statute_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_statute_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_statute_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_statute_revision'::name,
+ARRAY[
+  'in_force_date',
+  'name_and_date',
+  'section',
+  'repeal_date',
+  'type',
+  'default',
+  'audit_id',
+  'id',
+  'still_in_force'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_stat_version_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_stat_version_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_stat_version_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_stat_version_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_stat_version_revision'::name,
+ARRAY[
+  'version',
+  'area_class',
+  'desc',
+  'statute_action',
+  'start_date',
+  'end_date',
+  'audit_id'
+  , '_revision_created', '_revision_expired']);
+
 SELECT has_table('table_version'::name, 'bde_crs_street_address_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_street_address_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_street_address_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_street_address_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_street_address_revision'::name,
 ARRAY[
   'audit_id',
@@ -1132,6 +1385,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_sur_admin_area_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_sur_admin_area_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_sur_admin_area_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_sur_admin_area_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_sur_admin_area_revision'::name,
 ARRAY[
   'sur_wrk_id',
@@ -1142,6 +1398,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_sur_plan_ref_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_sur_plan_ref_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_sur_plan_ref_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_sur_plan_ref_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_sur_plan_ref_revision'::name,
 ARRAY[
   'shape',
@@ -1151,6 +1410,21 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_survey_image_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_survey_image_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_survey_image_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_survey_image_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_survey_image_revision'::name,
+ARRAY[
+  'type',
+  'sur_wrk_id',
+  'img_id',
+  'audit_id'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_survey_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_survey_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_survey_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_survey_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_survey_revision'::name,
 ARRAY[
   'dlr_amnd_date',
@@ -1182,16 +1456,27 @@ ARRAY[
   'xsv_id'
   , '_revision_created', '_revision_expired']);
 
-SELECT has_table('table_version'::name, 'bde_crs_survey_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_survey_image_revision'::name,
+SELECT has_table('table_version'::name, 'bde_crs_sys_code_group_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_sys_code_group_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_sys_code_group_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_sys_code_group_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_sys_code_group_revision'::name,
 ARRAY[
-  'type',
-  'sur_wrk_id',
-  'img_id',
-  'audit_id'
+  'code',
+  'audit_id',
+  'user_modify_flag',
+  'user_create_flag',
+  'desc',
+  'user_delete_flag',
+  'user_view_flag',
+  'data_type',
+  'group_type'
   , '_revision_created', '_revision_expired']);
 
-SELECT has_table('table_version'::name, 'bde_crs_sys_code_group_revision'::name);
+SELECT has_table('table_version'::name, 'bde_crs_sys_code_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_sys_code_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_sys_code_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_sys_code_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_sys_code_revision'::name,
 ARRAY[
   'start_date',
@@ -1206,21 +1491,109 @@ ARRAY[
   'scg_code'
   , '_revision_created', '_revision_expired']);
 
-SELECT has_table('table_version'::name, 'bde_crs_sys_code_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_sys_code_group_revision'::name,
+SELECT has_table('table_version'::name, 'bde_crs_title_action_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_title_action_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_title_action_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_title_action_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_title_action_revision'::name,
 ARRAY[
-  'code',
   'audit_id',
-  'user_modify_flag',
-  'user_create_flag',
-  'desc',
-  'user_delete_flag',
-  'user_view_flag',
-  'data_type',
-  'group_type'
+  'ttl_title_no',
+  'act_tin_id',
+  'act_id'
   , '_revision_created', '_revision_expired']);
 
-SELECT has_table('table_version'::name, 'bde_crs_title_action_revision'::name);
+SELECT has_table('table_version'::name, 'bde_crs_title_doc_ref_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_title_doc_ref_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_title_doc_ref_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_title_doc_ref_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_title_doc_ref_revision'::name,
+ARRAY[
+  'type',
+  'tin_id',
+  'id',
+  'reference_no'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_title_estate_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_title_estate_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_title_estate_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_title_estate_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_title_estate_revision'::name,
+ARRAY[
+  'type',
+  'ttl_title_no',
+  'id',
+  'tin_id_orig',
+  'act_tin_id_ext',
+  'share',
+  'lgd_id',
+  'status',
+  'term',
+  'original_flag',
+  'timeshare_week_no',
+  'act_id_ext',
+  'purpose',
+  'act_tin_id_crt',
+  'act_id_crt'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_title_memorial_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_title_memorial_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_title_memorial_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_title_memorial_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_title_memorial_revision'::name,
+ARRAY[
+  'col_6_size',
+  'id',
+  'ttl_title_no',
+  'mmt_code',
+  'act_id_orig',
+  'act_tin_id_orig',
+  'act_id_crt',
+  'act_tin_id_crt',
+  'status',
+  'user_changed',
+  'text_type',
+  'register_only_mem',
+  'prev_further_reg',
+  'curr_hist_flag',
+  'default',
+  'number_of_cols',
+  'col_1_size',
+  'col_2_size',
+  'col_3_size',
+  'col_4_size',
+  'col_5_size',
+  'col_7_size',
+  'act_id_ext',
+  'act_tin_id_ext'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_title_mem_text_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_title_mem_text_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_title_mem_text_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_title_mem_text_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_title_mem_text_revision'::name,
+ARRAY[
+  'audit_id',
+  'col_1_text',
+  'col_2_text',
+  'col_3_text',
+  'col_4_text',
+  'std_text',
+  'col_5_text',
+  'col_6_text',
+  'col_7_text',
+  'curr_hist_flag',
+  'sequence_no',
+  'ttm_id'
+  , '_revision_created', '_revision_expired']);
+
+SELECT has_table('table_version'::name, 'bde_crs_title_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_title_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_title_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_title_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_title_revision'::name,
 ARRAY[
   'ttl_title_no_head_srs',
@@ -1251,91 +1624,20 @@ ARRAY[
   'no_survivorship'
   , '_revision_created', '_revision_expired']);
 
-SELECT has_table('table_version'::name, 'bde_crs_title_doc_ref_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_title_action_revision'::name,
-ARRAY[
-  'audit_id',
-  'ttl_title_no',
-  'act_tin_id',
-  'act_id'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_title_estate_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_title_doc_ref_revision'::name,
-ARRAY[
-  'type',
-  'tin_id',
-  'id',
-  'reference_no'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_title_memorial_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_title_estate_revision'::name,
-ARRAY[
-  'type',
-  'ttl_title_no',
-  'id',
-  'tin_id_orig',
-  'act_tin_id_ext',
-  'share',
-  'lgd_id',
-  'status',
-  'term',
-  'original_flag',
-  'timeshare_week_no',
-  'act_id_ext',
-  'purpose',
-  'act_tin_id_crt',
-  'act_id_crt'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_title_mem_text_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_title_mem_text_revision'::name,
-ARRAY[
-  'audit_id',
-  'col_1_text',
-  'col_2_text',
-  'col_3_text',
-  'col_4_text',
-  'std_text',
-  'col_5_text',
-  'col_6_text',
-  'col_7_text',
-  'curr_hist_flag',
-  'sequence_no',
-  'ttm_id'
-  , '_revision_created', '_revision_expired']);
-
-SELECT has_table('table_version'::name, 'bde_crs_title_revision'::name);
-SELECT columns_are('table_version'::name, 'bde_crs_title_memorial_revision'::name,
-ARRAY[
-  'col_6_size',
-  'id',
-  'ttl_title_no',
-  'mmt_code',
-  'act_id_orig',
-  'act_tin_id_orig',
-  'act_id_crt',
-  'act_tin_id_crt',
-  'status',
-  'user_changed',
-  'text_type',
-  'register_only_mem',
-  'prev_further_reg',
-  'curr_hist_flag',
-  'default',
-  'number_of_cols',
-  'col_1_size',
-  'col_2_size',
-  'col_3_size',
-  'col_4_size',
-  'col_5_size',
-  'col_7_size',
-  'act_id_ext',
-  'act_tin_id_ext'
-  , '_revision_created', '_revision_expired']);
+SELECT lives_ok($CODE$
+  DO $$
+    DECLARE
+      x table_version.bde_crs_title_revision.protect_reference%type;
+    BEGIN
+      x := array_to_string(ARRAY(select 'x'::text from generate_series(1,255)), '');
+    END;
+  $$;
+$CODE$);
 
 SELECT has_table('table_version'::name, 'bde_crs_topology_class_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_topology_class_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_topology_class_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_topology_class_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_topology_class_revision'::name,
 ARRAY[
   'audit_id',
@@ -1345,6 +1647,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_transact_type_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_transact_type_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_transact_type_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_transact_type_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_transact_type_revision'::name,
 ARRAY[
   'partial_discharge',
@@ -1390,10 +1695,15 @@ ARRAY[
   'request_workflow_assignment',
   'short_name',
   'submitting_firm_only',
-  'view_in_search_tree'
+  'view_in_search_tree',
+  'user_type_list',
+  'user_type_list_flag'
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_ttl_enc_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_enc_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_enc_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_ttl_enc_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_ttl_enc_revision'::name,
 ARRAY[
   'act_tin_id_ext',
@@ -1407,6 +1717,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_ttl_hierarchy_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_hierarchy_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_hierarchy_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_ttl_hierarchy_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_ttl_hierarchy_revision'::name,
 ARRAY[
   'act_id_ext',
@@ -1421,6 +1734,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_ttl_inst_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_inst_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_inst_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_ttl_inst_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_ttl_inst_revision'::name,
 ARRAY[
   'dlg_id',
@@ -1452,7 +1768,33 @@ ARRAY[
   'ttin_new_rej'
   , '_revision_created', '_revision_expired']);
 
+SELECT has_table('table_version'::name, 'bde_crs_ttl_inst_protect_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_inst_protect_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_inst_protect_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_ttl_inst_protect_revision'::name, 'bde_dba'::name);
+SELECT columns_are('table_version'::name, 'bde_crs_ttl_inst_protect_revision'::name,
+ARRAY[
+  'id',
+  'tin_id',
+  'protect_start',
+  'protect_end',
+  'protect_reference'
+  , '_revision_created', '_revision_expired']);
+
+SELECT lives_ok($CODE$
+  DO $$
+    DECLARE
+      x table_version.bde_crs_ttl_inst_protect_revision.protect_reference%type;
+    BEGIN
+      x := array_to_string(ARRAY(select 'x'::text from generate_series(1,255)), '');
+    END;
+  $$;
+$CODE$);
+
 SELECT has_table('table_version'::name, 'bde_crs_ttl_inst_title_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_inst_title_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_ttl_inst_title_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_ttl_inst_title_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_ttl_inst_title_revision'::name,
 ARRAY[
   'tin_id',
@@ -1462,6 +1804,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_unit_of_meas_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_unit_of_meas_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_unit_of_meas_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_unit_of_meas_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_unit_of_meas_revision'::name,
 ARRAY[
   'code',
@@ -1470,6 +1815,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_user_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_user_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_user_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_user_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_user_revision'::name,
 ARRAY[
   'usr_id_coordinator',
@@ -1525,6 +1873,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_vector_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_vector_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_vector_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_vector_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_vector_revision'::name,
 ARRAY[
   'nod_id_end',
@@ -1539,6 +1890,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_vertx_sequence_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_vertx_sequence_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_vertx_sequence_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_vertx_sequence_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_vertx_sequence_revision'::name,
 ARRAY[
   'value2',
@@ -1549,6 +1903,9 @@ ARRAY[
   , '_revision_created', '_revision_expired']);
 
 SELECT has_table('table_version'::name, 'bde_crs_work_revision'::name);
+SELECT table_privs_are('table_version'::name, 'bde_crs_work_revision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('table_version'::name, 'bde_crs_work_revision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('table_version'::name, 'bde_crs_work_revision'::name, 'bde_dba'::name);
 SELECT columns_are('table_version'::name, 'bde_crs_work_revision'::name,
 ARRAY[
   'usr_id_principal',
@@ -1577,7 +1934,8 @@ ARRAY[
   'status',
   'trt_type',
   'trt_grp',
-  'id'
+  'id',
+  'ver_datum_code'
   , '_revision_created', '_revision_expired']);
 
 -- }
