@@ -34,6 +34,24 @@ All notable changes for the LINZ BDE schema are documented in this file.
 
 -   Landonline 3.22 support: new `crs_ttl_inst_protect` table
 
+## 1.10.3 - 2020-06-16
+
+### Fixed
+
+-   Lack of changelog in debian packaging
+
+## 1.10.2 - 2020-05-28
+
+### Fixed
+
+-   Version in Makefile (#193)
+
+## 1.10.1 - 2020-05-27
+
+### Fixed
+
+-   Work around RDS bug with `search_path` (#192)
+
 ## 1.10.0 - 2020-05-05
 
 ### Changed
