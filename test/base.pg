@@ -22,7 +22,13 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS pgtap;
 
 CREATE SCHEMA IF NOT EXISTS _patches;
-CREATE EXTENSION IF NOT EXISTS dbpatch SCHEMA _patches;
+DO $$
+BEGIN
+    IF NOT EXISTS ( SELECT * FROM pg_proc WHERE proname = 'apply_patch' )
+    THEN
+        CREATE EXTENSION dbpatch SCHEMA _patches;
+    END IF;
+END; $$;
 
 -- Switch to unprivileged role
 DO $$
@@ -43,6 +49,7 @@ BEGIN
 --VERSIONED-- --       grant CREATE on table_version to bde_dba (as requested by
 --VERSIONED-- --       sql/versioning/01-version_tables.sql)
 --VERSIONED-- GRANT ALL ON SCHEMA table_version TO linz_bde_schema_test_role WITH GRANT OPTION;
+--VERSIONED-- GRANT SELECT ON ALL SEQUENCES IN SCHEMA table_version TO linz_bde_schema_test_role WITH GRANT OPTION;
     SET session_authorization TO linz_bde_schema_test_role;
 END $$;
 
@@ -58,8 +65,8 @@ END $$;
 
 BEGIN;
 
-SELECT * FROM plan(653
---VERSIONED-- + 525
+SELECT * FROM plan(660
+--VERSIONED-- + 533
 );
 
 -- Test base schema existance
@@ -183,25 +190,6 @@ THEN IF table_version.ver_is_table_versioned('bde', 'crs_work') THEN
 
     PERFORM table_version.ver_create_revision('test fixture');
 
-    -- As of table_version 1.4.x the triggers attached by `ver_create_revision`
-    -- to tables are changed to be owned by the table owner and are made
-    -- run with those permissions. This is problematic for various reasons
-    -- explained in https://github.com/linz/postgresql-tableversion/issues/99
-    -- As a workaround, we change those ownership right before populating one
-    -- such table during testing.
-    -- FIXME: drop this snippet when using a non-bogus table_version
-    RESET session_authorization;
-    SELECT u.rolname
-      INTO tvowner
-      FROM pg_roles u, pg_proc f
-     WHERE f.proowner = u.oid
-       AND f.proname = 'ver_create_revision'
-     LIMIT 1;
-    EXECUTE FORMAT('ALTER FUNCTION '
-        'table_version.bde_crs_appellation_revision() OWNER TO %I',
-        tvowner);
-    SET session_authorization TO linz_bde_schema_test_role;
-
 END IF; END IF; END; $$;
 
 COPY bde.crs_appellation FROM STDIN ( delimiter '|' );
@@ -280,6 +268,7 @@ BEGIN
 --VERSIONED-- -- TODO: figure out which "dependent privileges exist", to
 --VERSIONED-- --      replace the CASCADE with fine-grained REVOKEs
 --VERSIONED-- REVOKE ALL ON SCHEMA table_version FROM linz_bde_schema_test_role CASCADE;
+--VERSIONED-- REVOKE ALL ON ALL SEQUENCES IN SCHEMA table_version FROM linz_bde_schema_test_role CASCADE;
     DROP ROLE linz_bde_schema_test_role;
 END; $$;
 

@@ -24,7 +24,6 @@ BEGIN
 
   EXECUTE format('ALTER FUNCTION %s OWNER TO bde_dba', p_pcid);
   EXECUTE format('REVOKE ALL ON FUNCTION %s FROM PUBLIC', p_pcid);
-  EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO bde_admin', p_pcid);
   EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO bde_user', p_pcid);
   EXECUTE format('COMMENT ON FUNCTION %s IS %L', p_pcid, v_comment);
 END
@@ -165,7 +164,7 @@ END;
     $$ LANGUAGE plpgsql IMMUTABLE STRICT;
 --}
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_app_specific(bde.crs_appellation, char)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_app_specific(bde.crs_appellation, char)'); END; $$;
 
 /**
 * Retrieve the title or survey appellation for a specific parcel and format it.
@@ -198,7 +197,7 @@ RETURNS text AS $$
     $$ LANGUAGE sql STABLE STRICT;
 --}
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_app_specific(INTEGER, VARCHAR, CHAR)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_app_specific(INTEGER, VARCHAR, CHAR)'); END; $$;
 
 
 
@@ -219,7 +218,7 @@ CREATE OR REPLACE FUNCTION bde.bde_get_charcode(p_code_group VARCHAR, p_code VAR
 $$ LANGUAGE sql STABLE STRICT;
 
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_charcode(VARCHAR, VARCHAR)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_charcode(VARCHAR, VARCHAR)'); END; $$;
 
 
 
@@ -260,7 +259,7 @@ END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_dataset(INTEGER)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_dataset(INTEGER)'); END; $$;
 
 
 
@@ -275,7 +274,7 @@ CREATE OR REPLACE FUNCTION bde.bde_get_datasource(p_wrk_id INTEGER) RETURNS CHAR
     WHERE  wrk_id = $1;
 $$ LANGUAGE sql STABLE STRICT;
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_datasource(INTEGER)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_datasource(INTEGER)'); END; $$;
 
 
 
@@ -291,7 +290,7 @@ CREATE OR REPLACE FUNCTION bde.bde_get_desccode(p_code_group VARCHAR, p_code VAR
     AND    SCO.code     = $2;
 $$ LANGUAGE sql STABLE STRICT;
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_desccode(VARCHAR, VARCHAR)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_desccode(VARCHAR, VARCHAR)'); END; $$;
 
 
 
@@ -306,7 +305,7 @@ CREATE OR REPLACE FUNCTION bde.bde_get_district(p_loc_id INTEGER) RETURNS VARCHA
     WHERE  id = $1;
 $$ LANGUAGE sql STABLE STRICT;
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_district(INTEGER)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_district(INTEGER)'); END; $$;
 
 
 
@@ -387,7 +386,7 @@ BEGIN
 END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_mrknodename(INTEGER, VARCHAR)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_mrknodename(INTEGER, VARCHAR)'); END; $$;
 
 
 
@@ -401,7 +400,7 @@ CREATE OR REPLACE FUNCTION bde.bde_get_markname(p_mrk_id INTEGER) RETURNS VARCHA
 $$ LANGUAGE sql STABLE STRICT;
 
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_markname(INTEGER)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_markname(INTEGER)'); END; $$;
 
 
 
@@ -415,7 +414,7 @@ CREATE OR REPLACE FUNCTION bde.bde_get_nodename(p_nod_id INTEGER) RETURNS VARCHA
 $$ LANGUAGE sql STABLE STRICT;
 
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_nodename(INTEGER)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_nodename(INTEGER)'); END; $$;
 
 
 
@@ -447,7 +446,7 @@ END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_nodename(INTEGER, VARCHAR)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_nodename(INTEGER, VARCHAR)'); END; $$;
 
 
 
@@ -468,7 +467,7 @@ CREATE OR REPLACE FUNCTION bde.bde_get_nodeorder(p_node_id INTEGER) RETURNS VARC
     AND     COS.dtm_id = DTM.id;
 $$ LANGUAGE sql STABLE STRICT;
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_nodeorder(INTEGER)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_nodeorder(INTEGER)'); END; $$;
 
 
 
@@ -486,7 +485,7 @@ CREATE OR REPLACE FUNCTION bde.bde_get_office(p_loc_id INTEGER) RETURNS VARCHAR 
 $$ LANGUAGE sql STABLE STRICT;
 
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_office(INTEGER)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_office(INTEGER)'); END; $$;
 
 
 
@@ -567,7 +566,7 @@ END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_roadname(INTEGER, DOUBLE PRECISION)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_roadname(INTEGER, DOUBLE PRECISION)'); END; $$;
 
 
 
@@ -583,7 +582,7 @@ CREATE OR REPLACE FUNCTION bde.bde_get_trtcode(p_code_group VARCHAR, p_type VARC
    AND    type = $2;
 $$ LANGUAGE sql STABLE STRICT;
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_trtcode(VARCHAR, VARCHAR)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_trtcode(VARCHAR, VARCHAR)'); END; $$;
 
 
 
@@ -598,7 +597,7 @@ CREATE OR REPLACE FUNCTION bde.bde_get_username(p_user_id VARCHAR) RETURNS VARCH
     WHERE  id = $1;
 $$ LANGUAGE sql STABLE STRICT;
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_username(VARCHAR)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_username(VARCHAR)'); END; $$;
 
 
 
@@ -614,7 +613,7 @@ CREATE OR REPLACE FUNCTION bde.bde_get_useroff(p_user_id VARCHAR) RETURNS VARCHA
 $$ LANGUAGE sql STABLE STRICT;
 
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_useroff(VARCHAR)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_useroff(VARCHAR)'); END; $$;
 
 
 
@@ -727,7 +726,7 @@ BEGIN
 END;
     $$ LANGUAGE plpgsql IMMUTABLE;
 
-SELECT pg_temp.bless_bde_function('bde.bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_write_appellation(VARCHAR, VARCHAR, CHAR, VARCHAR, TEXT, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, VARCHAR, TEXT)'); END; $$;
 
 
 
@@ -746,7 +745,7 @@ RETURNS TEXT AS $$
     LIMIT 1;
 $$ LANGUAGE sql STABLE STRICT;
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_combined_appellation(INTEGER, CHAR)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_combined_appellation(INTEGER, CHAR)'); END; $$;
 
 
 
@@ -878,7 +877,7 @@ BEGIN
 END;
     $$ LANGUAGE plpgsql STABLE STRICT;
 
-SELECT pg_temp.bless_bde_function('bde.bde_get_par_stat_act(INTEGER, INTEGER)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_get_par_stat_act(INTEGER, INTEGER)'); END; $$;
 
 
 
@@ -935,7 +934,7 @@ BEGIN
     END;
 $body$ LANGUAGE plpgsql STABLE;
 
-SELECT pg_temp.bless_bde_function('bde.bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_getnearnodes(DOUBLE PRECISION, DOUBLE PRECISION, DOUBLE PRECISION)'); END; $$;
 
 
 
@@ -978,7 +977,7 @@ BEGIN
 END
 $$ LANGUAGE plpgsql VOLATILE SECURITY DEFINER;
 
-SELECT pg_temp.bless_bde_function('bde.bde_drop_idle_connections(INTEGER)');
+DO $$ BEGIN PERFORM pg_temp.bless_bde_function('bde.bde_drop_idle_connections(INTEGER)'); END; $$;
 
 
 
