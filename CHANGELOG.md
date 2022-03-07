@@ -16,6 +16,12 @@ All notable changes for the LINZ BDE schema are documented in this file.
 -   Fix ordering of tests
 -   protect_reference column > VARCHAR(255)
 
+## 1.12.2 - 2020-09-15
+
+### Fixed
+
+-   Updated schema comments
+
 ## 1.12.1 - 2020-08-18
 
 ### Fixed
