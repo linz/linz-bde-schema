@@ -126,21 +126,6 @@ SELECT has_table('bde'::name, 'crs_adjustment_run'::name);
 SELECT table_privs_are('bde'::name, 'crs_adjustment_run'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_adjustment_run'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_adjustment_run'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_adjust_method'::name,
-ARRAY[
-  'type',
-  'id',
-  'status',
-  'software_used',
-  'name',
-  'audit_id',
-  'description'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_adjust_method'::name);
-SELECT table_privs_are('bde'::name, 'crs_adjust_method'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_adjust_method'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_adjust_method'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_adjustment_run'::name,
 ARRAY[
   'id',
@@ -157,6 +142,21 @@ ARRAY[
   'adj_obn_status_decom',
   'adj_nod_status_decom',
   'status'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_adjust_method'::name);
+SELECT table_privs_are('bde'::name, 'crs_adjust_method'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_adjust_method'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_adjust_method'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_adjust_method'::name,
+ARRAY[
+  'type',
+  'id',
+  'status',
+  'software_used',
+  'name',
+  'audit_id',
+  'description'
   ]);
 
 SELECT has_table('bde'::name, 'crs_adoption'::name);
@@ -308,18 +308,6 @@ SELECT has_table('bde'::name, 'crs_cord_order'::name);
 SELECT table_privs_are('bde'::name, 'crs_cord_order'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_cord_order'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_cord_order'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_cor_precision'::name,
-ARRAY[
-  'cor_id',
-  'ort_type',
-  'decimal_places',
-  'audit_id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_cor_precision'::name);
-SELECT table_privs_are('bde'::name, 'crs_cor_precision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_cor_precision'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_cor_precision'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_cord_order'::name,
 ARRAY[
   'dtm_id',
@@ -329,6 +317,18 @@ ARRAY[
   'id',
   'display',
   'description'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_cor_precision'::name);
+SELECT table_privs_are('bde'::name, 'crs_cor_precision'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_cor_precision'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_cor_precision'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_cor_precision'::name,
+ARRAY[
+  'cor_id',
+  'ort_type',
+  'decimal_places',
+  'audit_id'
   ]);
 
 SELECT has_table('bde'::name, 'crs_datum'::name);
@@ -399,6 +399,20 @@ SELECT has_table('bde'::name, 'crs_encumbrancee'::name);
 SELECT table_privs_are('bde'::name, 'crs_encumbrancee'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_encumbrancee'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_encumbrancee'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_encumbrancee'::name,
+ARRAY[
+  'id',
+  'ens_id',
+  'status',
+  'name',
+  'system_ext',
+  'usr_id'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_encumbrance'::name);
+SELECT table_privs_are('bde'::name, 'crs_encumbrance'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_encumbrance'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_encumbrance'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_encumbrance'::name,
 ARRAY[
   'term',
@@ -409,20 +423,6 @@ ARRAY[
   'act_id_crt',
   'act_id_orig',
   'ind_tan_holder'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_encumbrance'::name);
-SELECT table_privs_are('bde'::name, 'crs_encumbrance'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_encumbrance'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_encumbrance'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_encumbrancee'::name,
-ARRAY[
-  'id',
-  'ens_id',
-  'status',
-  'name',
-  'system_ext',
-  'usr_id'
   ]);
 
 SELECT has_table('bde'::name, 'crs_estate_share'::name);
@@ -490,22 +490,6 @@ SELECT has_table('bde'::name, 'crs_image_history'::name);
 SELECT table_privs_are('bde'::name, 'crs_image_history'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_image_history'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_image_history'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_image'::name,
-ARRAY[
-  'usr_id_created',
-  'barcode_datetime',
-  'ims_id',
-  'ims_date',
-  'pages',
-  'centera_id',
-  'location',
-  'id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_image'::name);
-SELECT table_privs_are('bde'::name, 'crs_image'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_image'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_image'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_image_history'::name,
 ARRAY[
   'usr_id',
@@ -516,6 +500,22 @@ ARRAY[
   'img_id',
   'id',
   'centera_datetime'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_image'::name);
+SELECT table_privs_are('bde'::name, 'crs_image'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_image'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_image'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_image'::name,
+ARRAY[
+  'usr_id_created',
+  'barcode_datetime',
+  'ims_id',
+  'ims_date',
+  'pages',
+  'centera_id',
+  'location',
+  'id'
   ]);
 
 SELECT has_table('bde'::name, 'crs_land_district'::name);
@@ -681,6 +681,45 @@ SELECT has_table('bde'::name, 'crs_mesh_blk_area'::name);
 SELECT table_privs_are('bde'::name, 'crs_mesh_blk_area'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_mesh_blk_area'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_mesh_blk_area'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_mesh_blk_area'::name,
+ARRAY[
+  'mbk_id',
+  'audit_id',
+  'alt_id',
+  'stt_id'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_mesh_blk_bdry'::name);
+SELECT table_privs_are('bde'::name, 'crs_mesh_blk_bdry'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_mesh_blk_bdry'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_mesh_blk_bdry'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_mesh_blk_bdry'::name,
+ARRAY[
+  'audit_id',
+  'mbk_id',
+  'mbl_id',
+  'alt_id'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_mesh_blk_line'::name);
+SELECT table_privs_are('bde'::name, 'crs_mesh_blk_line'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_mesh_blk_line'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_mesh_blk_line'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_mesh_blk_line'::name,
+ARRAY[
+  'shape',
+  'line_type',
+  'id',
+  'audit_id',
+  'se_row_id',
+  'alt_id',
+  'status'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_mesh_blk'::name);
+SELECT table_privs_are('bde'::name, 'crs_mesh_blk'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_mesh_blk'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_mesh_blk'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_mesh_blk'::name,
 ARRAY[
   'shape',
@@ -691,45 +730,6 @@ ARRAY[
   'end_datetime',
   'audit_id',
   'se_row_id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_mesh_blk_bdry'::name);
-SELECT table_privs_are('bde'::name, 'crs_mesh_blk_bdry'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_mesh_blk_bdry'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_mesh_blk_bdry'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_mesh_blk_area'::name,
-ARRAY[
-  'mbk_id',
-  'audit_id',
-  'alt_id',
-  'stt_id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_mesh_blk_line'::name);
-SELECT table_privs_are('bde'::name, 'crs_mesh_blk_line'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_mesh_blk_line'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_mesh_blk_line'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_mesh_blk_bdry'::name,
-ARRAY[
-  'audit_id',
-  'mbk_id',
-  'mbl_id',
-  'alt_id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_mesh_blk'::name);
-SELECT table_privs_are('bde'::name, 'crs_mesh_blk'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_mesh_blk'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_mesh_blk'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_mesh_blk_line'::name,
-ARRAY[
-  'shape',
-  'line_type',
-  'id',
-  'audit_id',
-  'se_row_id',
-  'alt_id',
-  'status'
   ]);
 
 SELECT has_table('bde'::name, 'crs_mesh_blk_place'::name);
@@ -897,37 +897,6 @@ SELECT has_table('bde'::name, 'crs_observation'::name);
 SELECT table_privs_are('bde'::name, 'crs_observation'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_observation'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_observation'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_obs_set'::name,
-ARRAY[
-  'audit_id',
-  'type',
-  'id',
-  'reason'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_obs_set'::name);
-SELECT table_privs_are('bde'::name, 'crs_obs_set'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_obs_set'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_obs_set'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_obs_type'::name,
-ARRAY[
-  'time_reqd',
-  'type',
-  'sub_type',
-  'vector_type',
-  'oet_type_1',
-  'oet_type_2',
-  'oet_type_3',
-  'description',
-  'datum_reqd',
-  'trajectory_reqd',
-  'audit_id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_obs_type'::name);
-SELECT table_privs_are('bde'::name, 'crs_obs_type'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_obs_type'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_obs_type'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_observation'::name,
 ARRAY[
   'arc_direction',
@@ -953,6 +922,37 @@ ARRAY[
   'obt_sub_type',
   'obt_type',
   'id'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_obs_set'::name);
+SELECT table_privs_are('bde'::name, 'crs_obs_set'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_obs_set'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_obs_set'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_obs_set'::name,
+ARRAY[
+  'audit_id',
+  'type',
+  'id',
+  'reason'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_obs_type'::name);
+SELECT table_privs_are('bde'::name, 'crs_obs_type'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_obs_type'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_obs_type'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_obs_type'::name,
+ARRAY[
+  'time_reqd',
+  'type',
+  'sub_type',
+  'vector_type',
+  'oet_type_1',
+  'oet_type_2',
+  'oet_type_3',
+  'description',
+  'datum_reqd',
+  'trajectory_reqd',
+  'audit_id'
   ]);
 
 SELECT has_table('bde'::name, 'crs_off_cord_sys'::name);
@@ -1038,6 +1038,43 @@ SELECT has_table('bde'::name, 'crs_parcel_bndry'::name);
 SELECT table_privs_are('bde'::name, 'crs_parcel_bndry'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_parcel_bndry'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_parcel_bndry'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_parcel_bndry'::name,
+ARRAY[
+  'pri_id',
+  'reversed',
+  'lin_id',
+  'sequence',
+  'audit_id'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_parcel_dimen'::name);
+SELECT table_privs_are('bde'::name, 'crs_parcel_dimen'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_parcel_dimen'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_parcel_dimen'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_parcel_dimen'::name,
+ARRAY[
+  'audit_id',
+  'obn_id',
+  'par_id'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_parcel_label'::name);
+SELECT table_privs_are('bde'::name, 'crs_parcel_label'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_parcel_label'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_parcel_label'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_parcel_label'::name,
+ARRAY[
+  'se_row_id',
+  'id',
+  'par_id',
+  'audit_id',
+  'shape'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_parcel'::name);
+SELECT table_privs_are('bde'::name, 'crs_parcel'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_parcel'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_parcel'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_parcel'::name,
 ARRAY[
   'nonsurvey_def',
@@ -1056,43 +1093,6 @@ ARRAY[
   'calculated_area',
   'total_area',
   'status'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_parcel_dimen'::name);
-SELECT table_privs_are('bde'::name, 'crs_parcel_dimen'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_parcel_dimen'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_parcel_dimen'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_parcel_bndry'::name,
-ARRAY[
-  'pri_id',
-  'reversed',
-  'lin_id',
-  'sequence',
-  'audit_id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_parcel_label'::name);
-SELECT table_privs_are('bde'::name, 'crs_parcel_label'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_parcel_label'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_parcel_label'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_parcel_dimen'::name,
-ARRAY[
-  'audit_id',
-  'obn_id',
-  'par_id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_parcel'::name);
-SELECT table_privs_are('bde'::name, 'crs_parcel'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_parcel'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_parcel'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_parcel_label'::name,
-ARRAY[
-  'se_row_id',
-  'id',
-  'par_id',
-  'audit_id',
-  'shape'
   ]);
 
 SELECT has_table('bde'::name, 'crs_parcel_ring'::name);
@@ -1209,6 +1209,19 @@ SELECT has_table('bde'::name, 'crs_road_name_asc'::name);
 SELECT table_privs_are('bde'::name, 'crs_road_name_asc'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_road_name_asc'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_road_name_asc'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_road_name_asc'::name,
+ARRAY[
+  'rna_id',
+  'rcl_id',
+  'alt_id',
+  'priority',
+  'audit_id'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_road_name'::name);
+SELECT table_privs_are('bde'::name, 'crs_road_name'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_road_name'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_road_name'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_road_name'::name,
 ARRAY[
   'sufi',
@@ -1219,19 +1232,6 @@ ARRAY[
   'location',
   'status',
   'unofficial_flag',
-  'audit_id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_road_name'::name);
-SELECT table_privs_are('bde'::name, 'crs_road_name'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_road_name'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_road_name'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_road_name_asc'::name,
-ARRAY[
-  'rna_id',
-  'rcl_id',
-  'alt_id',
-  'priority',
   'audit_id'
   ]);
 
@@ -1254,6 +1254,17 @@ SELECT has_table('bde'::name, 'crs_site_locality'::name);
 SELECT table_privs_are('bde'::name, 'crs_site_locality'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_site_locality'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_site_locality'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_site_locality'::name,
+ARRAY[
+  'loc_id',
+  'audit_id',
+  'sit_id'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_site'::name);
+SELECT table_privs_are('bde'::name, 'crs_site'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_site'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_site'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_site'::name,
 ARRAY[
   'id',
@@ -1262,17 +1273,6 @@ ARRAY[
   'desc',
   'occupier',
   'audit_id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_site'::name);
-SELECT table_privs_are('bde'::name, 'crs_site'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_site'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_site'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_site_locality'::name,
-ARRAY[
-  'loc_id',
-  'audit_id',
-  'sit_id'
   ]);
 
 SELECT has_table('bde'::name, 'crs_stat_act_parcl'::name);
@@ -1297,21 +1297,6 @@ SELECT has_table('bde'::name, 'crs_statist_area'::name);
 SELECT table_privs_are('bde'::name, 'crs_statist_area'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_statist_area'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_statist_area'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_stat_version'::name,
-ARRAY[
-  'version',
-  'area_class',
-  'desc',
-  'statute_action',
-  'start_date',
-  'end_date',
-  'audit_id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_statute_action'::name);
-SELECT table_privs_are('bde'::name, 'crs_statute_action'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_statute_action'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_statute_action'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_statist_area'::name,
 ARRAY[
   'name',
@@ -1326,6 +1311,26 @@ ARRAY[
   'alt_id',
   'usr_id_firm_ta',
   'id'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_statute_action'::name);
+SELECT table_privs_are('bde'::name, 'crs_statute_action'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_statute_action'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_statute_action'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_statute_action'::name,
+ARRAY[
+  'status',
+  'sur_wrk_id_vesting',
+  'gazette_year',
+  'gazette_page',
+  'gazette_type',
+  'other_legality',
+  'recorded_date',
+  'id',
+  'audit_id',
+  'gazette_notice_id',
+  'type',
+  'ste_id'
   ]);
 
 SELECT has_table('bde'::name, 'crs_statute'::name);
@@ -1349,20 +1354,15 @@ SELECT has_table('bde'::name, 'crs_stat_version'::name);
 SELECT table_privs_are('bde'::name, 'crs_stat_version'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_stat_version'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_stat_version'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_statute_action'::name,
+SELECT columns_are('bde'::name, 'crs_stat_version'::name,
 ARRAY[
-  'status',
-  'sur_wrk_id_vesting',
-  'gazette_year',
-  'gazette_page',
-  'gazette_type',
-  'other_legality',
-  'recorded_date',
-  'id',
-  'audit_id',
-  'gazette_notice_id',
-  'type',
-  'ste_id'
+  'version',
+  'area_class',
+  'desc',
+  'statute_action',
+  'start_date',
+  'end_date',
+  'audit_id'
   ]);
 
 SELECT has_table('bde'::name, 'crs_street_address'::name);
@@ -1417,6 +1417,18 @@ SELECT has_table('bde'::name, 'crs_survey_image'::name);
 SELECT table_privs_are('bde'::name, 'crs_survey_image'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_survey_image'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_survey_image'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_survey_image'::name,
+ARRAY[
+  'type',
+  'sur_wrk_id',
+  'img_id',
+  'audit_id'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_survey'::name);
+SELECT table_privs_are('bde'::name, 'crs_survey'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_survey'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_survey'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_survey'::name,
 ARRAY[
   'dlr_amnd_date',
@@ -1448,22 +1460,27 @@ ARRAY[
   'xsv_id'
   ]);
 
-SELECT has_table('bde'::name, 'crs_survey'::name);
-SELECT table_privs_are('bde'::name, 'crs_survey'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_survey'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_survey'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_survey_image'::name,
-ARRAY[
-  'type',
-  'sur_wrk_id',
-  'img_id',
-  'audit_id'
-  ]);
-
 SELECT has_table('bde'::name, 'crs_sys_code_group'::name);
 SELECT table_privs_are('bde'::name, 'crs_sys_code_group'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_sys_code_group'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_sys_code_group'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_sys_code_group'::name,
+ARRAY[
+  'code',
+  'audit_id',
+  'user_modify_flag',
+  'user_create_flag',
+  'desc',
+  'user_delete_flag',
+  'user_view_flag',
+  'data_type',
+  'group_type'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_sys_code'::name);
+SELECT table_privs_are('bde'::name, 'crs_sys_code'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_sys_code'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_sys_code'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_sys_code'::name,
 ARRAY[
   'start_date',
@@ -1478,27 +1495,109 @@ ARRAY[
   'scg_code'
   ]);
 
-SELECT has_table('bde'::name, 'crs_sys_code'::name);
-SELECT table_privs_are('bde'::name, 'crs_sys_code'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_sys_code'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_sys_code'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_sys_code_group'::name,
-ARRAY[
-  'code',
-  'audit_id',
-  'user_modify_flag',
-  'user_create_flag',
-  'desc',
-  'user_delete_flag',
-  'user_view_flag',
-  'data_type',
-  'group_type'
-  ]);
-
 SELECT has_table('bde'::name, 'crs_title_action'::name);
 SELECT table_privs_are('bde'::name, 'crs_title_action'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
 SELECT table_privs_are('bde'::name, 'crs_title_action'::name, 'bde_user'::name, ARRAY['SELECT']);
 SELECT table_owner_is('bde'::name, 'crs_title_action'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_title_action'::name,
+ARRAY[
+  'audit_id',
+  'ttl_title_no',
+  'act_tin_id',
+  'act_id'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_title_doc_ref'::name);
+SELECT table_privs_are('bde'::name, 'crs_title_doc_ref'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_title_doc_ref'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_title_doc_ref'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_title_doc_ref'::name,
+ARRAY[
+  'type',
+  'tin_id',
+  'id',
+  'reference_no'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_title_estate'::name);
+SELECT table_privs_are('bde'::name, 'crs_title_estate'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_title_estate'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_title_estate'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_title_estate'::name,
+ARRAY[
+  'type',
+  'ttl_title_no',
+  'id',
+  'tin_id_orig',
+  'act_tin_id_ext',
+  'share',
+  'lgd_id',
+  'status',
+  'term',
+  'original_flag',
+  'timeshare_week_no',
+  'act_id_ext',
+  'purpose',
+  'act_tin_id_crt',
+  'act_id_crt'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_title_memorial'::name);
+SELECT table_privs_are('bde'::name, 'crs_title_memorial'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_title_memorial'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_title_memorial'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_title_memorial'::name,
+ARRAY[
+  'col_6_size',
+  'id',
+  'ttl_title_no',
+  'mmt_code',
+  'act_id_orig',
+  'act_tin_id_orig',
+  'act_id_crt',
+  'act_tin_id_crt',
+  'status',
+  'user_changed',
+  'text_type',
+  'register_only_mem',
+  'prev_further_reg',
+  'curr_hist_flag',
+  'default',
+  'number_of_cols',
+  'col_1_size',
+  'col_2_size',
+  'col_3_size',
+  'col_4_size',
+  'col_5_size',
+  'col_7_size',
+  'act_id_ext',
+  'act_tin_id_ext'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_title_mem_text'::name);
+SELECT table_privs_are('bde'::name, 'crs_title_mem_text'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_title_mem_text'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_title_mem_text'::name, 'bde_dba'::name);
+SELECT columns_are('bde'::name, 'crs_title_mem_text'::name,
+ARRAY[
+  'audit_id',
+  'col_1_text',
+  'col_2_text',
+  'col_3_text',
+  'col_4_text',
+  'std_text',
+  'col_5_text',
+  'col_6_text',
+  'col_7_text',
+  'curr_hist_flag',
+  'sequence_no',
+  'ttm_id'
+  ]);
+
+SELECT has_table('bde'::name, 'crs_title'::name);
+SELECT table_privs_are('bde'::name, 'crs_title'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
+SELECT table_privs_are('bde'::name, 'crs_title'::name, 'bde_user'::name, ARRAY['SELECT']);
+SELECT table_owner_is('bde'::name, 'crs_title'::name, 'bde_dba'::name);
 SELECT columns_are('bde'::name, 'crs_title'::name,
 ARRAY[
   'ttl_title_no_head_srs',
@@ -1529,104 +1628,15 @@ ARRAY[
   'no_survivorship'
   ]);
 
-SELECT has_table('bde'::name, 'crs_title_doc_ref'::name);
-SELECT table_privs_are('bde'::name, 'crs_title_doc_ref'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_title_doc_ref'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_title_doc_ref'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_title_action'::name,
-ARRAY[
-  'audit_id',
-  'ttl_title_no',
-  'act_tin_id',
-  'act_id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_title_estate'::name);
-SELECT table_privs_are('bde'::name, 'crs_title_estate'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_title_estate'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_title_estate'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_title_doc_ref'::name,
-ARRAY[
-  'type',
-  'tin_id',
-  'id',
-  'reference_no'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_title_memorial'::name);
-SELECT table_privs_are('bde'::name, 'crs_title_memorial'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_title_memorial'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_title_memorial'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_title_estate'::name,
-ARRAY[
-  'type',
-  'ttl_title_no',
-  'id',
-  'tin_id_orig',
-  'act_tin_id_ext',
-  'share',
-  'lgd_id',
-  'status',
-  'term',
-  'original_flag',
-  'timeshare_week_no',
-  'act_id_ext',
-  'purpose',
-  'act_tin_id_crt',
-  'act_id_crt'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_title_mem_text'::name);
-SELECT table_privs_are('bde'::name, 'crs_title_mem_text'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_title_mem_text'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_title_mem_text'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_title_mem_text'::name,
-ARRAY[
-  'audit_id',
-  'col_1_text',
-  'col_2_text',
-  'col_3_text',
-  'col_4_text',
-  'std_text',
-  'col_5_text',
-  'col_6_text',
-  'col_7_text',
-  'curr_hist_flag',
-  'sequence_no',
-  'ttm_id'
-  ]);
-
-SELECT has_table('bde'::name, 'crs_title'::name);
-SELECT table_privs_are('bde'::name, 'crs_title'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
-SELECT table_privs_are('bde'::name, 'crs_title'::name, 'bde_user'::name, ARRAY['SELECT']);
-SELECT table_owner_is('bde'::name, 'crs_title'::name, 'bde_dba'::name);
-SELECT columns_are('bde'::name, 'crs_title_memorial'::name,
-ARRAY[
-  'col_6_size',
-  'id',
-  'ttl_title_no',
-  'mmt_code',
-  'act_id_orig',
-  'act_tin_id_orig',
-  'act_id_crt',
-  'act_tin_id_crt',
-  'status',
-  'user_changed',
-  'text_type',
-  'register_only_mem',
-  'prev_further_reg',
-  'curr_hist_flag',
-  'default',
-  'number_of_cols',
-  'col_1_size',
-  'col_2_size',
-  'col_3_size',
-  'col_4_size',
-  'col_5_size',
-  'col_7_size',
-  'act_id_ext',
-  'act_tin_id_ext'
-  ]);
+SELECT lives_ok($CODE$
+  DO $$
+    DECLARE
+      x bde.crs_title.protect_reference%type;
+    BEGIN
+      x := array_to_string(ARRAY(select 'x'::text from generate_series(1,255)), '');
+    END;
+  $$;
+$CODE$);
 
 SELECT has_table('bde'::name, 'crs_topology_class'::name);
 SELECT table_privs_are('bde'::name, 'crs_topology_class'::name, 'bde_admin'::name, ARRAY['DELETE','INSERT','SELECT','UPDATE']);
@@ -1774,6 +1784,16 @@ ARRAY[
   'protect_end',
   'protect_reference'
   ]);
+
+SELECT lives_ok($CODE$
+  DO $$
+    DECLARE
+      x bde.crs_ttl_inst_protect.protect_reference%type;
+    BEGIN
+      x := array_to_string(ARRAY(select 'x'::text from generate_series(1,255)), '');
+    END;
+  $$;
+$CODE$);
 
 
 SELECT has_table('bde'::name, 'crs_ttl_inst_title'::name);
