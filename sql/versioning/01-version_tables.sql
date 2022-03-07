@@ -36,6 +36,11 @@ BEGIN
     -- See https://github.com/linz/linz-bde-schema/issues/70
     GRANT CREATE ON SCHEMA table_version TO bde_dba;
 
+	-- It makes sense for bde_dba to also have SELECT permissions
+    -- on sequences in table_version schema
+    -- See https://github.com/linz/linz-bde-schema/issues/170
+    GRANT SELECT ON ALL SEQUENCES IN SCHEMA table_version TO bde_dba;
+
     v_needs_rev := false;
 
     FOR v_schema, v_table IN
@@ -80,8 +85,9 @@ BEGIN
         SELECT table_version.ver_get_version_table_full(v_schema, v_table)
         INTO   v_rev_table;
 
-        EXECUTE 'GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE ' || v_rev_table || ' TO bde_admin';
         EXECUTE 'GRANT SELECT ON TABLE ' || v_rev_table || ' TO bde_user';
+        -- SELECT is going to be inherited from bde_user role (granted to bde_admin)
+        EXECUTE 'GRANT UPDATE, INSERT, DELETE ON TABLE ' || v_rev_table || ' TO bde_admin';
     END LOOP;
 
     IF v_needs_rev THEN
