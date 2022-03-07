@@ -65,8 +65,8 @@ END $$;
 
 BEGIN;
 
-SELECT * FROM plan(653
---VERSIONED-- + 526
+SELECT * FROM plan(660
+--VERSIONED-- + 533
 );
 
 -- Test base schema existance

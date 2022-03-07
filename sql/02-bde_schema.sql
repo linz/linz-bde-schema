@@ -21,6 +21,26 @@ IF NOT EXISTS (SELECT * FROM pg_extension  WHERE extname = 'postgis') THEN
 	RAISE EXCEPTION 'postgis extension is not installed';
 END IF;
 
+--
+-- Utility function to change table owner if not already owned by user
+--
+CREATE FUNCTION pg_temp.changeTableOwnerIfNeeded(p_table regclass, p_owner name)
+RETURNS VOID LANGUAGE 'plpgsql' AS $$
+BEGIN
+    IF r.rolname != p_owner
+		FROM pg_class c, pg_roles r
+		WHERE c.oid = p_table
+		  AND c.relowner = r.oid
+    THEN
+        EXECUTE format('ALTER TABLE %s OWNER TO %I', p_table, p_owner);
+    END IF;
+END
+$$
+-- make sure regprocedure::text is fully-qualified
+-- to work around an RDS bug
+SET search_path = ''
+;
+
 CREATE SCHEMA IF NOT EXISTS bde;
 ALTER SCHEMA bde OWNER TO bde_dba;
 
@@ -50,7 +70,7 @@ ALTER TABLE bde.crs_action ALTER COLUMN att_type SET STATISTICS 500;
 ALTER TABLE bde.crs_action ALTER COLUMN ste_id SET STATISTICS 500;
 ALTER TABLE bde.crs_action ALTER COLUMN audit_id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_action OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_action'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_action_type
@@ -66,7 +86,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_action_type (
     CONSTRAINT pkey_crs_action_type PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_action_type OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_action_type'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adj_obs_change
@@ -105,7 +125,7 @@ ALTER TABLE bde.crs_adj_obs_change ALTER COLUMN adj_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_adj_obs_change ALTER COLUMN obn_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_adj_obs_change ALTER COLUMN audit_id SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_adj_obs_change OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_adj_obs_change'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adj_user_coef
@@ -120,7 +140,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_adj_user_coef (
     UNIQUE (adc_id, adj_id)
 );
 
-ALTER TABLE bde.crs_adj_user_coef OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_adj_user_coef'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adjust_coef
@@ -138,7 +158,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_adjust_coef (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_adjust_coef OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_adjust_coef'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adjust_method
@@ -156,7 +176,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_adjust_method (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_adjust_method OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_adjust_method'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adjustment_run
@@ -189,7 +209,7 @@ ALTER TABLE bde.crs_adjustment_run ALTER COLUMN status SET STATISTICS 250;
 ALTER TABLE bde.crs_adjustment_run ALTER COLUMN usr_id_exec SET STATISTICS 250;
 ALTER TABLE bde.crs_adjustment_run ALTER COLUMN wrk_id SET STATISTICS 250;
 
-ALTER TABLE bde.crs_adjustment_run OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_adjustment_run'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_adoption
@@ -212,7 +232,7 @@ ALTER TABLE bde.crs_adoption ALTER COLUMN obn_id_new SET STATISTICS 500;
 ALTER TABLE bde.crs_adoption ALTER COLUMN obn_id_orig SET STATISTICS 500;
 ALTER TABLE bde.crs_adoption ALTER COLUMN sur_wrk_id_orig SET STATISTICS 500;
 
-ALTER TABLE bde.crs_adoption OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_adoption'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_affected_parcl
@@ -231,7 +251,7 @@ ALTER TABLE bde.crs_affected_parcl ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_affected_parcl ALTER COLUMN par_id SET STATISTICS 500;
 ALTER TABLE bde.crs_affected_parcl ALTER COLUMN sur_wrk_id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_affected_parcl OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_affected_parcl'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_alias
@@ -245,7 +265,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_alias (
     CONSTRAINT pkey_crs_alias PRIMARY KEY (id)
 );
 
-ALTER TABLE bde.crs_alias OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_alias'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_appellation
@@ -290,7 +310,7 @@ ALTER TABLE bde.crs_appellation ALTER COLUMN other_appellation SET STATISTICS 50
 ALTER TABLE bde.crs_appellation ALTER COLUMN parcel_value SET STATISTICS 500;
 ALTER TABLE bde.crs_appellation ALTER COLUMN par_id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_appellation OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_appellation'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_comprised_in
@@ -305,7 +325,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_comprised_in (
     CONSTRAINT pkey_crs_comprised_in PRIMARY KEY (id)
 );
 
-ALTER TABLE bde.crs_comprised_in OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_comprised_in'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_coordinate
@@ -344,7 +364,7 @@ ALTER TABLE bde.crs_coordinate ALTER COLUMN value2 SET STATISTICS 1000;
 ALTER TABLE bde.crs_coordinate ALTER COLUMN value3 SET STATISTICS 1000;
 ALTER TABLE bde.crs_coordinate ALTER COLUMN wrk_id_created SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_coordinate OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_coordinate'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_coordinate_sys
@@ -363,7 +383,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_coordinate_sys (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_coordinate_sys OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_coordinate_sys'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_coordinate_tpe
@@ -390,7 +410,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_coordinate_tpe (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_coordinate_tpe OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_coordinate_tpe'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_cor_precision
@@ -405,7 +425,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_cor_precision (
     CONSTRAINT pkey_crs_cor_precision PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_cor_precision OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_cor_precision'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_cord_order
@@ -423,7 +443,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_cord_order (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_cord_order OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_cord_order'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_datum
@@ -444,7 +464,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_datum (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_datum OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_datum'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_elect_place
@@ -463,7 +483,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_elect_place (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_elect_place OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_elect_place'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ellipsoid
@@ -479,7 +499,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_ellipsoid (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_ellipsoid OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_ellipsoid'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_enc_share
@@ -502,7 +522,7 @@ ALTER TABLE bde.crs_enc_share ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
 ALTER TABLE bde.crs_enc_share ALTER COLUMN enc_id SET STATISTICS 500;
 ALTER TABLE bde.crs_enc_share ALTER COLUMN id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_enc_share OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_enc_share'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_encumbrance
@@ -524,7 +544,7 @@ ALTER TABLE bde.crs_encumbrance ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
 ALTER TABLE bde.crs_encumbrance ALTER COLUMN act_tin_id_orig SET STATISTICS 500;
 ALTER TABLE bde.crs_encumbrance ALTER COLUMN id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_encumbrance OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_encumbrance'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_encumbrancee
@@ -543,7 +563,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_encumbrancee (
 ALTER TABLE bde.crs_encumbrancee ALTER COLUMN ens_id SET STATISTICS 500;
 ALTER TABLE bde.crs_encumbrancee ALTER COLUMN id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_encumbrancee OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_encumbrancee'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_estate_share
@@ -572,7 +592,7 @@ ALTER TABLE bde.crs_estate_share ALTER COLUMN act_tin_id_crt SET STATISTICS 500;
 ALTER TABLE bde.crs_estate_share ALTER COLUMN ett_id SET STATISTICS 500;
 ALTER TABLE bde.crs_estate_share ALTER COLUMN id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_estate_share OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_estate_share'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_feature_name
@@ -591,7 +611,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_feature_name (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_feature_name OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_feature_name'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_geodetic_network
@@ -604,7 +624,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_geodetic_network  (
     CONSTRAINT pkey_crs_geodetic_network PRIMARY KEY (id)
 );
 
-ALTER TABLE bde.crs_geodetic_network OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_geodetic_network'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_geodetic_node_network
@@ -618,7 +638,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_geodetic_node_network  (
     CONSTRAINT pkey_crs_geodetic_node_network PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_geodetic_node_network OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_geodetic_node_network'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_image
@@ -636,7 +656,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_image (
   CONSTRAINT pkey_crs_image PRIMARY KEY (id)
 );
 
-ALTER TABLE bde.crs_image OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_image'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_image
@@ -654,7 +674,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_image_history (
     CONSTRAINT pkey_crs_image_history PRIMARY KEY (id)
 );
 
-ALTER TABLE bde.crs_image_history OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_image_history'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_land_district
@@ -672,7 +692,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_land_district (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_land_district OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_land_district'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_legal_desc
@@ -694,7 +714,7 @@ ALTER TABLE bde.crs_legal_desc ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_legal_desc ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.crs_legal_desc ALTER COLUMN ttl_title_no SET STATISTICS 500;
 
-ALTER TABLE bde.crs_legal_desc OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_legal_desc'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_legal_desc_prl
@@ -717,7 +737,7 @@ ALTER TABLE bde.crs_legal_desc_prl ALTER COLUMN lgd_id SET STATISTICS 500;
 ALTER TABLE bde.crs_legal_desc_prl ALTER COLUMN par_id SET STATISTICS 500;
 ALTER TABLE bde.crs_legal_desc_prl ALTER COLUMN sur_wrk_id_crt SET STATISTICS 500;
 
-ALTER TABLE bde.crs_legal_desc_prl OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_legal_desc_prl'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_line
@@ -748,7 +768,7 @@ ALTER TABLE bde.crs_line ALTER COLUMN nod_id_end SET STATISTICS 1000;
 ALTER TABLE bde.crs_line ALTER COLUMN nod_id_start SET STATISTICS 1000;
 ALTER TABLE bde.crs_line ALTER COLUMN pnx_id_created SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_line OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_line'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_locality
@@ -766,7 +786,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_locality (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_locality OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_locality'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_maintenance
@@ -783,7 +803,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_maintenance (
     CONSTRAINT pkey_crs_maintenance PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_maintenance OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_maintenance'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_map_grid
@@ -799,7 +819,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_map_grid (
     UNIQUE (major_grid, minor_grid)
 );
 
-ALTER TABLE bde.crs_map_grid OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_map_grid'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mark
@@ -836,7 +856,7 @@ ALTER TABLE bde.crs_mark ALTER COLUMN mrk_id_repl SET STATISTICS 1000;
 ALTER TABLE bde.crs_mark ALTER COLUMN nod_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_mark ALTER COLUMN wrk_id_created SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_mark OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_mark'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mark_name
@@ -855,7 +875,7 @@ ALTER TABLE bde.crs_mark_name ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_mark_name ALTER COLUMN mrk_id SET STATISTICS 500;
 ALTER TABLE bde.crs_mark_name ALTER COLUMN name SET STATISTICS 500;
 
-ALTER TABLE bde.crs_mark_name OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_mark_name'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mark_sup_doc
@@ -872,7 +892,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_mark_sup_doc (
 ALTER TABLE bde.crs_mark_sup_doc ALTER COLUMN mrk_id SET STATISTICS 250;
 ALTER TABLE bde.crs_mark_sup_doc ALTER COLUMN sud_id SET STATISTICS 250;
 
-ALTER TABLE bde.crs_mark_sup_doc OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_mark_sup_doc'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mrk_phys_state
@@ -913,7 +933,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_mrk_phys_state (
 ALTER TABLE bde.crs_mrk_phys_state ALTER COLUMN mrk_id SET STATISTICS 500;
 ALTER TABLE bde.crs_mrk_phys_state ALTER COLUMN wrk_id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_mrk_phys_state OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_mrk_phys_state'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk
@@ -936,7 +956,7 @@ ALTER TABLE bde.crs_mesh_blk ALTER COLUMN alt_id SET STATISTICS 250;
 ALTER TABLE bde.crs_mesh_blk ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_mesh_blk ALTER COLUMN id SET STATISTICS 250;
 
-ALTER TABLE bde.crs_mesh_blk OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_mesh_blk'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk_area
@@ -956,7 +976,7 @@ ALTER TABLE bde.crs_mesh_blk_area ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_mesh_blk_area ALTER COLUMN mbk_id SET STATISTICS 250;
 ALTER TABLE bde.crs_mesh_blk_area ALTER COLUMN stt_id SET STATISTICS 250;
 
-ALTER TABLE bde.crs_mesh_blk_area OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_mesh_blk_area'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk_bdry
@@ -976,7 +996,7 @@ ALTER TABLE bde.crs_mesh_blk_bdry ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_mesh_blk_bdry ALTER COLUMN mbk_id SET STATISTICS 500;
 ALTER TABLE bde.crs_mesh_blk_bdry ALTER COLUMN mbl_id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_mesh_blk_bdry OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_mesh_blk_bdry'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk_line
@@ -998,7 +1018,7 @@ ALTER TABLE bde.crs_mesh_blk_line ALTER COLUMN alt_id SET STATISTICS 500;
 ALTER TABLE bde.crs_mesh_blk_line ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_mesh_blk_line ALTER COLUMN id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_mesh_blk_line OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_mesh_blk_line'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_mesh_blk_place
@@ -1018,7 +1038,7 @@ ALTER TABLE bde.crs_mesh_blk_place ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_mesh_blk_place ALTER COLUMN epl_id SET STATISTICS 250;
 ALTER TABLE bde.crs_mesh_blk_place ALTER COLUMN mbk_id SET STATISTICS 250;
 
-ALTER TABLE bde.crs_mesh_blk_place OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_mesh_blk_place'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_network_plan
@@ -1035,7 +1055,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_network_plan (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_network_plan OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_network_plan'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_node
@@ -1064,7 +1084,7 @@ ALTER TABLE bde.crs_node ALTER COLUMN id SET STATISTICS 1000;
 ALTER TABLE bde.crs_node ALTER COLUMN sit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_node ALTER COLUMN wrk_id_created SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_node OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_node'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_node_prp_order
@@ -1079,7 +1099,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_node_prp_order (
     CONSTRAINT pkey_crs_node_prp_order PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_node_prp_order OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_node_prp_order'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_node_works
@@ -1100,7 +1120,7 @@ ALTER TABLE bde.crs_node_works ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_node_works ALTER COLUMN nod_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_node_works ALTER COLUMN wrk_id SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_node_works OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_node_works'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_nominal_index
@@ -1130,7 +1150,7 @@ ALTER TABLE bde.crs_nominal_index ALTER COLUMN prp_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_nominal_index ALTER COLUMN surname SET STATISTICS 1000;
 ALTER TABLE bde.crs_nominal_index ALTER COLUMN ttl_title_no SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_nominal_index OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_nominal_index'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_obs_accuracy
@@ -1159,7 +1179,7 @@ ALTER TABLE bde.crs_obs_accuracy ALTER COLUMN id SET STATISTICS 1000;
 ALTER TABLE bde.crs_obs_accuracy ALTER COLUMN obn_id1 SET STATISTICS 1000;
 ALTER TABLE bde.crs_obs_accuracy ALTER COLUMN obn_id2 SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_obs_accuracy OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_obs_accuracy'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_obs_elem_type
@@ -1175,7 +1195,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_obs_elem_type (
     CONSTRAINT pkey_crs_obs_elem_type PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_obs_elem_type OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_obs_elem_type'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_obs_set
@@ -1190,7 +1210,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_obs_set (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_obs_set OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_obs_set'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_obs_type
@@ -1212,7 +1232,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_obs_type (
     CONSTRAINT pkey_crs_obs_type PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_obs_type OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_obs_type'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_observation
@@ -1258,7 +1278,7 @@ ALTER TABLE bde.crs_observation ALTER COLUMN stp_id_local SET STATISTICS 1000;
 ALTER TABLE bde.crs_observation ALTER COLUMN stp_id_remote SET STATISTICS 1000;
 ALTER TABLE bde.crs_observation ALTER COLUMN vct_id SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_observation OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_observation'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_off_cord_sys
@@ -1275,7 +1295,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_off_cord_sys (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_off_cord_sys OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_off_cord_sys'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_office
@@ -1305,7 +1325,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_office (
     CONSTRAINT pkey_crs_office PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_office OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_office'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ordinate_adj
@@ -1337,7 +1357,7 @@ ALTER TABLE bde.crs_ordinate_adj ALTER COLUMN coo_id_output SET STATISTICS 1000;
 ALTER TABLE bde.crs_ordinate_adj ALTER COLUMN coo_id_source SET STATISTICS 1000;
 ALTER TABLE bde.crs_ordinate_adj ALTER COLUMN cor_id_prop SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_ordinate_adj OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_ordinate_adj'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ordinate_type
@@ -1354,7 +1374,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_ordinate_type (
     CONSTRAINT pkey_crs_ordinate_type PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_ordinate_type OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_ordinate_type'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel
@@ -1389,7 +1409,7 @@ ALTER TABLE bde.crs_parcel ALTER COLUMN img_id SET STATISTICS 500;
 ALTER TABLE bde.crs_parcel ALTER COLUMN ldt_loc_id SET STATISTICS 500;
 ALTER TABLE bde.crs_parcel ALTER COLUMN toc_code SET STATISTICS 500;
 
-ALTER TABLE bde.crs_parcel OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_parcel'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel_bndry
@@ -1409,7 +1429,7 @@ ALTER TABLE bde.crs_parcel_bndry ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_parcel_bndry ALTER COLUMN lin_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_parcel_bndry ALTER COLUMN pri_id SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_parcel_bndry OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_parcel_bndry'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel_dimen
@@ -1427,7 +1447,7 @@ ALTER TABLE bde.crs_parcel_dimen ALTER COLUMN audit_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_parcel_dimen ALTER COLUMN obn_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_parcel_dimen ALTER COLUMN par_id SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_parcel_dimen OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_parcel_dimen'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel_label
@@ -1447,7 +1467,7 @@ ALTER TABLE bde.crs_parcel_label ALTER COLUMN audit_id SET STATISTICS 500;
 ALTER TABLE bde.crs_parcel_label ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.crs_parcel_label ALTER COLUMN par_id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_parcel_label OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_parcel_label'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_parcel_ring
@@ -1468,7 +1488,7 @@ ALTER TABLE bde.crs_parcel_ring ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.crs_parcel_ring ALTER COLUMN par_id SET STATISTICS 500;
 ALTER TABLE bde.crs_parcel_ring ALTER COLUMN pri_id_parent_ring SET STATISTICS 500;
 
-ALTER TABLE bde.crs_parcel_ring OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_parcel_ring'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_programme
@@ -1491,7 +1511,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_programme (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_programme OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_programme'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_proprietor
@@ -1517,7 +1537,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_proprietor (
 ALTER TABLE bde.crs_proprietor ALTER COLUMN ets_id SET STATISTICS 500;
 ALTER TABLE bde.crs_proprietor ALTER COLUMN id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_proprietor OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_proprietor'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_reduct_meth
@@ -1533,7 +1553,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_reduct_meth (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_reduct_meth OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_reduct_meth'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_reduct_run
@@ -1552,7 +1572,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_reduct_run (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_reduct_run OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_reduct_run'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ref_survey
@@ -1571,7 +1591,7 @@ ALTER TABLE bde.crs_ref_survey ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_ref_survey ALTER COLUMN sur_wrk_id_exist SET STATISTICS 250;
 ALTER TABLE bde.crs_ref_survey ALTER COLUMN sur_wrk_id_new SET STATISTICS 250;
 
-ALTER TABLE bde.crs_ref_survey OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_ref_survey'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_road_ctr_line
@@ -1593,7 +1613,7 @@ ALTER TABLE bde.crs_road_ctr_line ALTER COLUMN alt_id SET STATISTICS 250;
 ALTER TABLE bde.crs_road_ctr_line ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_road_ctr_line ALTER COLUMN id SET STATISTICS 250;
 
-ALTER TABLE bde.crs_road_ctr_line OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_road_ctr_line'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_road_name
@@ -1613,7 +1633,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_road_name (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_road_name OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_road_name'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_road_name_asc
@@ -1634,7 +1654,7 @@ ALTER TABLE bde.crs_road_name_asc ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_road_name_asc ALTER COLUMN rcl_id SET STATISTICS 250;
 ALTER TABLE bde.crs_road_name_asc ALTER COLUMN rna_id SET STATISTICS 250;
 
-ALTER TABLE bde.crs_road_name_asc OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_road_name_asc'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_setup
@@ -1658,7 +1678,7 @@ ALTER TABLE bde.crs_setup ALTER COLUMN id SET STATISTICS 1000;
 ALTER TABLE bde.crs_setup ALTER COLUMN nod_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_setup ALTER COLUMN wrk_id SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_setup OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_setup'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_site
@@ -1679,7 +1699,7 @@ ALTER TABLE bde.crs_site ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_site ALTER COLUMN id SET STATISTICS 250;
 ALTER TABLE bde.crs_site ALTER COLUMN wrk_id_created SET STATISTICS 250;
 
-ALTER TABLE bde.crs_site OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_site'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_site_locality
@@ -1697,7 +1717,7 @@ ALTER TABLE bde.crs_site_locality ALTER COLUMN audit_id SET STATISTICS 250;
 ALTER TABLE bde.crs_site_locality ALTER COLUMN loc_id SET STATISTICS 250;
 ALTER TABLE bde.crs_site_locality ALTER COLUMN sit_id SET STATISTICS 250;
 
-ALTER TABLE bde.crs_site_locality OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_site_locality'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_stat_act_parcl
@@ -1719,7 +1739,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_stat_act_parcl (
 ALTER TABLE bde.crs_stat_act_parcl ALTER COLUMN par_id SET STATISTICS 250;
 ALTER TABLE bde.crs_stat_act_parcl ALTER COLUMN sta_id SET STATISTICS 250;
 
-ALTER TABLE bde.crs_stat_act_parcl OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_stat_act_parcl'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_stat_version
@@ -1737,7 +1757,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_stat_version (
     CONSTRAINT pkey_crs_stat_version PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_stat_version OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_stat_version'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_statist_area
@@ -1760,7 +1780,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_statist_area (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_statist_area OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_statist_area'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_statute
@@ -1780,7 +1800,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_statute  (
     UNIQUE (audit_id)
 );
 
-ALTER TABLE bde.crs_statute OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_statute'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_statute_action
@@ -1808,7 +1828,7 @@ ALTER TABLE bde.crs_statute_action ALTER COLUMN id SET STATISTICS 250;
 ALTER TABLE bde.crs_statute_action ALTER COLUMN ste_id SET STATISTICS 250;
 ALTER TABLE bde.crs_statute_action ALTER COLUMN sur_wrk_id_vesting SET STATISTICS 250;
 
-ALTER TABLE bde.crs_statute_action OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_statute_action'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_street_address
@@ -1840,7 +1860,7 @@ ALTER TABLE bde.crs_street_address ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.crs_street_address ALTER COLUMN rcl_id SET STATISTICS 500;
 ALTER TABLE bde.crs_street_address ALTER COLUMN rna_id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_street_address OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_street_address'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_sur_admin_area
@@ -1862,7 +1882,7 @@ ALTER TABLE bde.crs_sur_admin_area ALTER COLUMN stt_id SET STATISTICS 250;
 ALTER TABLE bde.crs_sur_admin_area ALTER COLUMN sur_wrk_id SET STATISTICS 250;
 ALTER TABLE bde.crs_sur_admin_area ALTER COLUMN xstt_id SET STATISTICS 250;
 
-ALTER TABLE bde.crs_sur_admin_area OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_sur_admin_area'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_sur_plan_ref
@@ -1879,7 +1899,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_sur_plan_ref (
 ALTER TABLE bde.crs_sur_plan_ref ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.crs_sur_plan_ref ALTER COLUMN wrk_id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_sur_plan_ref OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_sur_plan_ref'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_survey
@@ -1929,7 +1949,7 @@ ALTER TABLE bde.crs_survey ALTER COLUMN usr_id_sol SET STATISTICS 500;
 ALTER TABLE bde.crs_survey ALTER COLUMN usr_id_sol_firm SET STATISTICS 500;
 ALTER TABLE bde.crs_survey ALTER COLUMN wrk_id SET STATISTICS 500;
 
-ALTER TABLE bde.crs_survey OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_survey'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_survey_image
@@ -1944,7 +1964,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_survey_image (
     CONSTRAINT pkey_crs_survey_image PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_survey_image OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_survey_image'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_sys_code
@@ -1965,7 +1985,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_sys_code (
     CONSTRAINT pkey_crs_sys_code PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_sys_code OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_sys_code'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_sys_code_group
@@ -1985,7 +2005,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_sys_code_group (
     CONSTRAINT pkey_crs_sys_code_group PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_sys_code_group OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_sys_code_group'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title
@@ -2033,7 +2053,7 @@ ALTER TABLE bde.crs_title ALTER COLUMN sur_wrk_id_preallc SET STATISTICS 500;
 ALTER TABLE bde.crs_title ALTER COLUMN title_no SET STATISTICS 500;
 ALTER TABLE bde.crs_title ALTER COLUMN ttl_title_no_srs SET STATISTICS 500;
 
-ALTER TABLE bde.crs_title OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_title'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title_action
@@ -2053,7 +2073,7 @@ ALTER TABLE bde.crs_title_action ALTER COLUMN act_tin_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_title_action ALTER COLUMN act_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_title_action ALTER COLUMN audit_id SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_title_action OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_title_action'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title_doc_ref
@@ -2069,7 +2089,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_title_doc_ref (
 
 ALTER TABLE bde.crs_title_doc_ref ALTER COLUMN id SET STATISTICS 250;
 
-ALTER TABLE bde.crs_title_doc_ref OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_title_doc_ref'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title_estate
@@ -2099,7 +2119,7 @@ ALTER TABLE bde.crs_title_estate ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.crs_title_estate ALTER COLUMN lgd_id SET STATISTICS 500;
 ALTER TABLE bde.crs_title_estate ALTER COLUMN ttl_title_no SET STATISTICS 500;
 
-ALTER TABLE bde.crs_title_estate OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_title_estate'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title_mem_text
@@ -2126,7 +2146,7 @@ ALTER TABLE bde.crs_title_mem_text ALTER COLUMN ttm_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_title_mem_text ALTER COLUMN sequence_no SET STATISTICS 1000;
 ALTER TABLE bde.crs_title_mem_text ALTER COLUMN audit_id SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_title_mem_text OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_title_mem_text'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_title_memorial
@@ -2170,7 +2190,7 @@ ALTER TABLE bde.crs_title_memorial ALTER COLUMN act_id_orig SET STATISTICS 1000;
 ALTER TABLE bde.crs_title_memorial ALTER COLUMN act_tin_id_ext SET STATISTICS 1000;
 ALTER TABLE bde.crs_title_memorial ALTER COLUMN act_id_ext SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_title_memorial OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_title_memorial'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_topology_class
@@ -2185,7 +2205,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_topology_class  (
     CONSTRAINT pkey_crs_topology_class PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_topology_class OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_topology_class'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_transact_type
@@ -2242,7 +2262,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_transact_type (
     CONSTRAINT pkey_crs_transact_type PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_transact_type OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_transact_type'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ttl_enc
@@ -2265,7 +2285,7 @@ ALTER TABLE bde.crs_ttl_enc ALTER COLUMN enc_id SET STATISTICS 500;
 ALTER TABLE bde.crs_ttl_enc ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.crs_ttl_enc ALTER COLUMN ttl_title_no SET STATISTICS 500;
 
-ALTER TABLE bde.crs_ttl_enc OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_ttl_enc'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ttl_hierarchy
@@ -2290,7 +2310,7 @@ ALTER TABLE bde.crs_ttl_hierarchy ALTER COLUMN tdr_id SET STATISTICS 500;
 ALTER TABLE bde.crs_ttl_hierarchy ALTER COLUMN ttl_title_no_flw SET STATISTICS 500;
 ALTER TABLE bde.crs_ttl_hierarchy ALTER COLUMN ttl_title_no_prior SET STATISTICS 500;
 
-ALTER TABLE bde.crs_ttl_hierarchy OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_ttl_hierarchy'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ttl_inst
@@ -2339,7 +2359,7 @@ ALTER TABLE bde.crs_ttl_inst ALTER COLUMN trt_grp SET STATISTICS 500;
 ALTER TABLE bde.crs_ttl_inst ALTER COLUMN trt_type SET STATISTICS 500;
 ALTER TABLE bde.crs_ttl_inst ALTER COLUMN usr_id_approve SET STATISTICS 500;
 
-ALTER TABLE bde.crs_ttl_inst OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_ttl_inst'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_ttl_inst_title
@@ -2357,7 +2377,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_ttl_inst_title (
 ALTER TABLE bde.crs_ttl_inst_title ALTER COLUMN tin_id SET STATISTICS 1000;
 ALTER TABLE bde.crs_ttl_inst_title ALTER COLUMN ttl_title_no SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_ttl_inst_title OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_ttl_inst_title'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_unit_of_meas
@@ -2371,7 +2391,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_unit_of_meas (
     CONSTRAINT pkey_crs_unit_of_meas PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_unit_of_meas OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_unit_of_meas'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_user
@@ -2432,7 +2452,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_user (
     CONSTRAINT pkey_crs_user PRIMARY KEY (audit_id)
 );
 
-ALTER TABLE bde.crs_user OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_user'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_vector
@@ -2457,7 +2477,7 @@ ALTER TABLE bde.crs_vector ALTER COLUMN id SET STATISTICS 1000;
 ALTER TABLE bde.crs_vector ALTER COLUMN nod_id_end SET STATISTICS 1000;
 ALTER TABLE bde.crs_vector ALTER COLUMN nod_id_start SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_vector OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_vector'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_vertx_sequence
@@ -2475,7 +2495,7 @@ CREATE TABLE IF NOT EXISTS bde.crs_vertx_sequence (
 
 ALTER TABLE bde.crs_vertx_sequence ALTER COLUMN lin_id SET STATISTICS 1000;
 
-ALTER TABLE bde.crs_vertx_sequence OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_vertx_sequence'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table crs_work
@@ -2532,7 +2552,7 @@ ALTER TABLE bde.crs_work ALTER COLUMN usr_id_prin_firm SET STATISTICS 500;
 ALTER TABLE bde.crs_work ALTER COLUMN usr_id_validated SET STATISTICS 500;
 ALTER TABLE bde.crs_work ALTER COLUMN validated_date SET STATISTICS 500;
 
-ALTER TABLE bde.crs_work OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.crs_work'::regclass, 'bde_dba');
 
 --------------------------------------------------------------------------------
 -- BDE table cbe_title_parcel_association
@@ -2553,7 +2573,7 @@ ALTER TABLE bde.cbe_title_parcel_association ALTER COLUMN id SET STATISTICS 500;
 ALTER TABLE bde.cbe_title_parcel_association ALTER COLUMN ttl_title_no SET STATISTICS 500;
 ALTER TABLE bde.cbe_title_parcel_association ALTER COLUMN par_id SET STATISTICS 500;
 
-ALTER TABLE bde.cbe_title_parcel_association OWNER TO bde_dba;
+PERFORM pg_temp.changeTableOwnerIfNeeded('bde.cbe_title_parcel_association'::regclass, 'bde_dba');
 
 -- Fix up permissions on schema
 
@@ -2579,6 +2599,12 @@ GRANT UPDATE, INSERT, DELETE
 GRANT ALL
     ON ALL TABLES IN SCHEMA bde
     TO bde_dba;
+
+--------------------------------------------------------------------------------
+-- Cleanup
+--------------------------------------------------------------------------------
+
+DROP FUNCTION pg_temp.changeTableOwnerIfNeeded(regclass, name);
 
 
 END;
