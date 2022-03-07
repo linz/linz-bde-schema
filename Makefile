@@ -1,11 +1,9 @@
 # Minimal script to install the SQL creation scripts ready for postinst script.
 
-VERSION=1.10.3
+VERSION=1.14.0dev
 REVISION = $(shell test -d .git && git describe --always || echo $(VERSION))
 
 TEST_DATABASE = regress_linz_bde_schema
-
-SED = sed
 
 datadir=${DESTDIR}/usr/share/linz-bde-schema
 bindir=${DESTDIR}/usr/bin
@@ -22,12 +20,10 @@ SQLSCRIPTS = \
   sql/05-bde_version.sql \
   sql/99-patches.sql \
   sql/versioning/01-version_tables.sql
-  $(END)
 
 SCRIPTS_built = \
     scripts/linz-bde-schema-load \
-    scripts/linz-bde-schema-publish \
-    $(END)
+    scripts/linz-bde-schema-publish
 
 TEST_SCRIPTS = \
     test/base.pg
@@ -44,14 +40,14 @@ EXTRA_CLEAN = \
 all: $(SQLSCRIPTS) $(SCRIPTS_built)
 
 %.sql: %.sql.in Makefile
-	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
+	sed -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 
-scripts/linz-bde-schema-load: scripts/linz-bde-schema-load.in
-	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
+scripts/linz-bde-schema-load: scripts/linz-bde-schema-load.bash
+	sed -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 	chmod +x $@
 
-scripts/linz-bde-schema-publish: scripts/linz-bde-schema-publish.in
-	$(SED) -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
+scripts/linz-bde-schema-publish: scripts/linz-bde-schema-publish.bash
+	sed -e 's/@@VERSION@@/$(VERSION)/;s|@@REVISION@@|$(REVISION)|' $< > $@
 	chmod +x $@
 
 install: $(SQLSCRIPTS) $(SCRIPTS_built)
@@ -82,7 +78,7 @@ check-publisher:
 	V=`linz-bde-schema-publish --version` && \
 	echo $$V && test `echo "$$V" | awk '{print $$1}'` = "$(VERSION)"
 
-	test/test-publication.sh
+	test/test-publication.bash
 
 check-loader:
 
@@ -196,6 +192,3 @@ clean:
 	rm -f regression.out
 	rm -rf results
 	rm -f $(EXTRA_CLEAN)
-
-deb:
-	dpkg-buildpackage -b -us -uc
