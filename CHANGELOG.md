@@ -2,6 +2,16 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.14.0 - 2022-03-08
+
+### Added
+
+-   Support for Ubuntu 20.04/LTS
+
+### Enhanced
+
+-   Quality improvements
+
 ## 1.13.0 - 2021-01-05
 
 ### Added
