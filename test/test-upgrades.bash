@@ -4,6 +4,7 @@ set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
 
 upgradeable_versions=(
+    '1.14.0'
     '1.13.0'
     '1.12.2'
     '1.12.1'
