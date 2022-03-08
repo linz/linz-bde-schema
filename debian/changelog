@@ -1,3 +1,9 @@
+linz-bde-schema (1.13.0-linz~bionic) bionic; urgency=medium
+
+  * New version
+
+ -- Ivan Mincik <imincik@linz.govt.nz>  Tue, 05 Jan 2021 09:40:26 +0000
+
 linz-bde-schema (1.12.2-linz~bionic) bionic; urgency=medium
 
   * New version
