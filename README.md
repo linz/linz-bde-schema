@@ -73,9 +73,9 @@ dpkg-buildpackage -us -uc
 
 ## Dependencies
 
-Requires PostgreSQL 9.3+/PostGIS 2.2+ and PL/PgSQL on the target database system,
-[dbpatch](https://github.com/linz/postgresql-dbpatch) version 1.2.0 or higher and optionally
-[table_version](https://github.com/linz/postgresql-tableversion) version 1.5.0 or higher.
+Requires PostgreSQL and PostGIS on the target database system,
+[dbpatch](https://github.com/linz/postgresql-dbpatch) and optionally
+[table_version](https://github.com/linz/postgresql-tableversion).
 
 ## License
 
