@@ -1,3 +1,9 @@
+linz-bde-schema (1.14.0-linz~focal) focal; urgency=medium
+
+  * New version
+
+ -- Mitchell Paff <mpaff@linz.govt.nz>  Tue, 08 Mar 2022 01:49:39 +0000
+
 linz-bde-schema (1.14.0-linz~bionic) bionic; urgency=medium
 
   * New version
