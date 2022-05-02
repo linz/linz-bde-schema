@@ -400,3 +400,17 @@ jobs:
                   packagecloud_token: ${{ secrets.LINZCI_PACKAGECLOUD_TOKEN }}
                   packagecloud_repository: ${{ env.REPO }}
                   push_to_git_remote: origin
+
+    finalise:
+        if: always()
+        needs:
+            - lint
+            - test-source
+            - test-package
+            - package
+        runs-on: ubuntu-latest
+        steps:
+            - name: Decide whether the needed jobs succeeded or failed
+              uses: re-actors/alls-green@release/v1
+              with:
+                  jobs: ${{ toJSON(needs) }}
