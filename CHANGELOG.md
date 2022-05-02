@@ -2,6 +2,12 @@
 
 All notable changes for the LINZ BDE schema are documented in this file.
 
+## 1.14.1 - 2022-05-02
+
+### Fixed
+
+-   Force pushing changes to origin remote
+
 ## 1.14.0 - 2022-03-08
 
 ### Added
